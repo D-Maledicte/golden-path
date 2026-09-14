@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080714" />
+    <meta name="description" content="Golden Path: conceptos, herramientas, procesos y casos reales para trabajar con agentes." />
+    <title>Golden Path</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#library">Ir a la biblioteca</a>
+
+    <div class="shell">
+      <header class="hero" aria-labelledby="site-title">
+        <img src="assets/golden-path-banner.png" alt="Una figura con túnica blanca camina hacia un horizonte dorado en un paisaje egipcio psicodélico" />
+        <div class="hero-shade"></div>
+        <div class="hero-copy">
+          <p class="eyebrow">Manual vivo · casos anonimizados</p>
+          <h1 id="site-title">Golden Path</h1>
+          <p>Conceptos, patrones y aprendizajes transferibles para diseñar entornos donde los agentes puedan hacer buen trabajo sin llevarse producción puesta.</p>
+        </div>
+        <div class="hero-count" aria-live="polite"><strong id="entry-count">—</strong><span>entradas</span></div>
+      </header>
+
+      <main id="library" class="workspace">
+        <aside class="rail" aria-label="Explorar la biblioteca">
+          <div class="rail-sticky">
+            <p class="rail-label">Recorridos</p>
+            <nav id="area-nav" class="area-nav"></nav>
+
+            <div class="rail-note">
+              <span class="rail-note-mark">✦</span>
+              <p>Cada entrada se puede copiar o descargar en Markdown para pasarle contexto limpio a otro agente.</p>
+            </div>
+          </div>
+        </aside>
+
+        <section class="catalog" aria-labelledby="catalog-title">
+          <div class="catalog-head">
+            <div>
+              <p class="section-kicker" id="active-area">Toda la biblioteca</p>
+              <h2 id="catalog-title">Elegí una puerta de entrada</h2>
+            </div>
+            <label class="search">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <span class="sr-only">Buscar conceptos</span>
+              <input id="search-input" type="search" placeholder="Buscar concepto, herramienta o proceso…" autocomplete="off" />
+              <kbd>/</kbd>
+            </label>
+          </div>
+
+          <div id="type-filters" class="type-filters" aria-label="Filtrar por tipo"></div>
+          <div id="cards" class="cards" aria-live="polite"></div>
+          <div id="empty-state" class="empty-state" hidden>
+            <span>◇</span>
+            <h3>No apareció nada por ese sendero</h3>
+            <p>Probá con otra palabra o volvé a toda la biblioteca.</p>
+            <button id="clear-filters" class="button secondary" type="button">Limpiar filtros</button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>© 2026 · All rights reserved · Autor <span>D_Maledicte</span></p>
+        <nav class="social-links" aria-label="Redes sociales de D_Maledicte">
+          <a href="https://www.linkedin.com/in/mjmartel/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de mjmartel" title="LinkedIn · mjmartel">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.5 8.25H3V21h3.5V8.25ZM4.75 3A2.08 2.08 0 1 0 4.75 7.16 2.08 2.08 0 0 0 4.75 3ZM21 13.69c0-3.84-2.05-5.63-4.78-5.63a4.13 4.13 0 0 0-3.72 2.05V8.25H9V21h3.5v-6.31c0-1.66.32-3.28 2.39-3.28 2.04 0 2.06 1.91 2.06 3.39V21H21v-7.31Z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/D-Maledicte" target="_blank" rel="noopener noreferrer" aria-label="GitHub de D-Maledicte" title="GitHub · D-Maledicte">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.58 2 12.23c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.49 0-.24-.01-1.05-.02-1.9-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.95a9.3 9.3 0 0 1 2.5.35c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.25 10.25 0 0 0 22 12.23C22 6.58 17.52 2 12 2Z"/>
+            </svg>
+          </a>
+        </nav>
+      </footer>
+    </div>
+
+    <dialog id="reader" class="reader">
+      <div class="reader-frame">
+        <header class="reader-head">
+          <div>
+            <p id="reader-area" class="section-kicker"></p>
+            <h2 id="reader-title"></h2>
+          </div>
+          <button id="close-reader" class="icon-button" type="button" aria-label="Cerrar lectura">×</button>
+        </header>
+        <div class="reader-tools">
+          <span id="reader-type" class="type-pill"></span>
+          <div class="reader-actions">
+            <button id="copy-md" class="button secondary" type="button">Copiar contexto</button>
+            <button id="download-md" class="button primary" type="button">Descargar .md</button>
+          </div>
+        </div>
+        <article id="reader-content" class="markdown"></article>
+        <footer id="reader-related" class="related"></footer>
+      </div>
+    </dialog>
+
+    <section id="glossary-panel" class="glossary-panel" aria-labelledby="glossary-title" aria-hidden="true">
+      <header class="glossary-head">
+        <div>
+          <p class="section-kicker">Referencia rápida</p>
+          <h2 id="glossary-title">Glosario</h2>
+        </div>
+        <button id="close-glossary" class="icon-button" type="button" aria-label="Cerrar glosario">×</button>
+      </header>
+      <label class="glossary-search">
+        <span aria-hidden="true">⌕</span>
+        <span class="sr-only">Buscar en el glosario</span>
+        <input id="glossary-search" type="search" placeholder="Buscar Orca, CLI, harness…" autocomplete="off" />
+      </label>
+      <p id="glossary-count" class="glossary-count" aria-live="polite"></p>
+      <div id="glossary-results" class="glossary-results"></div>
+    </section>
+
+    <button id="glossary-trigger" class="glossary-trigger" type="button" aria-expanded="false" aria-controls="glossary-panel">
+      <span class="glossary-trigger-icon" aria-hidden="true">Aa</span>
+      <span>Glosario</span>
+    </button>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
