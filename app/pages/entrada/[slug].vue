@@ -38,7 +38,6 @@ useSeoMeta({
 })
 
 useHead({
-  link: [{ rel: 'canonical', href: () => `${config.public.siteUrl}/entrada/${slug.value}` }],
   script: [
     {
       type: 'application/ld+json',

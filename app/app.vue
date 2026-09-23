@@ -1,13 +1,23 @@
 <script setup lang="ts">
 const { entries } = useLibrary()
 const config = useRuntimeConfig()
+const route = useRoute()
 
 /** Tarjeta de previsualización por defecto (la obra completa, 1200x630). */
 const defaultOgImage = `${config.public.siteUrl}/og/golden-path.jpg`
 
+/** Canónica de toda página, derivada de la ruta. */
+const canonical = computed(() => {
+  const path = route.path === '/' ? '/' : route.path.replace(/\/+$/, '')
+  return `${config.public.siteUrl}${path}`
+})
+
 useHead({
   titleTemplate: title => (title ? `${title} · Golden Path` : 'Golden Path'),
-  link: [{ rel: 'alternate', type: 'application/json', href: '/content.json', title: 'Biblioteca completa en JSON' }],
+  link: [
+    { rel: 'canonical', href: canonical },
+    { rel: 'alternate', type: 'application/json', href: '/content.json', title: 'Biblioteca completa en JSON' },
+  ],
 })
 
 useSeoMeta({

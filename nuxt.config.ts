@@ -16,7 +16,31 @@ const entrySlugs = existsSync(contentDir)
       .filter((slug): slug is string => Boolean(slug))
   : []
 
-const siteUrl = process.env.NUXT_PUBLIC_SITE_URL ?? 'https://golden-path.pages.dev'
+/**
+ * Origen canónico del sitio. Lo usan `og:image`, las canónicas, el `sitemap.xml`
+ * y el `robots.txt`, así que tiene que ser el dominio real: las plataformas de
+ * mensajería no resuelven `og:image` relativas.
+ *
+ * Orden de resolución:
+ *   1. `NUXT_PUBLIC_SITE_URL` — explícita, la que hay que definir en el host.
+ *   2. `VERCEL_PROJECT_PRODUCTION_URL` / `VERCEL_URL` — las inyecta Vercel en el
+ *      build. Evita que un deploy quede apuntando a un dominio inexistente.
+ *   3. Placeholder de desarrollo.
+ */
+const explicitSiteUrl = process.env.NUXT_PUBLIC_SITE_URL
+const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL
+const siteUrl = (
+  explicitSiteUrl ?? (vercelHost ? `https://${vercelHost}` : 'https://golden-path.pages.dev')
+).replace(/\/+$/, '')
+
+if (siteUrl === 'https://golden-path.pages.dev') {
+  console.warn(
+    '\n[golden-path] NUXT_PUBLIC_SITE_URL no está definida.\n'
+    + '  og:image, las canónicas y el sitemap van a apuntar al placeholder y las\n'
+    + '  previsualizaciones al compartir enlaces no van a funcionar.\n'
+    + '  Definila con el dominio real, por ejemplo: NUXT_PUBLIC_SITE_URL=https://ia.dmaledicte.cloud\n',
+  )
+}
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-09-23',
@@ -64,6 +88,17 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: { siteUrl },
+  },
+
+  /**
+   * Los `_nuxt/*` ya salen con `immutable` (Vercel los reconoce por el hash).
+   * Estos son los archivos de `public/`, que no están hasheados: cache
+   * moderado para no servir una versión vieja durante meses si se reemplazan.
+   */
+  routeRules: {
+    '/og/**': { headers: { 'cache-control': 'public, max-age=86400, stale-while-revalidate=604800' } },
+    '/assets/**': { headers: { 'cache-control': 'public, max-age=86400, stale-while-revalidate=604800' } },
+    '/content.json': { headers: { 'cache-control': 'public, max-age=3600' } },
   },
 
   nitro: {
