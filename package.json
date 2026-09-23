@@ -6,6 +6,7 @@
   "description": "Golden Path — conceptos, patrones y aprendizajes para diseñar entornos donde los agentes hacen buen trabajo. Nuxt 4 + nxui.",
   "scripts": {
     "content": "node scripts/build-content.mjs",
+    "og": "node scripts/generate-og.mjs",
     "optimize": "node scripts/optimize-images.mjs",
     "nxui": "node scripts/fetch-nxui.mjs",
     "migrate": "node scripts/migrate-content.mjs",

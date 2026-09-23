@@ -60,11 +60,17 @@ El build siempre es el mismo:
 | --- | --- |
 | **Build command** | `npm run generate` |
 | **Publish directory** | `.output/public` |
-| **Variable opcional** | `NUXT_PUBLIC_SITE_URL=https://tu-dominio.com` |
+| **Variable recomendada** | `NUXT_PUBLIC_SITE_URL=https://tu-dominio.com` |
 
 Sirve para Cloudflare Pages, Netlify, Vercel, S3 o cualquier hosting estático.
 Los pre-scripts de npm (`pregenerate`) compilan el contenido antes del build, así
 que no hace falta ningún paso extra.
+
+> **Definí `NUXT_PUBLIC_SITE_URL`.** No es cosmético: las tarjetas de
+> previsualización se referencian con URL absoluta, y las plataformas de mensajería
+> no pueden resolver una relativa. Sin esa variable, al compartir un enlace no
+> aparece imagen. También la usan las canónicas, el `sitemap.xml` y el
+> `robots.txt`.
 
 El workflow `.github/workflows/build.yml` valida el build en cada push y sube el
 resultado como artefacto, para poder desplegarlo a mano si hiciera falta.
@@ -80,6 +86,10 @@ resultado como artefacto, para poder desplegarlo a mano si hiciera falta.
 `public/robots.txt` son **artefactos generados** por
 `scripts/build-content.mjs` y están en `.gitignore`. Se recrean solos en cada
 `dev`, `build`, `generate` y `preview`.
+
+Las tarjetas de `public/og/` sí se versionan: cambian poco y conviene que sean
+estables (no dependen de las fuentes que tenga el runner de CI). Regeneralas con
+`npm run og` cuando cambies títulos o agregues una entrada.
 
 ---
 
@@ -239,6 +249,7 @@ consumen los componentes vendorizados.
 | `npm run generate` | build estático completo |
 | `npm run preview` | sirve `.output/public` |
 | `npm run content` | recompila `content/*.md` → `entries.ts` + artefactos |
+| `npm run og` | regenera las tarjetas de previsualización en `public/og/` |
 | `npm run nxui` | re-descarga los componentes de nxui vía MCP |
 | `npm run optimize` | genera AVIF/WebP del banner del hero |
 | `npm run migrate` | migra contenido desde el export original |
@@ -260,10 +271,12 @@ palabra. Además corrige defectos del original:
 - **Frontmatter YAML inválido.** Tres `summary` contenían `: ` sin comillas, lo
   que es YAML inválido. El parser casero del original lo tapaba; ahora están
   citados y el build valida.
-- **SEO.** El original no tenía `og:*`, canónicas, `robots.txt`, `sitemap.xml`
-  ni datos estructurados, y el cuerpo de las entradas no estaba en el HTML. Ahora
-  hay una ruta real por entrada, prerenderizada, con metadatos completos y
-  JSON-LD (`Article`).
+- **SEO y previsualización.** El original no tenía `og:*`, canónicas,
+  `robots.txt`, `sitemap.xml` ni datos estructurados, y el cuerpo de las entradas
+  no estaba en el HTML. Ahora hay una ruta real por entrada, prerenderizada, con
+  metadatos completos y JSON-LD (`Article`). Además cada entrada tiene su propia
+  tarjeta de previsualización de 1200×630 (`npm run og`), así que al compartir un
+  enlace se ve la obra con el título de esa entrada.
 - **Doble `h1`.** El `h1` del Markdown duplicaba el de la página; se elimina en
   build.
 - **Banner del hero.** El PNG del repositorio original estaba **truncado**: la

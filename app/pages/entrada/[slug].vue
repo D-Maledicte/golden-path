@@ -2,6 +2,7 @@
 const route = useRoute()
 const { bySlug, areaGlyph } = useLibrary()
 const reader = useReader()
+const config = useRuntimeConfig()
 
 const slug = computed(() => String(route.params.slug ?? ''))
 const entry = computed(() => bySlug(slug.value))
@@ -14,6 +15,9 @@ if (!entry.value) {
   })
 }
 
+/** Cada entrada tiene su propia tarjeta de previsualización. */
+const ogImage = computed(() => `${config.public.siteUrl}/og/${slug.value}.jpg`)
+
 useHead({
   title: () => entry.value?.title ?? 'Entrada',
 })
@@ -23,11 +27,15 @@ useSeoMeta({
   ogTitle: () => `${entry.value?.title ?? ''} · Golden Path`,
   ogDescription: () => entry.value?.summary ?? '',
   ogType: 'article',
+  ogImage,
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogImageAlt: () => `Golden Path: ${entry.value?.title ?? ''}`,
+  twitterCard: 'summary_large_image',
+  twitterImage: ogImage,
   articleSection: () => entry.value?.area,
   articleTag: () => entry.value?.tags ?? [],
 })
-
-const config = useRuntimeConfig()
 
 useHead({
   link: [{ rel: 'canonical', href: () => `${config.public.siteUrl}/entrada/${slug.value}` }],
