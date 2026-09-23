@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # npm 10.8 descarta `@rolldown/binding-linux-x64-gnu` por un bug en la
+      # detección de libc, y `nuxt prepare` falla. npm 11+ lo resuelve.
+      - name: Asegurar npm 11+
+        run: npm install --global npm@11
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      # Compila content/*.md (prebuild) y genera el sitio estático completo.
+      - name: Build estático
+        run: npm run generate
+
+      - name: Publicar artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-path-static
+          path: .output/public
+          retention-days: 7

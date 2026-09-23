@@ -1,0 +1,335 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+ * Golden Path — dark-only por diseño.
+ * El modo oscuro no depende de `prefers-color-scheme`: la clase `.dark` vive en
+ * <html> y los componentes de nxui la consumen vía `dark:`.
+ * ------------------------------------------------------------------------- */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Paleta original, preservada sin cambios. */
+  --color-night: #080714;
+  --color-night-2: #111022;
+  --color-abyss: #0e0c1c;
+  --color-ink: #f8f3e3;
+  --color-faint: #aaa4bc;
+  --color-dim: #777184;
+  --color-gold: #edc35e;
+  --color-gold-bright: #ffe8a1;
+  --color-violet: #a86aff;
+  --color-cyan: #57d9e8;
+  --color-magenta: #ec5fbd;
+
+  --radius-arc: 22px;
+  --radius-hero: 30px;
+
+  /* Animaciones que esperan shimmer-button y star-border. */
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+
+  @keyframes shimmer-slide {
+    to {
+      transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+
+  @keyframes spin-around {
+    0% {
+      transform: translateZ(0) rotate(0);
+    }
+    15%,
+    35% {
+      transform: translateZ(0) rotate(90deg);
+    }
+    65%,
+    85% {
+      transform: translateZ(0) rotate(270deg);
+    }
+    100% {
+      transform: translateZ(0) rotate(360deg);
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Tokens shadcn-vue que consumen los componentes de nxui
+ * (`bg-background`, `text-muted-foreground`, `border-border`, …).
+ * ------------------------------------------------------------------------- */
+:root {
+  --background: #080714;
+  --foreground: #f8f3e3;
+  --card: #131126;
+  --card-foreground: #f8f3e3;
+  --popover: #0e0c1c;
+  --popover-foreground: #f8f3e3;
+  --primary: #edc35e;
+  --primary-foreground: #21180b;
+  --secondary: #17142c;
+  --secondary-foreground: #f8f3e3;
+  --muted: #17142c;
+  --muted-foreground: #aaa4bc;
+  --accent: #a86aff;
+  --accent-foreground: #f8f3e3;
+  --destructive: #ec5fbd;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #57d9e8;
+  --radius: 0.75rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--color-ink);
+    background:
+      radial-gradient(circle at 82% 8%, rgba(108, 48, 160, 0.18), transparent 31rem),
+      radial-gradient(circle at 10% 42%, rgba(237, 195, 94, 0.08), transparent 26rem),
+      var(--color-night);
+    font-family: var(--font-sans);
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+
+  button {
+    color: inherit;
+  }
+
+  ::selection {
+    color: #21180b;
+    background: var(--color-gold);
+  }
+}
+
+/* `@container-size` es una clase literal que usa shimmer-button; no es una
+ * utilidad válida de Tailwind v4 (que esperaría `@container/size`). */
+[class~="@container-size"] {
+  container-type: size;
+}
+
+/* `::backdrop` no tiene variante en Tailwind: se define acá. */.reader-dialog::backdrop {
+  background: rgba(2, 2, 8, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.reader-dialog[open] {
+  animation: reader-in 0.22s ease-out;
+}
+
+@keyframes reader-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Índice lateral (AnimatedToc).
+ * El componente usa una altura de fila fija, así que los encabezados largos se
+ * pisaban entre sí al envolverse. Se achica la tipografía y se recorta el
+ * sobrante para que cada fila respete su altura.
+ * ------------------------------------------------------------------------- */
+.toc-compact a {
+  overflow: hidden;
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+/* ---------------------------------------------------------------------------
+ * Prosa editorial — estilo del Markdown renderizado en build.
+ * Portado 1:1 de la hoja original, con soporte de listas anidadas y tablas
+ * anchas que ahora sí funcionan.
+ * ------------------------------------------------------------------------- */
+.prose-golden {
+  color: #d6d1df;
+  font-size: 1rem;
+  line-height: 1.72;
+}
+
+.prose-golden h2 {
+  margin: 2.2rem 0 0.7rem;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.prose-golden h3 {
+  margin: 1.7rem 0 0.55rem;
+  color: var(--color-gold-bright);
+  font-size: 1.14rem;
+  font-weight: 650;
+}
+
+.prose-golden p {
+  margin: 0.7rem 0;
+}
+
+.prose-golden strong {
+  color: var(--color-ink);
+}
+
+.prose-golden em {
+  color: #c7b4e8;
+}
+
+.prose-golden a {
+  color: var(--color-cyan);
+  text-underline-offset: 3px;
+}
+
+.prose-golden a:hover {
+  color: #a6f5f7;
+}
+
+.prose-golden ul,
+.prose-golden ol {
+  margin: 0.7rem 0;
+  padding-left: 1.4rem;
+}
+
+.prose-golden ul {
+  list-style: disc;
+}
+
+.prose-golden ol {
+  list-style: decimal;
+}
+
+.prose-golden li {
+  margin: 0.35rem 0;
+}
+
+.prose-golden li::marker {
+  color: var(--color-gold);
+}
+
+.prose-golden li > ul,
+.prose-golden li > ol {
+  margin: 0.3rem 0;
+}
+
+.prose-golden blockquote {
+  margin: 1.35rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--color-gold);
+  color: #c9c4d2;
+  background: rgba(237, 195, 94, 0.05);
+}
+
+.prose-golden blockquote p {
+  margin: 0;
+}
+
+.prose-golden code {
+  padding: 0.16rem 0.38rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #ffe7a0;
+  background: rgba(0, 0, 0, 0.28);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.prose-golden pre {
+  overflow-x: auto;
+  margin: 1.3rem 0;
+  padding: 18px;
+  border: 1px solid rgba(87, 217, 232, 0.13);
+  border-radius: 14px;
+  background: #0b0a18;
+}
+
+.prose-golden pre code {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.prose-golden table {
+  display: block;
+  width: 100%;
+  margin: 1.2rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.prose-golden th,
+.prose-golden td {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose-golden th {
+  color: var(--color-gold-bright);
+  background: rgba(237, 195, 94, 0.06);
+}
+
+.prose-golden hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid rgba(236, 195, 94, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

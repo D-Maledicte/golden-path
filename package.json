@@ -1,0 +1,45 @@
+{
+  "name": "golden-path",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Golden Path — conceptos, patrones y aprendizajes para diseñar entornos donde los agentes hacen buen trabajo. Nuxt 4 + nxui.",
+  "scripts": {
+    "content": "node scripts/build-content.mjs",
+    "optimize": "node scripts/optimize-images.mjs",
+    "nxui": "node scripts/fetch-nxui.mjs",
+    "migrate": "node scripts/migrate-content.mjs",
+    "predev": "node scripts/build-content.mjs",
+    "dev": "nuxt dev",
+    "prebuild": "node scripts/build-content.mjs",
+    "build": "nuxt build",
+    "pregenerate": "node scripts/build-content.mjs",
+    "generate": "nuxt generate",
+    "prepreview": "node scripts/build-content.mjs",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/icon": "^2.5.1",
+    "@shikijs/markdown-it": "^4.4.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vueuse/core": "^15.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
+    "lucide-vue-next": "^1.0.0",
+    "markdown-it": "^15.0.2",
+    "motion-v": "^2.4.4",
+    "nuxt": "^4.5.2",
+    "ogl": "^1.0.11",
+    "reka-ui": "^2.10.5",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "vue": "^3.5.43"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.136",
+    "sharp": "^0.35.4",
+    "typescript": "^5.9.0"
+  }
+}

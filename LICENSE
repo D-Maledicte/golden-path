@@ -1,0 +1,29 @@
+All rights reserved.
+
+Copyright (c) 2026 D_Maledicte (https://github.com/D-Maledicte)
+
+Este repositorio y su contenido —incluyendo los textos editoriales, los casos
+anonimizados, la identidad visual y la maquetación— son propiedad de su autor.
+No se concede permiso para copiar, modificar, distribuir, publicar ni usar
+comercialmente este material, total o parcialmente, sin autorización previa y
+por escrito del autor.
+
+El código de los componentes ubicados en `app/components/ui/` proviene del
+registry público de nxui (https://nxui.geoql.in) y se incluye aquí como
+dependencia vendorizada; su uso se rige por los términos de ese proyecto.
+
+---
+
+All rights reserved.
+
+Copyright (c) 2026 D_Maledicte (https://github.com/D-Maledicte)
+
+This repository and its contents — including the editorial texts, the
+anonymised case studies, the visual identity and the layout — are the property
+of the author. No permission is granted to copy, modify, distribute, publish or
+commercially use this material, in whole or in part, without prior written
+authorisation from the author.
+
+The component code under `app/components/ui/` comes from the public nxui
+registry (https://nxui.geoql.in) and is vendored here as a dependency; its use
+is governed by that project's terms.

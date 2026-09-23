@@ -1,0 +1,15 @@
+node_modules
+.nuxt
+.output
+.data
+dist
+.env
+.env.*
+*.log
+.DS_Store
+
+# Generado por scripts/build-content.mjs (se recrea en cada build)
+app/generated/
+public/content.json
+public/sitemap.xml
+public/robots.txt
