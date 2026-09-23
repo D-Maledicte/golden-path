@@ -54,7 +54,7 @@ NUXT_PUBLIC_SITE_URL=https://tu-dominio.com npm run generate
 
 ## Deploy
 
-El build siempre es el mismo:
+El build para un hosting puramente estático es:
 
 | | |
 | --- | --- |
@@ -62,9 +62,16 @@ El build siempre es el mismo:
 | **Publish directory** | `.output/public` |
 | **Variable recomendada** | `NUXT_PUBLIC_SITE_URL=https://tu-dominio.com` |
 
-Sirve para Cloudflare Pages, Netlify, Vercel, S3 o cualquier hosting estático.
-Los pre-scripts de npm (`pregenerate`) compilan el contenido antes del build, así
-que no hace falta ningún paso extra.
+Sirve para Cloudflare Pages, Netlify, S3 o cualquier hosting estático. Los
+pre-scripts de npm (`pregenerate`) compilan el contenido antes del build, así que
+no hace falta ningún paso extra.
+
+> **En Vercel** no hace falta configurar nada: su integración de Nuxt corre
+> `npm run build` y aplica el preset `vercel`, que también prerenderiza las 26
+> rutas (por `nitro.prerender`). El resultado son páginas estáticas servidas
+> desde el CDN más una función de respaldo que sólo atiende rutas inexistentes.
+> Si querés un deploy 100 % estático sin función, se puede forzar, pero hay que
+> verificar que Vercel tome `.output/public`.
 
 > **Definí `NUXT_PUBLIC_SITE_URL`.** No es cosmético: las tarjetas de
 > previsualización se referencian con URL absoluta, y las plataformas de mensajería
