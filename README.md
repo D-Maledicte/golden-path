@@ -113,12 +113,18 @@ claude mcp add --transport http golden-path https://ia.dmaledicte.cloud/mcp
 
 | Tool | Qué hace |
 | --- | --- |
-| `buscar_entradas` | búsqueda con ranking por término (título, tags, resumen, secciones, cuerpo) |
-| `leer_entrada` | entrada completa en Markdown, o una sola sección por su ancla |
-| `listar_entradas` | índice agrupado por área, filtrable por área y tipo |
-| `consultar_glosario` | definiciones y la entrada donde se desarrolla cada término |
+| `search_entries` | búsqueda con ranking por término (título, tags, resumen, secciones, cuerpo) |
+| `read_entry` | entrada completa en Markdown, o una sola sección por su ancla |
+| `list_entries` | índice agrupado por área, filtrable por área y tipo |
+| `lookup_glossary` | definiciones y la entrada donde se desarrolla cada término |
 
 Decisiones:
+
+- **Interfaz en inglés.** Nombres de tools, parámetros, descripciones y
+  mensajes. El contenido sale en inglés por defecto (`content/en/`); las
+  entradas sin traducir se sirven en español marcadas como pendientes, y
+  `language: "es"` devuelve el original. Las áreas se exponen con su etiqueta en
+  inglés (`MCP_AREA_LABELS_EN` en `shared/mcp.ts`).
 
 - **Sólo lectura y sin autenticación.** El contenido ya es público
   (`content.json`); no hay nada que proteger ni que se pueda romper.

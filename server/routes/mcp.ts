@@ -1,11 +1,17 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js'
 import { z } from 'zod'
-import { entries } from '~/generated/entries'
-import { glossary } from '~/data/glossary'
+import * as generated from '~/generated/entries'
+import * as glossaryData from '~/data/glossary'
 import { AREA_ORDER, TYPE_LABELS, fold, slugify } from '#shared/library'
-import { MCP_INSTRUCTIONS, MCP_SERVER_NAME, MCP_TOOLS } from '#shared/mcp'
-import type { EntryType, LibraryEntry } from '#shared/types/library'
+import {
+  MCP_AREA_LABELS_EN,
+  MCP_INSTRUCTIONS,
+  MCP_SERVER_NAME,
+  MCP_TOOLS,
+  MCP_TYPE_LABELS_EN,
+} from '#shared/mcp'
+import type { EntryType, GlossaryTerm, LibraryEntry } from '#shared/types/library'
 
 /**
  * Servidor MCP de Golden Path: la biblioteca, de sólo lectura, para agentes.
@@ -17,6 +23,9 @@ import type { EntryType, LibraryEntry } from '#shared/types/library'
  * Transporte Streamable HTTP **sin estado**: cada POST crea su servidor, responde
  * JSON y termina. No hay sesiones ni streams SSE abiertos, que es lo que conviene
  * a una función serverless (cada invocación dura milisegundos).
+ *
+ * La interfaz es en inglés. El contenido sale en inglés por defecto y, si una
+ * entrada todavía no está traducida, en español marcada como tal.
  */
 
 const MAX_BODY_BYTES = 64 * 1024
@@ -30,6 +39,18 @@ const CORS_HEADERS = {
   'access-control-expose-headers': 'mcp-session-id',
   'access-control-max-age': '86400',
 }
+
+type Language = 'en' | 'es'
+
+/*
+ * `entriesEn` y `glossaryEn` los agrega la traducción del sitio. Se leen del
+ * namespace para que el servidor funcione también mientras no existan: en ese
+ * caso todo cae al español.
+ */
+const entriesEs: LibraryEntry[] = generated.entries
+const entriesEn: LibraryEntry[] = (generated as { entriesEn?: LibraryEntry[] }).entriesEn ?? []
+const glossaryEs: GlossaryTerm[] = glossaryData.glossary
+const glossaryEn: GlossaryTerm[] = (glossaryData as { glossaryEn?: GlossaryTerm[] }).glossaryEn ?? []
 
 /* ---------------------------------------------------------------------------
  * Datos derivados: se calculan una vez por instancia de la función.
@@ -45,11 +66,15 @@ interface Section {
 
 interface PreparedEntry {
   entry: LibraryEntry
+  /** Idioma real del contenido. */
+  language: Language
+  /** Se pidió inglés y la entrada todavía no está traducida. */
+  fallback: boolean
   /** Cuerpo en Markdown, sin frontmatter ni `# Título`. */
   body: string
   paragraphs: string[]
   sections: Section[]
-  folded: { title: string; summary: string; tags: string; headings: string; body: string }
+  folded: { title: string, summary: string, tags: string, headings: string, body: string }
 }
 
 function stripFrontmatter(raw: string): string {
@@ -58,12 +83,12 @@ function stripFrontmatter(raw: string): string {
 
 /**
  * Parte el cuerpo en secciones h2/h3. Los ids se toman de `entry.headings`
- * (los mismos del HTML del sitio, en el mismo orden) para que `seccion` acepte
+ * (los mismos del HTML del sitio, en el mismo orden) para que `section` acepte
  * exactamente los anclas de las URLs `…#id`.
  */
 function splitSections(body: string, entry: LibraryEntry): Section[] {
   const lines = body.split('\n')
-  const found: { line: number; depth: number; label: string }[] = []
+  const found: { line: number, depth: number, label: string }[] = []
   let inFence = false
 
   lines.forEach((line, index) => {
@@ -95,10 +120,12 @@ function toParagraphs(body: string): string[] {
     .filter(block => block.length > 40)
 }
 
-const prepared: PreparedEntry[] = entries.map((entry) => {
+function prepare(entry: LibraryEntry, language: Language, fallback: boolean): PreparedEntry {
   const body = stripFrontmatter(entry.raw)
   return {
     entry,
+    language,
+    fallback,
     body,
     paragraphs: toParagraphs(body),
     sections: splitSections(body, entry),
@@ -110,13 +137,38 @@ const prepared: PreparedEntry[] = entries.map((entry) => {
       body: fold(body),
     },
   }
-})
+}
 
-const bySlug = new Map(prepared.map(item => [item.entry.slug, item]))
+/**
+ * La biblioteca en cada idioma, en el orden editorial del español. En inglés,
+ * las entradas sin traducir se sirven en español con `fallback: true`.
+ */
+const enBySlug = new Map(entriesEn.map(entry => [entry.slug, entry]))
+const library: Record<Language, PreparedEntry[]> = {
+  es: entriesEs.map(entry => prepare(entry, 'es', false)),
+  en: entriesEs.map((entry) => {
+    const translated = enBySlug.get(entry.slug)
+    return translated ? prepare(translated, 'en', false) : prepare(entry, 'es', true)
+  }),
+}
+const bySlug: Record<Language, Map<string, PreparedEntry>> = {
+  es: new Map(library.es.map(item => [item.entry.slug, item])),
+  en: new Map(library.en.map(item => [item.entry.slug, item])),
+}
 
-const slugs = entries.map(entry => entry.slug) as [string, ...string[]]
-const areas = AREA_ORDER.filter(area => entries.some(entry => entry.area === area)) as [string, ...string[]]
+const slugs = entriesEs.map(entry => entry.slug) as [string, ...string[]]
 const types = Object.keys(TYPE_LABELS) as [EntryType, ...EntryType[]]
+
+/** Áreas presentes, por su etiqueta en inglés (lo que ve y manda el agente). */
+const areaIds = AREA_ORDER.filter(area => entriesEs.some(entry => entry.area === area))
+const areaLabel = (area: string) => MCP_AREA_LABELS_EN[area] ?? area
+const areaByLabel = new Map(areaIds.map(area => [areaLabel(area), area]))
+const areaLabels = areaIds.map(areaLabel) as [string, ...string[]]
+
+const languageParam = z
+  .enum(['en', 'es'])
+  .default('en')
+  .describe('Content language. Defaults to English; "es" returns the original Spanish.')
 
 /* ---------------------------------------------------------------------------
  * Búsqueda con ranking. El sitio filtra por coincidencia exacta de la frase;
@@ -142,10 +194,10 @@ function score(item: PreparedEntry, terms: string[], phrase: string): number {
   for (const term of terms) {
     const termScore
       = (folded.title.includes(term) ? 10 : 0)
-      + (folded.tags.includes(term) ? 6 : 0)
-      + (folded.summary.includes(term) ? 4 : 0)
-      + (folded.headings.includes(term) ? 3 : 0)
-      + Math.min(countOccurrences(folded.body, term), 10)
+        + (folded.tags.includes(term) ? 6 : 0)
+        + (folded.summary.includes(term) ? 4 : 0)
+        + (folded.headings.includes(term) ? 3 : 0)
+        + Math.min(countOccurrences(folded.body, term), 10)
     if (termScore > 0) matched++
     total += termScore
   }
@@ -169,21 +221,32 @@ function snippet(item: PreparedEntry, terms: string[]): string {
  * Formato de salida: Markdown compacto, que es lo que mejor lee un modelo.
  * ------------------------------------------------------------------------- */
 
-function entryUrl(siteUrl: string, slug: string, anchor?: string) {
-  return `${siteUrl}/entrada/${slug}${anchor ? `#${anchor}` : ''}`
+function entryUrl(siteUrl: string, item: PreparedEntry, anchor?: string) {
+  const prefix = item.language === 'en' ? '/en' : ''
+  return `${siteUrl}${prefix}/entrada/${item.entry.slug}${anchor ? `#${anchor}` : ''}`
 }
+
+function typeLabel(type: EntryType, language: Language) {
+  return language === 'en' ? MCP_TYPE_LABELS_EN[type] : TYPE_LABELS[type]
+}
+
+function displayArea(area: string, language: Language) {
+  return language === 'en' ? areaLabel(area) : area
+}
+
+const FALLBACK_NOTE = '_(Spanish only: English translation pending)_'
 
 function text(markdown: string) {
   return { content: [{ type: 'text' as const, text: markdown }] }
 }
 
-function notFound(message: string) {
+function toolError(message: string) {
   return { ...text(message), isError: true }
 }
 
 function createServer(siteUrl: string) {
   const server = new McpServer(
-    { name: MCP_SERVER_NAME, title: 'Golden Path', version: '1.0.0', websiteUrl: siteUrl },
+    { name: MCP_SERVER_NAME, title: 'Golden Path', version: '2.0.0', websiteUrl: siteUrl },
     { instructions: MCP_INSTRUCTIONS },
   )
 
@@ -192,47 +255,49 @@ function createServer(siteUrl: string) {
   server.registerTool(
     MCP_TOOLS.buscar.name,
     {
-      title: MCP_TOOLS.buscar.title,
-      description: MCP_TOOLS.buscar.description,
+      title: MCP_TOOLS.buscar.en.title,
+      description: MCP_TOOLS.buscar.en.description,
       inputSchema: {
-        consulta: z.string().min(2).max(200).describe('Texto a buscar, en español. Ej.: "worktrees y paralelismo".'),
-        area: z.enum(areas).optional().describe('Limitar a un área (recorrido) de la biblioteca.'),
-        tipo: z.enum(types).optional().describe('Limitar a un tipo de entrada.'),
-        limite: z.number().int().min(1).max(MAX_RESULTS).default(5).describe('Cantidad máxima de resultados.'),
+        query: z.string().min(2).max(200).describe('Text to search for. E.g. "worktrees and parallel agents".'),
+        area: z.enum(areaLabels).optional().describe('Restrict to one area (learning path) of the library.'),
+        type: z.enum(types).optional().describe('Restrict to one entry type.'),
+        limit: z.number().int().min(1).max(MAX_RESULTS).default(5).describe('Maximum number of results.'),
+        language: languageParam,
       },
       annotations: readOnly,
     },
-    async ({ consulta, area, tipo, limite }) => {
-      const phrase = fold(consulta.trim())
+    async ({ query, area, type, limit, language }) => {
+      const phrase = fold(query.trim())
       const terms = [...new Set(phrase.split(/[^a-z0-9ñ.#-]+/).filter(term => term.length >= 2))]
-      if (!terms.length) return notFound('La consulta no tiene términos buscables.')
+      if (!terms.length) return toolError('The query has no searchable terms.')
 
-      const results = prepared
-        .filter(({ entry }) => (!area || entry.area === area) && (!tipo || entry.type === tipo))
+      const areaId = area ? areaByLabel.get(area) : undefined
+      const results = library[language]
+        .filter(({ entry }) => (!areaId || entry.area === areaId) && (!type || entry.type === type))
         .map(item => ({ item, score: score(item, terms, phrase) }))
         .filter(result => result.score > 0)
         .sort((a, b) => b.score - a.score)
-        .slice(0, limite)
+        .slice(0, limit)
 
       if (!results.length) {
         return text(
-          `Sin resultados para "${consulta}". Probá con otros términos o usá \`${MCP_TOOLS.listar.name}\` para ver el índice.`,
+          `No results for "${query}". Try other terms or use \`${MCP_TOOLS.listar.name}\` to browse the index.`,
         )
       }
 
       const lines = results.map(({ item }, index) => {
         const { entry } = item
         return [
-          `${index + 1}. **${entry.title}** — \`${entry.slug}\``,
-          `   ${TYPE_LABELS[entry.type]} · ${entry.area} · ${entryUrl(siteUrl, entry.slug)}`,
+          `${index + 1}. **${entry.title}** — \`${entry.slug}\`${item.fallback ? ` ${FALLBACK_NOTE}` : ''}`,
+          `   ${typeLabel(entry.type, language)} · ${displayArea(entry.area, language)} · ${entryUrl(siteUrl, item)}`,
           `   ${entry.summary}`,
           `   > ${snippet(item, terms)}`,
         ].join('\n')
       })
 
       return text(
-        `${results.length} resultado(s) para "${consulta}":\n\n${lines.join('\n\n')}\n\n`
-        + `Usá \`${MCP_TOOLS.leer.name}\` con el slug para leer una entrada completa.`,
+        `${results.length} result(s) for "${query}":\n\n${lines.join('\n\n')}\n\n`
+        + `Use \`${MCP_TOOLS.leer.name}\` with the slug to read a full entry.`,
       )
     },
   )
@@ -240,54 +305,56 @@ function createServer(siteUrl: string) {
   server.registerTool(
     MCP_TOOLS.leer.name,
     {
-      title: MCP_TOOLS.leer.title,
-      description: MCP_TOOLS.leer.description,
+      title: MCP_TOOLS.leer.en.title,
+      description: MCP_TOOLS.leer.en.description,
       inputSchema: {
-        slug: z.enum(slugs).describe('Slug de la entrada.'),
-        seccion: z
+        slug: z.enum(slugs).describe('Entry slug.'),
+        section: z
           .string()
           .max(200)
           .optional()
-          .describe('Id (el ancla de la URL) o título de un h2/h3 para leer sólo esa sección.'),
+          .describe('Id (the URL anchor) or title of an h2/h3, to read only that section.'),
+        language: languageParam,
       },
       annotations: readOnly,
     },
-    async ({ slug, seccion }) => {
-      const item = bySlug.get(slug)
-      if (!item) return notFound(`No existe la entrada "${slug}".`)
+    async ({ slug, section, language }) => {
+      const item = bySlug[language].get(slug)
+      if (!item) return toolError(`There is no entry "${slug}".`)
       const { entry } = item
+      const note = item.fallback ? `\n\n${FALLBACK_NOTE}` : ''
 
       const sectionIndex = item.sections
-        .map(section => `- \`${section.id}\`${section.depth === 3 ? ' (h3)' : ''} — ${section.label}`)
+        .map(candidate => `- \`${candidate.id}\`${candidate.depth === 3 ? ' (h3)' : ''} — ${candidate.label}`)
         .join('\n')
 
-      if (seccion) {
-        const wanted = fold(seccion.trim())
-        const section
+      if (section) {
+        const wanted = fold(section.trim())
+        const found
           = item.sections.find(candidate => candidate.id === wanted || fold(candidate.label) === wanted)
             ?? item.sections.find(candidate => fold(candidate.label).includes(wanted))
-        if (!section) {
-          return notFound(`La entrada "${slug}" no tiene la sección "${seccion}". Secciones disponibles:\n${sectionIndex}`)
+        if (!found) {
+          return toolError(`Entry "${slug}" has no section "${section}". Available sections:\n${sectionIndex}`)
         }
         return text(
-          `# ${entry.title} → ${section.label}\n\nFuente: ${entryUrl(siteUrl, slug, section.id)}\n\n${section.markdown}`,
+          `# ${entry.title} → ${found.label}${note}\n\nSource: ${entryUrl(siteUrl, item, found.id)}\n\n${found.markdown}`,
         )
       }
 
       const related = entry.related
-        .map(relatedSlug => bySlug.get(relatedSlug)?.entry)
+        .map(relatedSlug => bySlug[language].get(relatedSlug)?.entry)
         .filter((relatedEntry): relatedEntry is LibraryEntry => Boolean(relatedEntry))
         .map(relatedEntry => `- \`${relatedEntry.slug}\` — ${relatedEntry.title}`)
         .join('\n')
 
       return text(
         [
-          `# ${entry.title}`,
+          `# ${entry.title}${note}`,
           '',
-          `- **Tipo:** ${TYPE_LABELS[entry.type]}`,
-          `- **Área:** ${entry.area}`,
+          `- **Type:** ${typeLabel(entry.type, language)}`,
+          `- **Area:** ${displayArea(entry.area, language)}`,
           `- **Tags:** ${entry.tags.join(', ') || '—'}`,
-          `- **URL:** ${entryUrl(siteUrl, slug)}`,
+          `- **URL:** ${entryUrl(siteUrl, item)}`,
           '',
           `> ${entry.summary}`,
           '',
@@ -297,7 +364,7 @@ function createServer(siteUrl: string) {
           '',
           '---',
           '',
-          related ? `**Entradas relacionadas:**\n${related}` : '',
+          related ? `**Related entries:**\n${related}` : '',
         ].join('\n').trim(),
       )
     },
@@ -306,53 +373,62 @@ function createServer(siteUrl: string) {
   server.registerTool(
     MCP_TOOLS.listar.name,
     {
-      title: MCP_TOOLS.listar.title,
-      description: MCP_TOOLS.listar.description,
+      title: MCP_TOOLS.listar.en.title,
+      description: MCP_TOOLS.listar.en.description,
       inputSchema: {
-        area: z.enum(areas).optional().describe('Mostrar sólo esta área.'),
-        tipo: z.enum(types).optional().describe('Mostrar sólo este tipo de entrada.'),
+        area: z.enum(areaLabels).optional().describe('Show only this area.'),
+        type: z.enum(types).optional().describe('Show only this entry type.'),
+        language: languageParam,
       },
       annotations: readOnly,
     },
-    async ({ area, tipo }) => {
-      const groups = areas
+    async ({ area, type, language }) => {
+      const areaId = area ? areaByLabel.get(area) : undefined
+      const groups = areaIds
         .map(groupArea => ({
           area: groupArea,
-          items: entries.filter(entry =>
-            entry.area === groupArea && (!area || entry.area === area) && (!tipo || entry.type === tipo),
+          items: library[language].filter(({ entry }) =>
+            entry.area === groupArea && (!areaId || entry.area === areaId) && (!type || entry.type === type),
           ),
         }))
         .filter(group => group.items.length)
 
-      if (!groups.length) return text('No hay entradas con esos filtros.')
+      if (!groups.length) return text('No entries match those filters.')
 
       const total = groups.reduce((sum, group) => sum + group.items.length, 0)
+      const pending = groups.reduce((sum, group) => sum + group.items.filter(item => item.fallback).length, 0)
       const body = groups
         .map(group =>
           [
-            `## ${group.area} (${group.items.length})`,
-            ...group.items.map(entry => `- \`${entry.slug}\` — **${entry.title}** (${TYPE_LABELS[entry.type]}): ${entry.summary}`),
+            `## ${displayArea(group.area, language)} (${group.items.length})`,
+            ...group.items.map(({ entry, fallback }) =>
+              `- \`${entry.slug}\` — **${entry.title}** (${typeLabel(entry.type, language)})${fallback ? ' [es]' : ''}: ${entry.summary}`,
+            ),
           ].join('\n'),
         )
         .join('\n\n')
 
-      return text(`# Golden Path — ${total} entrada(s)\n\n${body}`)
+      const legend = pending ? `\n\n${pending} entr${pending === 1 ? 'y is' : 'ies are'} marked [es]: Spanish only, English translation pending.` : ''
+      return text(`# Golden Path — ${total} entr${total === 1 ? 'y' : 'ies'}${legend}\n\n${body}`)
     },
   )
 
   server.registerTool(
     MCP_TOOLS.glosario.name,
     {
-      title: MCP_TOOLS.glosario.title,
-      description: MCP_TOOLS.glosario.description,
+      title: MCP_TOOLS.glosario.en.title,
+      description: MCP_TOOLS.glosario.en.description,
       inputSchema: {
-        termino: z.string().max(100).optional().describe('Término a buscar. Ej.: "worktree", "ADE".'),
+        term: z.string().max(100).optional().describe('Term to look up. E.g. "worktree", "ADE".'),
+        language: languageParam,
       },
       annotations: readOnly,
     },
-    async ({ termino }) => {
-      const sorted = [...glossary].sort((a, b) => a.term.localeCompare(b.term, 'es'))
-      const wanted = termino ? fold(termino.trim()) : ''
+    async ({ term, language }) => {
+      const source = language === 'en' && glossaryEn.length ? glossaryEn : glossaryEs
+      const note = language === 'en' && !glossaryEn.length ? `${FALLBACK_NOTE}\n\n` : ''
+      const sorted = [...source].sort((a, b) => a.term.localeCompare(b.term, language))
+      const wanted = term ? fold(term.trim()) : ''
 
       const matches = !wanted
         ? sorted
@@ -364,16 +440,17 @@ function createServer(siteUrl: string) {
           })()
 
       if (!matches.length) {
-        return text(
-          `"${termino}" no está en el glosario. Términos disponibles: ${sorted.map(item => item.term).join(', ')}.`,
-        )
+        return text(`"${term}" is not in the glossary. Available terms: ${sorted.map(item => item.term).join(', ')}.`)
       }
 
       return text(
-        matches
-          .map(item =>
-            `**${item.term}**: ${item.definition}${item.slug ? `\n  → Se explica en \`${item.slug}\` (${entryUrl(siteUrl, item.slug)})` : ''}`,
-          )
+        note + matches
+          .map((item) => {
+            const linked = item.slug ? bySlug[language].get(item.slug) : undefined
+            return `**${item.term}**: ${item.definition}${
+              linked ? `\n  → Explained in \`${linked.entry.slug}\` (${entryUrl(siteUrl, linked)})` : ''
+            }`
+          })
           .join('\n\n'),
       )
     },
@@ -401,7 +478,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 405)
     return {
       jsonrpc: '2.0',
-      error: { code: -32000, message: 'Método no permitido: este servidor MCP es sin estado y sólo acepta POST.' },
+      error: { code: -32000, message: 'Method not allowed: this MCP server is stateless and only accepts POST.' },
       id: null,
     }
   }
