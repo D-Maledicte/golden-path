@@ -89,8 +89,8 @@ resultado como artefacto, para poder desplegarlo a mano si hiciera falta.
 
 ### Qué no se versiona
 
-`app/generated/`, `public/content.json`, `public/sitemap.xml` y
-`public/robots.txt` son **artefactos generados** por
+`app/generated/`, `public/content.json`, `public/llms.txt`, `public/sitemap.xml`
+y `public/robots.txt` son **artefactos generados** por
 `scripts/build-content.mjs` y están en `.gitignore`. Se recrean solos en cada
 `dev`, `build`, `generate` y `preview`.
 
@@ -100,10 +100,54 @@ estables (no dependen de las fuentes que tenga el runner de CI). Regeneralas con
 
 ---
 
+## MCP para agentes
+
+`server/routes/mcp.ts` expone la biblioteca como servidor
+[MCP](https://modelcontextprotocol.io) en `/mcp`, para que un agente (Claude,
+Cursor, VS Code…) la busque y la lea mientras trabaja. La página `/conectar`
+explica cómo conectarse desde cada cliente.
+
+```bash
+claude mcp add --transport http golden-path https://ia.dmaledicte.cloud/mcp
+```
+
+| Tool | Qué hace |
+| --- | --- |
+| `buscar_entradas` | búsqueda con ranking por término (título, tags, resumen, secciones, cuerpo) |
+| `leer_entrada` | entrada completa en Markdown, o una sola sección por su ancla |
+| `listar_entradas` | índice agrupado por área, filtrable por área y tipo |
+| `consultar_glosario` | definiciones y la entrada donde se desarrolla cada término |
+
+Decisiones:
+
+- **Sólo lectura y sin autenticación.** El contenido ya es público
+  (`content.json`); no hay nada que proteger ni que se pueda romper.
+- **Transporte Streamable HTTP sin estado.** Cada POST crea su servidor, responde
+  JSON y termina: sin sesiones ni streams SSE abiertos, lo que conviene a una
+  función serverless. `GET` responde 405 (o redirige a `/conectar` si viene de un
+  navegador) y el cuerpo se limita a 64 KB.
+- **Mismos datos que el sitio.** Lee `app/generated/entries.ts` y
+  `app/data/glossary.ts`; los ids de sección son las mismas anclas de las URLs.
+- **El catálogo de tools vive en `shared/mcp.ts`**, así `/conectar` nunca describe
+  una tool que el servidor no tenga.
+
+**Dónde existe.** En Vercel (`npm run build`, preset `vercel`) la ruta se sirve
+desde la misma función de respaldo que ya generaba Nuxt; las páginas siguen
+prerenderizadas en el CDN. Con `npm run generate` (hosting estático puro) `/mcp`
+no existe: para esos casos quedan `llms.txt` y `content.json`.
+
+Para probarlo en local, con `npm run dev` corriendo:
+
+```bash
+npx @modelcontextprotocol/inspector   # URL: http://localhost:3000/mcp, transporte Streamable HTTP
+```
+
+---
+
 ## Estructura
 
 ```
-content/                  23 entradas en Markdown (fuente de verdad editorial)
+content/                  26 entradas en Markdown (fuente de verdad editorial)
 app/
   app.vue                 shell: skip-link, páginas, footer, glosario, lector, paleta
   assets/css/main.css     paleta, tokens shadcn-vue, prosa editorial
@@ -113,9 +157,14 @@ app/
   data/glossary.ts        los 24 términos del glosario
   generated/entries.ts    AUTO-GENERADO — no editar a mano
   lib/utils.ts            `cn()` (clsx + tailwind-merge)
-  pages/                  index, entrada/[slug], entradas, glosario
-  types/library.ts        tipos compartidos
-public/                   favicon, content.json, sitemap.xml, robots.txt
+  pages/                  index, entrada/[slug], entradas, glosario, conectar
+  types/library.ts        re-exporta los tipos de shared/
+server/routes/mcp.ts      servidor MCP (única ruta dinámica)
+shared/                   código compartido entre app y servidor
+  library.ts              áreas, tipos, índice de búsqueda, slugify
+  mcp.ts                  catálogo de tools (lo leen el servidor y /conectar)
+  types/library.ts        tipos de la biblioteca
+public/                   favicon, content.json, llms.txt, sitemap.xml, robots.txt
 scripts/                  pipeline de contenido, imágenes y vendorizado de nxui
 ```
 

@@ -21,6 +21,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.1",
     "@nuxt/icon": "^2.5.1",
     "@shikijs/markdown-it": "^4.4.3",
     "@tailwindcss/vite": "^4.3.3",
@@ -33,7 +34,8 @@
     "ogl": "^1.0.11",
     "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3",
-    "vue": "^3.5.43"
+    "vue": "^3.5.43",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.136",

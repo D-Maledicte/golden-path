@@ -239,6 +239,7 @@ const urls = [
   { loc: `${siteUrl}/`, changefreq: 'weekly', priority: '1.0' },
   { loc: `${siteUrl}/entradas`, changefreq: 'weekly', priority: '0.8' },
   { loc: `${siteUrl}/glosario`, changefreq: 'monthly', priority: '0.7' },
+  { loc: `${siteUrl}/conectar`, changefreq: 'monthly', priority: '0.5' },
   ...entries.map(entry => ({
     loc: `${siteUrl}/entrada/${entry.slug}`,
     changefreq: 'monthly',
@@ -271,7 +272,38 @@ Sitemap: ${siteUrl}/sitemap.xml
   'utf8',
 )
 
-console.log(`Artefactos:          public/content.json, public/sitemap.xml, public/robots.txt (${urls.length} URLs)`)
+/**
+ * `llms.txt` (https://llmstxt.org): índice en Markdown para agentes que no usan
+ * MCP. Existe también en el deploy estático puro, donde `/mcp` no está.
+ */
+const llmsByArea = AREA_ORDER.map(area => ({ area, items: entries.filter(entry => entry.area === area) }))
+  .filter(group => group.items.length)
+
+writeFileSync(
+  join(publicDir, 'llms.txt'),
+  `# Golden Path
+
+> Biblioteca editorial en español sobre cómo diseñar entornos donde los agentes de IA hacen buen trabajo sin llevarse producción puesta: conceptos, patrones, guías y casos reales anonimizados.
+
+## Acceso para agentes
+
+- [Servidor MCP](${siteUrl}/mcp): Streamable HTTP, público y de sólo lectura. Instrucciones en ${siteUrl}/conectar
+- [Biblioteca completa en JSON](${siteUrl}/content.json): todas las entradas con su Markdown original
+- [Glosario](${siteUrl}/glosario): vocabulario de referencia
+
+${llmsByArea
+  .map(
+    group =>
+      `## ${group.area}\n\n${group.items
+        .map(entry => `- [${entry.title}](${siteUrl}/entrada/${entry.slug}): ${entry.summary}`)
+        .join('\n')}`,
+  )
+  .join('\n\n')}
+`,
+  'utf8',
+)
+
+console.log(`Artefactos:          public/content.json, public/llms.txt, public/sitemap.xml, public/robots.txt (${urls.length} URLs)`)
 
 if (problems.length) {
   console.error(`\nAdvertencias (${problems.length}):`)

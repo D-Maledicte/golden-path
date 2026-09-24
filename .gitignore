@@ -13,3 +13,4 @@ app/generated/
 public/content.json
 public/sitemap.xml
 public/robots.txt
+public/llms.txt

@@ -1,34 +1,16 @@
 import { entries, generatedAt } from '~/generated/entries'
 import type { EntryType, LibraryEntry } from '~/types/library'
+import {
+  ALL_AREAS,
+  ALL_TYPES,
+  AREA_GLYPHS,
+  AREA_ORDER,
+  TYPE_LABELS,
+  buildSearchIndex,
+  type SearchIndexItem,
+} from '#shared/library'
 
-/** Orden editorial de los recorridos. */
-export const AREA_ORDER = [
-  'Toda la biblioteca',
-  'Gobierno de agentes',
-  'Orca',
-  'Diseño agéntico',
-  'Hermes',
-  'CRM versionado',
-  'Casos de producto',
-]
-
-/** Glifo decorativo por área (identidad del sitio original). */
-export const AREA_GLYPHS: Record<string, string> = {
-  'Toda la biblioteca': '◎',
-  'Gobierno de agentes': '⚿',
-  Orca: '◉',
-  'Diseño agéntico': '✦',
-  Hermes: '✦',
-  'CRM versionado': '▣',
-  'Casos de producto': '◆',
-}
-
-export const TYPE_LABELS: Record<EntryType, string> = {
-  concept: 'Concepto',
-  guide: 'Guía',
-  editorial: 'Editorial',
-  'case-study': 'Caso real',
-}
+export { ALL_AREAS, ALL_TYPES, AREA_GLYPHS, AREA_ORDER, TYPE_LABELS }
 
 export type AreaFilter = string
 export type TypeFilter = EntryType | 'Todos'
@@ -39,28 +21,11 @@ export interface LibraryFilters {
   query: string
 }
 
-export const ALL_AREAS = 'Toda la biblioteca'
-export const ALL_TYPES = 'Todos'
+let searchIndex: SearchIndexItem[] | null = null
 
-let searchIndex: { entry: LibraryEntry; haystack: string }[] | null = null
-
-/** Índice de búsqueda: se arma una vez e incluye el cuerpo completo. */
+/** Índice de búsqueda: se arma una vez, la primera vez que se filtra. */
 function getSearchIndex() {
-  if (!searchIndex) {
-    searchIndex = entries.map(entry => ({
-      entry,
-      haystack: [
-        entry.title,
-        entry.summary,
-        entry.area,
-        TYPE_LABELS[entry.type],
-        ...entry.tags,
-        entry.raw,
-      ]
-        .join(' ')
-        .toLocaleLowerCase('es'),
-    }))
-  }
+  searchIndex ??= buildSearchIndex(entries)
   return searchIndex
 }
 

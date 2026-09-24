@@ -25,6 +25,8 @@ const socials = [
         <NuxtLink to="/glosario" class="text-cyan underline-offset-4 hover:underline">glosario</NuxtLink>
         ·
         <a href="/content.json" class="text-cyan underline-offset-4 hover:underline">JSON</a>
+        ·
+        <NuxtLink to="/conectar" class="text-cyan underline-offset-4 hover:underline">MCP para agentes</NuxtLink>
       </p>
     </div>
 

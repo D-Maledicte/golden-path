@@ -99,13 +99,14 @@ export default defineNuxtConfig({
     '/og/**': { headers: { 'cache-control': 'public, max-age=86400, stale-while-revalidate=604800' } },
     '/assets/**': { headers: { 'cache-control': 'public, max-age=86400, stale-while-revalidate=604800' } },
     '/content.json': { headers: { 'cache-control': 'public, max-age=3600' } },
+    '/llms.txt': { headers: { 'cache-control': 'public, max-age=3600' } },
   },
 
   nitro: {
     prerender: {
       crawlLinks: true,
       failOnError: true,
-      routes: ['/', '/glosario', '/entradas', ...entrySlugs.map(slug => `/entrada/${slug}`)],
+      routes: ['/', '/glosario', '/entradas', '/conectar', ...entrySlugs.map(slug => `/entrada/${slug}`)],
     },
   },
 
