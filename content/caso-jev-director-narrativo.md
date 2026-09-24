@@ -2,11 +2,11 @@
 slug: caso-jev-director-narrativo
 title: "Caso: un Director que separa narración y memoria"
 type: case-study
-order: 14
+order: 3
 summary: "Una arquitectura orquestada donde un modelo redacta la escena, Jev decide sus consecuencias y un registro de eventos reconstruye lo que cada personaje puede recordar."
 tags: [jev, narrativa, memoria, agentes, eventos, caso-real]
 related: [jev-decisiones-estructuradas, orquestacion, continuidad-y-observabilidad]
-area: Gobierno de agentes
+area: Casos de producto
 glyph: ◉
 hue: rgba(236,95,189,.24)
 ---
