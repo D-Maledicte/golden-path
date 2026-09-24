@@ -240,23 +240,55 @@ const siteUrl = (process.env.NUXT_PUBLIC_SITE_URL ?? 'https://golden-path.pages.
 
 mkdirSync(publicDir, { recursive: true })
 
-writeFileSync(
-  join(publicDir, 'content.json'),
-  `${JSON.stringify(
-    {
-      name: 'Golden Path',
-      description:
-        'Conceptos, patrones y aprendizajes transferibles para diseñar entornos donde los agentes hacen buen trabajo sin llevarse producción puesta.',
-      language: 'es',
-      generatedAt: new Date().toISOString(),
-      count: entries.length,
-      entries,
-    },
-    null,
-    2,
-  )}\n`,
-  'utf8',
+/**
+ * La biblioteca en inglés, en el orden editorial del español. Si una entrada
+ * no tiene traducción, va la española y su `language` lo dice.
+ */
+const enBySlug = new Map(entriesEn.map(entry => [entry.slug, entry]))
+const libraryEn = entries.map(entry =>
+  enBySlug.has(entry.slug) ? { ...enBySlug.get(entry.slug), language: 'en' } : { ...entry, language: 'es' },
 )
+
+/**
+ * Etiquetas en inglés de las áreas (el id es el nombre en español). Es la
+ * misma tabla que `MCP_AREA_LABELS_EN` en `shared/mcp.ts` y `area.*` en
+ * `app/i18n/messages.ts`: este script es JS plano y no importa TypeScript.
+ */
+const AREA_LABELS_EN = {
+  'Gobierno de agentes': 'Agent governance',
+  Orca: 'Orca',
+  'Diseño agéntico': 'Agentic design',
+  Hermes: 'Hermes',
+  'CRM versionado': 'Versioned CRM',
+  'Casos de producto': 'Product cases',
+}
+
+function writeContentJson(file, { description, language, list }) {
+  mkdirSync(dirname(file), { recursive: true })
+  writeFileSync(
+    file,
+    `${JSON.stringify(
+      { name: 'Golden Path', description, language, generatedAt: new Date().toISOString(), count: list.length, entries: list },
+      null,
+      2,
+    )}\n`,
+    'utf8',
+  )
+}
+
+writeContentJson(join(publicDir, 'content.json'), {
+  description:
+    'Conceptos, patrones y aprendizajes transferibles para diseñar entornos donde los agentes hacen buen trabajo sin llevarse producción puesta.',
+  language: 'es',
+  list: entries,
+})
+
+writeContentJson(join(publicDir, 'en', 'content.json'), {
+  description:
+    'Transferable concepts, patterns and lessons for designing environments where agents do good work without taking production down.',
+  language: 'en',
+  list: libraryEn,
+})
 
 const urls = [
   { loc: `${siteUrl}/`, changefreq: 'weekly', priority: '1.0' },
@@ -304,10 +336,20 @@ Sitemap: ${siteUrl}/sitemap.xml
 
 /**
  * `llms.txt` (https://llmstxt.org): índice en Markdown para agentes que no usan
- * MCP. Existe también en el deploy estático puro, donde `/mcp` no está.
+ * MCP, en los dos idiomas. Existe también en el deploy estático puro, donde
+ * `/mcp` no está.
  */
-const llmsByArea = AREA_ORDER.map(area => ({ area, items: entries.filter(entry => entry.area === area) }))
-  .filter(group => group.items.length)
+function llmsIndex(list, { areaLabel, entryBase }) {
+  return AREA_ORDER.map(area => ({ area, items: list.filter(entry => entry.area === area) }))
+    .filter(group => group.items.length)
+    .map(
+      group =>
+        `## ${areaLabel(group.area)}\n\n${group.items
+          .map(entry => `- [${entry.title}](${siteUrl}${entryBase}/${entry.slug}): ${entry.summary}`)
+          .join('\n')}`,
+    )
+    .join('\n\n')
+}
 
 writeFileSync(
   join(publicDir, 'llms.txt'),
@@ -317,23 +359,38 @@ writeFileSync(
 
 ## Acceso para agentes
 
-- [Servidor MCP](${siteUrl}/mcp): Streamable HTTP, público y de sólo lectura. Instrucciones en ${siteUrl}/conectar
+- [Servidor MCP](${siteUrl}/mcp): Streamable HTTP, público y de sólo lectura. Sirve en inglés por defecto; con language "es", en español. Instrucciones en ${siteUrl}/conectar
 - [Biblioteca completa en JSON](${siteUrl}/content.json): todas las entradas con su Markdown original
 - [Glosario](${siteUrl}/glosario): vocabulario de referencia
+- [English version](${siteUrl}/en/llms.txt): este índice en inglés
 
-${llmsByArea
-  .map(
-    group =>
-      `## ${group.area}\n\n${group.items
-        .map(entry => `- [${entry.title}](${siteUrl}/entrada/${entry.slug}): ${entry.summary}`)
-        .join('\n')}`,
-  )
-  .join('\n\n')}
+${llmsIndex(entries, { areaLabel: area => area, entryBase: '/entrada' })}
 `,
   'utf8',
 )
 
-console.log(`Artefactos:          public/content.json, public/llms.txt, public/sitemap.xml, public/robots.txt (${urls.length} URLs)`)
+writeFileSync(
+  join(publicDir, 'en', 'llms.txt'),
+  `# Golden Path
+
+> Editorial library on designing environments where AI agents do good work without taking production down: concepts, patterns, guides and anonymized real-world cases.
+
+## Agent access
+
+- [MCP server](${siteUrl}/mcp): Streamable HTTP, public and read-only. Serves English by default. Setup: ${siteUrl}/en/conectar
+- [Full library as JSON](${siteUrl}/en/content.json): every entry with its original Markdown
+- [Glossary](${siteUrl}/en/glosario): reference vocabulary
+- [Versión en español](${siteUrl}/llms.txt): this index in the original Spanish
+
+${llmsIndex(libraryEn, {
+  areaLabel: area => AREA_LABELS_EN[area] ?? area,
+  entryBase: '/en/entrada',
+})}
+`,
+  'utf8',
+)
+
+console.log(`Artefactos:          public/{,en/}content.json, public/{,en/}llms.txt, public/sitemap.xml, public/robots.txt (${urls.length} URLs)`)
 
 if (problems.length) {
   console.error(`\nAdvertencias (${problems.length}):`)

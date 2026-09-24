@@ -229,9 +229,9 @@ useSeoMeta({
         <h2 id="sin-mcp" class="m-0 mb-4 font-display text-[1.7rem] font-medium">{{ t('connect.noMcp') }}</h2>
         <p class="m-0 text-[.92rem] leading-[1.7] text-faint">
           {{ t('connect.noMcpBefore') }}
-          <a href="/llms.txt" class="text-cyan underline-offset-4 hover:underline">llms.txt</a>
+          <a :href="localePath('/llms.txt')" class="text-cyan underline-offset-4 hover:underline">llms.txt</a>
           {{ t('connect.noMcpIndex') }}
-          <a href="/content.json" class="text-cyan underline-offset-4 hover:underline">content.json</a>
+          <a :href="localePath('/content.json')" class="text-cyan underline-offset-4 hover:underline">content.json</a>
           {{ t('connect.noMcpAfter') }}
         </p>
       </section>

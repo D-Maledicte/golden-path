@@ -89,8 +89,8 @@ resultado como artefacto, para poder desplegarlo a mano si hiciera falta.
 
 ### Qué no se versiona
 
-`app/generated/`, `public/content.json`, `public/llms.txt`, `public/sitemap.xml`
-y `public/robots.txt` son **artefactos generados** por
+`app/generated/`, `public/content.json`, `public/llms.txt`, `public/en/` (las
+mismas dos en inglés), `public/sitemap.xml` y `public/robots.txt` son **artefactos generados** por
 `scripts/build-content.mjs` y están en `.gitignore`. Se recrean solos en cada
 `dev`, `build`, `generate` y `preview`.
 

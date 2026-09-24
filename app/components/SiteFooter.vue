@@ -25,7 +25,7 @@ const socials = [
         ·
         <NuxtLink :to="localePath('/glosario')" class="text-cyan underline-offset-4 hover:underline">{{ t('footer.glossary') }}</NuxtLink>
         ·
-        <a href="/content.json" class="text-cyan underline-offset-4 hover:underline">JSON</a>
+        <a :href="localePath('/content.json')" class="text-cyan underline-offset-4 hover:underline">JSON</a>
         ·
         <NuxtLink :to="localePath('/conectar')" class="text-cyan underline-offset-4 hover:underline">{{ t('footer.mcp') }}</NuxtLink>
       </p>

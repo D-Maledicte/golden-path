@@ -25,7 +25,7 @@ useHead({
     { rel: 'alternate', hreflang: 'es', href: () => alternate('es') },
     { rel: 'alternate', hreflang: 'en', href: () => alternate('en') },
     { rel: 'alternate', hreflang: 'x-default', href: () => alternate('es') },
-    { rel: 'alternate', type: 'application/json', href: '/content.json', title: () => t('site.jsonTitle') },
+    { rel: 'alternate', type: 'application/json', href: () => localePath('/content.json'), title: () => t('site.jsonTitle') },
   ],
 })
 

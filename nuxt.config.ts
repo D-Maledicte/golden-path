@@ -100,6 +100,8 @@ export default defineNuxtConfig({
     '/assets/**': { headers: { 'cache-control': 'public, max-age=86400, stale-while-revalidate=604800' } },
     '/content.json': { headers: { 'cache-control': 'public, max-age=3600' } },
     '/llms.txt': { headers: { 'cache-control': 'public, max-age=3600' } },
+    '/en/content.json': { headers: { 'cache-control': 'public, max-age=3600' } },
+    '/en/llms.txt': { headers: { 'cache-control': 'public, max-age=3600' } },
   },
 
   nitro: {
