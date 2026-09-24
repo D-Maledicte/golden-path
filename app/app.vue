@@ -1,7 +1,9 @@
 <script setup lang="ts">
-const { entries } = useLibrary()
 const config = useRuntimeConfig()
 const route = useRoute()
+const { locale, meta, t, localePath } = useI18n()
+/** Ambos idiomas tienen las mismas entradas (lo valida el build de contenido). */
+const total = useLibrary().entries.length
 
 /** Tarjeta de previsualización por defecto (la obra completa, 1200x630). */
 const defaultOgImage = `${config.public.siteUrl}/og/golden-path.jpg`
@@ -12,24 +14,30 @@ const canonical = computed(() => {
   return `${config.public.siteUrl}${path}`
 })
 
+/** Cada página existe en los dos idiomas: se declaran como alternativas. */
+const alternate = (target: 'es' | 'en') => `${config.public.siteUrl}${localePath(route.path, target)}`
+
 useHead({
+  htmlAttrs: { lang: () => meta.value.htmlLang },
   titleTemplate: title => (title ? `${title} · Golden Path` : 'Golden Path'),
   link: [
     { rel: 'canonical', href: canonical },
-    { rel: 'alternate', type: 'application/json', href: '/content.json', title: 'Biblioteca completa en JSON' },
+    { rel: 'alternate', hreflang: 'es', href: () => alternate('es') },
+    { rel: 'alternate', hreflang: 'en', href: () => alternate('en') },
+    { rel: 'alternate', hreflang: 'x-default', href: () => alternate('es') },
+    { rel: 'alternate', type: 'application/json', href: '/content.json', title: () => t('site.jsonTitle') },
   ],
 })
 
 useSeoMeta({
-  description:
-    'Golden Path: conceptos, patrones y aprendizajes transferibles para diseñar entornos donde los agentes hacen buen trabajo sin llevarse producción puesta.',
+  description: () => t('site.description'),
   ogSiteName: 'Golden Path',
-  ogLocale: 'es_AR',
+  ogLocale: () => meta.value.og,
+  ogLocaleAlternate: () => (locale.value === 'es' ? ['en_US'] : ['es_AR']),
   ogImage: defaultOgImage,
   ogImageWidth: 1200,
   ogImageHeight: 630,
-  ogImageAlt:
-    'Una figura con túnica blanca camina hacia un horizonte dorado en un paisaje egipcio psicodélico',
+  ogImageAlt: () => t('site.ogAlt'),
   twitterCard: 'summary_large_image',
   twitterImage: defaultOgImage,
 })
@@ -41,17 +49,23 @@ useSeoMeta({
       href="#biblioteca"
       class="fixed left-4 top-4 z-100 -translate-y-[180%] rounded-full bg-gold px-4 py-2.5 font-semibold text-[#171018] transition-transform focus:translate-y-0"
     >
-      Ir a la biblioteca
+      {{ t('site.skip') }}
     </a>
 
-    <div class="mx-auto w-[min(1500px,100%)]">
-      <NuxtPage />
-      <SiteFooter :total="entries.length" />
-    </div>
+    <LocaleToggle />
 
-    <GlossaryPanel />
-    <EntryReader />
-    <SearchCommand />
+    <!-- `useLibrary` toma el idioma al montarse: al cambiarlo se remonta todo
+         lo que depende de la biblioteca. -->
+    <div :key="locale">
+      <div class="mx-auto w-[min(1500px,100%)]">
+        <NuxtPage />
+        <SiteFooter :total="total" />
+      </div>
+
+      <GlossaryPanel />
+      <EntryReader />
+      <SearchCommand />
+    </div>
     <ToastHost />
   </div>
 </template>

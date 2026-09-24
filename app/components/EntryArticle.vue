@@ -13,6 +13,7 @@ const props = withDefaults(
 const { relatedOf, typeLabel } = useLibrary()
 const { show: toast } = useToast()
 const reader = useReader()
+const { t, localePath } = useI18n()
 
 const related = computed(() => relatedOf(props.entry))
 const tocActive = ref(0)
@@ -33,7 +34,7 @@ function scrollToHeading(index: number) {
 async function copyMarkdown() {
   try {
     await navigator.clipboard.writeText(props.entry.raw)
-    toast('Contexto copiado en Markdown')
+    toast(t('entry.copied'))
   } catch {
     const area = document.createElement('textarea')
     area.value = props.entry.raw
@@ -41,7 +42,7 @@ async function copyMarkdown() {
     area.select()
     document.execCommand('copy')
     area.remove()
-    toast('Contexto copiado en Markdown')
+    toast(t('entry.copied'))
   }
 }
 
@@ -53,7 +54,7 @@ function downloadMarkdown() {
   link.download = `${props.entry.slug}.md`
   link.click()
   URL.revokeObjectURL(url)
-  toast('Markdown descargado')
+  toast(t('entry.downloaded'))
 }
 </script>
 
@@ -78,7 +79,7 @@ function downloadMarkdown() {
             class="rounded-xl border border-white/11 bg-white/4 px-3.5 py-2 text-[.84rem] font-bold text-ink transition hover:brightness-110 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-cyan"
             @click="copyMarkdown"
           >
-            Copiar contexto
+            {{ t('entry.copy') }}
           </button>
 
           <ShimmerButton
@@ -89,16 +90,16 @@ function downloadMarkdown() {
             class="!h-10 !px-4 !text-[.84rem] !font-bold"
             @click="downloadMarkdown"
           >
-            <span class="text-[#21180b]">Descargar .md</span>
+            <span class="text-[#21180b]">{{ t('entry.download') }}</span>
           </ShimmerButton>
 
           <NuxtLink
             v-if="props.variant === 'reader'"
-            :to="`/entrada/${props.entry.slug}`"
+            :to="localePath(`/entrada/${props.entry.slug}`)"
             class="rounded-xl border border-cyan/25 bg-cyan/6 px-3.5 py-2 text-[.84rem] font-bold text-cyan transition hover:bg-cyan/12"
             @click="reader.close()"
           >
-            Abrir página completa
+            {{ t('entry.openPage') }}
           </NuxtLink>
         </div>
       </div>
@@ -109,7 +110,7 @@ function downloadMarkdown() {
 
       <footer v-if="related.length" class="mt-14 border-t border-white/7 pt-6">
         <p class="mb-3 text-[.75rem] font-bold uppercase tracking-[.14em] text-[#777184]">
-          Seguí por acá
+          {{ t('entry.continue') }}
         </p>
         <div class="flex flex-wrap gap-2">
           <button
@@ -132,7 +133,7 @@ function downloadMarkdown() {
           :items="tocItems"
           :row-height="52"
           :indent="16"
-          title="En esta entrada"
+          :title="t('entry.toc')"
           class="toc-compact"
           @select="scrollToHeading"
         />

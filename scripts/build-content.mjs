@@ -11,7 +11,7 @@
  *
  * Se ejecuta automáticamente vía `predev` / `prebuild` / `pregenerate`.
  */
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import matter from 'gray-matter'
@@ -121,30 +121,35 @@ md.renderer.rules.link_open = (tokens, index, options, env, self) => {
   return defaultLinkOpen(tokens, index, options, env, self)
 }
 
-const files = readdirSync(contentDir).filter(name => name.endsWith('.md')).sort()
+/**
+ * Compila un idioma. El español vive en `content/*.md` y el inglés en
+ * `content/en/*.md`, con el mismo `slug` y el mismo `area` (el área es un id
+ * editorial en español; la UI traduce su etiqueta).
+ */
+function compileLocale(dir, label) {
+const files = readdirSync(dir).filter(name => name.endsWith('.md')).sort()
 const entries = []
-const problems = []
 
 for (const file of files) {
-  const raw = readFileSync(join(contentDir, file), 'utf8').replace(/\r\n/g, '\n')
+  const raw = readFileSync(join(dir, file), 'utf8').replace(/\r\n/g, '\n')
 
   let data
   let content
   try {
     ;({ data, content } = matter(raw))
   } catch (error) {
-    problems.push(`${file}: frontmatter YAML inválido — ${error.reason ?? error.message}`)
+    problems.push(`${label}${file}: frontmatter YAML inválido — ${error.reason ?? error.message}`)
     continue
   }
 
   for (const field of ['slug', 'title', 'summary', 'type', 'area']) {
-    if (!data[field]) problems.push(`${file}: falta \`${field}\` en el frontmatter`)
+    if (!data[field]) problems.push(`${label}${file}: falta \`${field}\` en el frontmatter`)
   }
   if (data.type && !VALID_TYPES.includes(data.type)) {
-    problems.push(`${file}: tipo desconocido "${data.type}"`)
+    problems.push(`${label}${file}: tipo desconocido "${data.type}"`)
   }
   if (data.area && !AREA_ORDER.includes(data.area)) {
-    problems.push(`${file}: área desconocida "${data.area}"`)
+    problems.push(`${label}${file}: área desconocida "${data.area}"`)
   }
 
   const rendered = md.render(content)
@@ -181,10 +186,26 @@ entries.sort((a, b) => {
 
 const slugs = new Set(entries.map(entry => entry.slug))
 for (const entry of entries) {
-  if (!entry.slug) problems.push(`${entry.file}: slug vacío`)
+  if (!entry.slug) problems.push(`${label}${entry.file}: slug vacío`)
   for (const related of entry.related) {
-    if (!slugs.has(related)) problems.push(`${entry.file}: related "${related}" no existe`)
+    if (!slugs.has(related)) problems.push(`${label}${entry.file}: related "${related}" no existe`)
   }
+}
+
+return entries
+}
+
+const problems = []
+const entries = compileLocale(contentDir, '')
+const enDir = join(contentDir, 'en')
+const entriesEn = existsSync(enDir) ? compileLocale(enDir, 'en/') : []
+
+const esSlugs = new Set(entries.map(entry => entry.slug))
+for (const entry of entriesEn) {
+  if (!esSlugs.has(entry.slug)) problems.push(`en/${entry.file}: no hay entrada en español con slug "${entry.slug}"`)
+}
+for (const slug of esSlugs) {
+  if (!entriesEn.some(entry => entry.slug === slug)) problems.push(`falta la traducción al inglés de "${slug}"`)
 }
 
 mkdirSync(dirname(outputFile), { recursive: true })
@@ -198,6 +219,8 @@ import type { LibraryEntry } from '~/types/library'
 export const generatedAt = ${JSON.stringify(new Date().toISOString())}
 
 export const entries: LibraryEntry[] = ${JSON.stringify(entries, null, 2)}
+
+export const entriesEn: LibraryEntry[] = ${JSON.stringify(entriesEn, null, 2)}
 `,
   'utf8',
 )
@@ -246,6 +269,13 @@ const urls = [
     priority: '0.6',
   })),
 ]
+// Versión en inglés: mismas rutas bajo `/en`.
+urls.push(
+  ...urls.map(url => ({
+    ...url,
+    loc: url.loc.replace(siteUrl, `${siteUrl}/en`).replace(/\/en\/$/, '/en'),
+  })),
+)
 
 writeFileSync(
   join(publicDir, 'sitemap.xml'),

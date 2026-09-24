@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const reader = useReader()
-const { bySlug } = useLibrary()
+const { bySlug, areaLabel } = useLibrary()
+const { t } = useI18n()
 
 const entry = computed(() => (reader.slug.value ? bySlug(reader.slug.value) : undefined))
 
@@ -45,7 +46,7 @@ function onKeydown(event: KeyboardEvent) {
       >
         <div class="min-w-0">
           <p class="mb-1.5 text-[.78rem] font-bold uppercase tracking-[.16em] text-gold">
-            {{ entry.area }}
+            {{ areaLabel(entry.area) }}
           </p>
           <h2
             id="reader-title"
@@ -56,7 +57,7 @@ function onKeydown(event: KeyboardEvent) {
         </div>
         <button
           type="button"
-          aria-label="Cerrar lectura"
+          :aria-label="t('reader.close')"
           class="grid size-[42px] shrink-0 cursor-pointer place-items-center rounded-full border border-white/10 bg-white/4 text-[1.8rem] leading-none transition hover:border-gold/35 hover:text-gold focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-cyan"
           @click="reader.close()"
         >

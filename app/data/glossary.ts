@@ -147,3 +147,153 @@ export const glossary: GlossaryTerm[] = [
     slug: 'setup-windows-wsl',
   },
 ]
+
+/** Glosario en inglés: mismos términos y mismos `slug`, en el mismo orden. */
+export const glossaryEn: GlossaryTerm[] = [
+  {
+    term: 'ADE',
+    definition:
+      'Agent Development Environment: an environment built to run, organize and supervise development agents.',
+    slug: 'orca-como-ade',
+  },
+  {
+    term: 'Agent',
+    definition:
+      'A system that uses a model, instructions and tools to reason and take actions within a defined scope.',
+  },
+  {
+    term: 'Agent-to-agent',
+    definition:
+      'Delegation between full agents that work in separate conversations and environments, exchange instructions or files and return results.',
+    slug: 'amp-fabrica-agentes-cloud',
+  },
+  {
+    term: 'Amp',
+    definition:
+      'Agentic development environment that brings models, threads, remote machines, Git and coordination together on a single platform.',
+    slug: 'amp-fabrica-agentes-cloud',
+  },
+  {
+    term: 'BYOK',
+    definition:
+      'Bring Your Own Key: a mode where the user supplies an API key and usage is billed directly to the provider account.',
+    slug: 'opendesign-integracion-local-cli-proxy',
+  },
+  {
+    term: 'CLI',
+    definition:
+      'Command-line interface. Lets you work with tools and agents from a terminal, with direct access to the project and its environment.',
+    slug: 'terminal-vs-web-superficies-trabajo',
+  },
+  {
+    term: 'CRM',
+    definition:
+      'A system that centralizes relationships, data and commercial processes. In these cases it also acts as the operational source of truth.',
+    slug: 'backup-versionado-crm',
+  },
+  {
+    term: 'Daemon',
+    definition:
+      'A process that keeps running in the background and sustains services, sessions or tasks even when an interface is closed.',
+    slug: 'continuidad-y-observabilidad',
+  },
+  {
+    term: 'DESIGN.md',
+    definition:
+      'A portable file that encodes colors, typography, composition and visual rules so different agents produce consistent artifacts.',
+    slug: 'opendesign-direccion-visual-agentes',
+  },
+  {
+    term: 'Harness',
+    definition:
+      'The CLI or environment that turns model decisions into real actions: reading files, editing code, running commands or asking for permission.',
+    slug: 'modelos-guiados-el-entorno-es-la-politica',
+  },
+  {
+    term: 'Hermes',
+    definition:
+      'An operational agent that can live on a server, connect to channels and integrations and run tasks with continuity.',
+    slug: 'hermes-agente-operativo',
+  },
+  {
+    term: 'MCP',
+    definition:
+      'Model Context Protocol: a standard for connecting agents to tools and data sources through declared interfaces.',
+  },
+  {
+    term: 'n8n',
+    definition:
+      'A visual automation platform used to coordinate integrations, webhooks and steps across different systems.',
+  },
+  {
+    term: 'OpenDesign',
+    definition:
+      'A local-first workspace that combines coding agents, skills, templates and DESIGN.md systems to produce visual artifacts as real files.',
+    slug: 'opendesign-direccion-visual-agentes',
+  },
+  {
+    term: 'Oracle',
+    definition:
+      'A second-opinion role inside Amp, used by the main agent to consult on reasoning, planning or hard decisions.',
+    slug: 'amp-fabrica-agentes-cloud',
+  },
+  {
+    term: 'Orb',
+    definition:
+      'A fresh, isolated remote machine where an Amp agent can work with code, tools and services even while the user’s computer is off.',
+    slug: 'amp-fabrica-agentes-cloud',
+  },
+  {
+    term: 'Orca',
+    definition:
+      'An ADE and control plane for organizing agents, repositories, workspaces, terminals and hosts without replacing the model.',
+    slug: 'orca-como-ade',
+  },
+  {
+    term: 'Runner',
+    definition:
+      'A self-owned or managed machine that Amp can use as its execution environment instead of an Orb from its own infrastructure.',
+    slug: 'amp-fabrica-agentes-cloud',
+  },
+  {
+    term: 'SSH',
+    definition:
+      'A secure protocol for accessing and running work on another machine or environment, such as WSL or a remote server.',
+    slug: 'hosts-ssh',
+  },
+  {
+    term: 'The Dial',
+    definition:
+      'Amp’s selector for how much effort a task needs, through the low, medium, high and ultra modes, regardless of which model sits behind it.',
+    slug: 'amp-fabrica-agentes-cloud',
+  },
+  {
+    term: 'Thread',
+    definition:
+      'A persistent Amp conversation that keeps context, decisions, files and references to the work the agent produced.',
+    slug: 'amp-fabrica-agentes-cloud',
+  },
+  {
+    term: 'Worktree',
+    definition:
+      'An isolated Git working copy tied to a branch, which lets you develop tasks in parallel without mixing files.',
+    slug: 'workspaces-y-worktrees',
+  },
+  {
+    term: 'Workspace',
+    definition:
+      'A visible work front that groups tabs, terminals, editors and a task; on its own it is not the same as Git isolation.',
+    slug: 'workspaces-y-worktrees',
+  },
+  {
+    term: 'WSL',
+    definition:
+      'Windows Subsystem for Linux: a Linux environment built into Windows where repositories, runtimes and CLI agents can live.',
+    slug: 'setup-windows-wsl',
+  },
+]
+
+/** Glosario del idioma pedido. */
+export function glossaryFor(locale: 'es' | 'en'): GlossaryTerm[] {
+  return locale === 'en' ? glossaryEn : glossary
+}

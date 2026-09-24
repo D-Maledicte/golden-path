@@ -4,8 +4,9 @@ import type { NuxtError } from '#app'
 const props = defineProps<{ error: NuxtError }>()
 
 const isNotFound = computed(() => props.error.statusCode === 404)
+const { t, localePath } = useI18n()
 
-useHead({ title: isNotFound.value ? 'Sendero no encontrado' : 'Algo se rompió' })
+useHead({ title: t(isNotFound.value ? 'error.notFoundTitle' : 'error.genericTitle') })
 </script>
 
 <template>
@@ -30,28 +31,24 @@ useHead({ title: isNotFound.value ? 'Sendero no encontrado' : 'Algo se rompió' 
         {{ props.error.statusCode }}
       </p>
       <h1 class="mt-2 font-display text-[clamp(2rem,5vw,3rem)] font-medium leading-tight">
-        {{ isNotFound ? 'Ese sendero no existe' : 'Algo se rompió en el camino' }}
+        {{ t(isNotFound ? 'error.notFoundHeading' : 'error.genericHeading') }}
       </h1>
       <p class="mt-4 text-faint">
-        {{
-          isNotFound
-            ? 'La entrada que buscás no está en la biblioteca. Probá desde el catálogo o el índice completo.'
-            : 'Ocurrió un error inesperado. Volver al catálogo suele resolverlo.'
-        }}
+        {{ t(isNotFound ? 'error.notFoundText' : 'error.genericText') }}
       </p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <button
           type="button"
           class="rounded-xl border border-gold/30 bg-gold/10 px-4 py-2.5 font-bold text-gold-bright transition hover:bg-gold/18"
-          @click="clearError({ redirect: '/' })"
+          @click="clearError({ redirect: localePath('/') })"
         >
-          Volver al catálogo
+          {{ t('error.home') }}
         </button>
         <NuxtLink
-          to="/entradas"
+          :to="localePath('/entradas')"
           class="rounded-xl border border-white/11 bg-white/4 px-4 py-2.5 font-bold text-ink transition hover:brightness-110"
         >
-          Ver el índice completo
+          {{ t('error.index') }}
         </NuxtLink>
       </div>
     </div>

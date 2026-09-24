@@ -2,6 +2,7 @@
 defineProps<{ total: number }>()
 
 const year = new Date().getFullYear()
+const { t, localePath } = useI18n()
 
 const socials = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mjmartel/', icon: 'lucide:linkedin' },
@@ -15,22 +16,22 @@ const socials = [
   >
     <div class="space-y-1.5">
       <p>
-        © {{ year }} · All rights reserved · Autor
+        © {{ year }} · {{ t('footer.rights') }}
         <span class="text-faint">D_Maledicte</span>
       </p>
       <p class="text-[.78rem] text-dim/80">
-        {{ total }} entradas ·
-        <NuxtLink to="/entradas" class="text-cyan underline-offset-4 hover:underline">índice completo</NuxtLink>
+        {{ t('footer.entries', { count: total }) }} ·
+        <NuxtLink :to="localePath('/entradas')" class="text-cyan underline-offset-4 hover:underline">{{ t('footer.index') }}</NuxtLink>
         ·
-        <NuxtLink to="/glosario" class="text-cyan underline-offset-4 hover:underline">glosario</NuxtLink>
+        <NuxtLink :to="localePath('/glosario')" class="text-cyan underline-offset-4 hover:underline">{{ t('footer.glossary') }}</NuxtLink>
         ·
         <a href="/content.json" class="text-cyan underline-offset-4 hover:underline">JSON</a>
         ·
-        <NuxtLink to="/conectar" class="text-cyan underline-offset-4 hover:underline">MCP para agentes</NuxtLink>
+        <NuxtLink :to="localePath('/conectar')" class="text-cyan underline-offset-4 hover:underline">{{ t('footer.mcp') }}</NuxtLink>
       </p>
     </div>
 
-    <nav class="flex items-center gap-2" aria-label="Redes sociales de D_Maledicte">
+    <nav class="flex items-center gap-2" :aria-label="t('footer.socials')">
       <a
         v-for="social in socials"
         :key="social.label"

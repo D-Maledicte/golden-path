@@ -106,7 +106,26 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       failOnError: true,
-      routes: ['/', '/glosario', '/entradas', '/conectar', ...entrySlugs.map(slug => `/entrada/${slug}`)],
+      routes: [
+        '/', '/glosario', '/entradas', '/conectar', ...entrySlugs.map(slug => `/entrada/${slug}`),
+        '/en', '/en/glosario', '/en/entradas', '/en/conectar', ...entrySlugs.map(slug => `/en/entrada/${slug}`),
+      ],
+    },
+  },
+
+  /**
+   * Versión en inglés: cada página se registra también bajo `/en` con el mismo
+   * componente. El idioma se deriva de la ruta (`useI18n`), no de un plugin.
+   */
+  hooks: {
+    'pages:extend'(pages) {
+      for (const page of [...pages]) {
+        pages.push({
+          ...page,
+          name: page.name ? `en-${page.name}` : undefined,
+          path: page.path === '/' ? '/en' : `/en${page.path}`,
+        })
+      }
     },
   },
 

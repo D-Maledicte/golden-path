@@ -2,26 +2,27 @@
 import type { CommandItem } from '~/components/ui/command-menu/types'
 
 const { open } = useCommandPalette()
-const { entries, areaGlyph } = useLibrary()
+const { entries, areaGlyph, areaLabel } = useLibrary()
+const { t, localePath } = useI18n()
 const reader = useReader()
 
 const items = computed<CommandItem[]>(() => [
   {
-    label: 'Ver el índice completo',
+    label: t('palette.index'),
     icon: 'lucide:list',
-    group: 'Navegación',
-    onSelect: () => navigateTo('/entradas'),
+    group: t('palette.nav'),
+    onSelect: () => navigateTo(localePath('/entradas')),
   },
   {
-    label: 'Abrir el glosario',
+    label: t('palette.glossary'),
     icon: 'lucide:book-a',
-    group: 'Navegación',
-    onSelect: () => navigateTo('/glosario'),
+    group: t('palette.nav'),
+    onSelect: () => navigateTo(localePath('/glosario')),
   },
   ...entries.map(entry => ({
     label: entry.title,
     icon: 'lucide:file-text',
-    group: `${areaGlyph(entry.area)} ${entry.area}`,
+    group: `${areaGlyph(entry.area)} ${areaLabel(entry.area)}`,
     onSelect: () => reader.show(entry.slug),
   })),
 ])
@@ -32,7 +33,7 @@ const items = computed<CommandItem[]>(() => [
     v-model:open="open"
     :items="items"
     brand-name="Golden Path"
-    placeholder="Buscar concepto, herramienta o proceso…"
-    empty-message="No apareció nada por ese sendero"
+    :placeholder="t('catalog.placeholder')"
+    :empty-message="t('home.emptyTitle')"
   />
 </template>

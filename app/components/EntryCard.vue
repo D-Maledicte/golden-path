@@ -8,7 +8,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{ open: [entry: LibraryEntry] }>()
 
-const { typeLabel } = useLibrary()
+const { typeLabel, areaLabel } = useLibrary()
 </script>
 
 <template>
@@ -42,7 +42,7 @@ const { typeLabel } = useLibrary()
       </p>
 
       <span class="mt-auto flex items-center justify-between gap-3 pt-5 text-[.76rem] text-[#756f83]">
-        <span>{{ props.entry.glyph }} {{ props.entry.area }}</span>
+        <span>{{ props.entry.glyph }} {{ areaLabel(props.entry.area) }}</span>
         <span
           class="text-[1.25rem] text-gold transition-transform duration-200 group-hover:translate-x-1"
         >

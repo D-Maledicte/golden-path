@@ -1,27 +1,29 @@
 <script setup lang="ts">
-import { glossary } from '~/data/glossary'
+import { glossaryFor } from '~/data/glossary'
 
 const open = ref(false)
 const query = ref('')
 const searchInput = ref<HTMLInputElement>()
 const reader = useReader()
+const { locale, t } = useI18n()
+const glossary = glossaryFor(locale.value)
 
 const sorted = computed(() =>
-  [...glossary].sort((a, b) => a.term.localeCompare(b.term, 'es')),
+  [...glossary].sort((a, b) => a.term.localeCompare(b.term, locale.value)),
 )
 
 const matches = computed(() => {
-  const needle = query.value.trim().toLocaleLowerCase('es')
+  const needle = query.value.trim().toLocaleLowerCase(locale.value)
   if (!needle) return sorted.value
   return sorted.value.filter(item =>
-    `${item.term} ${item.definition}`.toLocaleLowerCase('es').includes(needle),
+    `${item.term} ${item.definition}`.toLocaleLowerCase(locale.value).includes(needle),
   )
 })
 
 const countLabel = computed(() => {
-  if (!query.value.trim()) return `${glossary.length} conceptos esenciales`
+  if (!query.value.trim()) return t('glossary.count', { count: glossary.length })
   const total = matches.value.length
-  return `${total} ${total === 1 ? 'resultado' : 'resultados'}`
+  return t(total === 1 ? 'glossary.result' : 'glossary.results', { count: total })
 })
 
 function openPanel() {
@@ -61,7 +63,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       >
         Aa
       </span>
-      <span>Glosario</span>
+      <span>{{ t('glossary.title') }}</span>
     </button>
   </Magnet>
 
@@ -79,13 +81,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
     <header class="flex items-start justify-between gap-4">
       <div>
         <p class="mb-1 text-[.68rem] font-bold uppercase tracking-[.16em] text-gold">
-          Referencia rápida
+          {{ t('glossary.kicker') }}
         </p>
-        <h2 id="glossary-title" class="m-0 font-display text-[2rem] font-medium">Glosario</h2>
+        <h2 id="glossary-title" class="m-0 font-display text-[2rem] font-medium">{{ t('glossary.title') }}</h2>
       </div>
       <button
         type="button"
-        aria-label="Cerrar glosario"
+        :aria-label="t('glossary.close')"
         class="grid size-9 shrink-0 place-items-center rounded-full border border-white/10 bg-white/4 text-[1.45rem] leading-none transition hover:border-gold/35 hover:text-gold"
         @click="closePanel"
       >
@@ -97,13 +99,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       class="mt-4 flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/3.5 px-3 transition focus-within:border-gold/52 focus-within:shadow-[0_0_0_4px_rgba(237,195,94,.08)]"
     >
       <span aria-hidden="true" class="text-[1.2rem] text-gold">⌕</span>
-      <span class="sr-only">Buscar en el glosario</span>
+      <span class="sr-only">{{ t('glossary.searchLabel') }}</span>
       <input
         ref="searchInput"
         v-model="query"
         type="search"
         autocomplete="off"
-        placeholder="Buscar Orca, CLI, harness…"
+        :placeholder="t('glossary.placeholder')"
         class="w-full min-w-0 bg-transparent py-3 text-ink outline-none placeholder:text-[#716b80]"
       />
     </label>
@@ -131,13 +133,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
             class="mt-2.5 text-[.8rem] text-cyan transition hover:text-[#a6f5f7]"
             @click="readInContext(item.slug)"
           >
-            Leer en contexto →
+            {{ t('glossary.inContext') }}
           </button>
         </article>
       </template>
       <div v-else class="px-3 py-8 text-center text-faint">
         <span class="text-[1.5rem] text-gold">◇</span>
-        <p class="mt-2">No encontré ese concepto todavía.</p>
+        <p class="mt-2">{{ t('glossary.empty') }}</p>
       </div>
     </div>
   </section>

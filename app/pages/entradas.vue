@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { LibraryEntry } from '~/types/library'
 
-const { entries, areas, areaGlyph, typeLabel } = useLibrary()
+const { entries, areas, areaGlyph, areaLabel, typeLabel } = useLibrary()
+const { t, localePath } = useI18n()
 const reader = useReader()
 
 const grouped = computed(() =>
@@ -14,10 +15,10 @@ const grouped = computed(() =>
     .filter(group => group.items.length > 0),
 )
 
-useHead({ title: 'Índice completo' })
+useHead({ title: t('index.title') })
 useSeoMeta({
-  description: `Las ${entries.length} entradas de Golden Path, agrupadas por recorrido: gobierno de agentes, Orca, diseño agéntico, Hermes, CRM versionado y casos de producto.`,
-  ogTitle: 'Índice completo · Golden Path',
+  description: t('index.description', { count: entries.length }),
+  ogTitle: `${t('index.title')} · Golden Path`,
   ogType: 'website',
 })
 </script>
@@ -42,22 +43,21 @@ useSeoMeta({
       </ClientOnly>
       <div class="relative z-10">
         <HyperText
-          text="Biblioteca completa"
+          :text="t('index.kicker')"
           :duration="700"
           class="font-sans text-[.78rem] font-bold uppercase tracking-[.16em] text-gold"
         />
         <h1 class="mb-0 mt-2 font-display text-[clamp(2.2rem,5vw,3.4rem)] font-medium leading-[1.05]">
-          Índice completo
+          {{ t('index.title') }}
         </h1>
         <p class="mt-4 max-w-[52ch] text-faint">
-          Las {{ entries.length }} entradas de Golden Path, agrupadas por recorrido. Cada una tiene su
-          propia página y se puede copiar o descargar en Markdown.
+          {{ t('index.lead', { count: entries.length }) }}
         </p>
         <NuxtLink
-          to="/"
+          :to="localePath('/')"
           class="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/11 bg-white/4 px-4 py-2.5 font-bold text-ink transition hover:brightness-110"
         >
-          ← Volver al catálogo
+          {{ t('index.back') }}
         </NuxtLink>
       </div>
     </header>
@@ -67,7 +67,7 @@ useSeoMeta({
         <div class="mb-5 flex items-baseline gap-3 border-b border-white/7 pb-3">
           <span class="text-gold">{{ areaGlyph(group.area) }}</span>
           <h2 :id="`area-${group.area}`" class="m-0 font-display text-[1.7rem] font-medium">
-            {{ group.area }}
+            {{ areaLabel(group.area) }}
           </h2>
           <span class="ml-auto font-mono text-[.75rem] text-dim">{{ group.items.length }}</span>
         </div>
@@ -75,7 +75,7 @@ useSeoMeta({
         <ul class="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
           <li v-for="entry in group.items" :key="entry.slug">
             <NuxtLink
-              :to="`/entrada/${entry.slug}`"
+              :to="localePath(`/entrada/${entry.slug}`)"
               class="group flex h-full flex-col rounded-2xl border border-white/7.5 bg-white/2 p-4 transition hover:-translate-y-0.5 hover:border-gold/25 hover:bg-white/4"
             >
               <span class="text-[.68rem] font-bold uppercase tracking-[.08em] text-gold-bright">
@@ -94,13 +94,13 @@ useSeoMeta({
     </div>
 
     <p class="mt-14 text-[.84rem] text-dim">
-      ¿Buscabas una definición?
-      <NuxtLink to="/glosario" class="text-cyan underline-offset-4 hover:underline">
-        Ir al glosario
+      {{ t('index.lookingFor') }}
+      <NuxtLink :to="localePath('/glosario')" class="text-cyan underline-offset-4 hover:underline">
+        {{ t('index.toGlossary') }}
       </NuxtLink>
       ·
       <button type="button" class="text-cyan underline-offset-4 hover:underline" @click="reader.show(entries[0]!.slug)">
-        Abrir el lector
+        {{ t('index.openReader') }}
       </button>
     </p>
   </main>

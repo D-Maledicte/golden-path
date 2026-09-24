@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { glossary } from '~/data/glossary'
+import { glossaryFor } from '~/data/glossary'
 
 const reader = useReader()
+const { locale, t, localePath } = useI18n()
+const glossary = glossaryFor(locale.value)
 
 const sorted = computed(() =>
-  [...glossary].sort((a, b) => a.term.localeCompare(b.term, 'es')),
+  [...glossary].sort((a, b) => a.term.localeCompare(b.term, locale.value)),
 )
 
 const terms = computed(() => sorted.value.map(item => item.term))
@@ -29,10 +31,10 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, '')
 }
 
-useHead({ title: 'Glosario' })
+useHead({ title: t('glossary.title') })
 useSeoMeta({
-  description: `Glosario de ${glossary.length} términos esenciales: ADE, harness, worktree, MCP, Orb, Runner, DESIGN.md y el resto del vocabulario de Golden Path.`,
-  ogTitle: 'Glosario · Golden Path',
+  description: t('glossary.description', { count: glossary.length }),
+  ogTitle: `${t('glossary.title')} · Golden Path`,
   ogType: 'website',
 })
 </script>
@@ -41,25 +43,24 @@ useSeoMeta({
   <main id="biblioteca" class="px-4 pb-20 pt-6 md:px-[clamp(22px,5vw,74px)] md:pb-24">
     <header class="mb-12 max-w-[52ch]">
       <p class="mb-2 text-[.78rem] font-bold uppercase tracking-[.16em] text-gold">
-        Referencia rápida
+        {{ t('glossary.kicker') }}
       </p>
       <h1 class="m-0 font-display text-[clamp(2.2rem,5vw,3.4rem)] font-medium leading-[1.05]">
-        Glosario
+        {{ t('glossary.title') }}
       </h1>
       <p class="mt-4 text-faint">
-        {{ glossary.length }} conceptos esenciales del vocabulario de Golden Path. Cada término con
-        entrada propia enlaza al contexto donde se explica.
+        {{ t('glossary.lead', { count: glossary.length }) }}
       </p>
       <NuxtLink
-        to="/"
+        :to="localePath('/')"
         class="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/11 bg-white/4 px-4 py-2.5 font-bold text-ink transition hover:brightness-110"
       >
-        ← Volver al catálogo
+        {{ t('index.back') }}
       </NuxtLink>
     </header>
 
     <ScrollReveal
-      text="El vocabulario compartido del trabajo con agentes"
+      :text="t('glossary.reveal')"
       :base-opacity="0.16"
       :blur-strength="3"
       :base-rotation="2"
@@ -99,7 +100,7 @@ useSeoMeta({
                 class="text-[.82rem] font-semibold text-cyan transition hover:text-[#a6f5f7]"
                 @click="reader.show(item.slug!)"
               >
-                Leer en contexto →
+                {{ t('glossary.inContext') }}
               </button>
             </dd>
           </div>

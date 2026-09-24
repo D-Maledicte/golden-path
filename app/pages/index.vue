@@ -2,7 +2,8 @@
 import type { LibraryEntry } from '~/types/library'
 import type { TypeFilter } from '~/composables/useLibrary'
 
-const { entries, filter, areaGlyph } = useLibrary()
+const { entries, filter, areaGlyph, areaLabel } = useLibrary()
+const { t } = useI18n()
 const reader = useReader()
 
 const area = ref('Toda la biblioteca')
@@ -13,9 +14,9 @@ const results = computed(() => filter({ area: area.value, type: type.value, quer
 
 const heading = computed(() => {
   const needle = query.value.trim()
-  if (needle) return `Resultados para “${needle}”`
-  if (area.value === 'Toda la biblioteca') return 'Elegí una puerta de entrada'
-  return `Explorá ${area.value}`
+  if (needle) return t('home.resultsFor', { query: needle })
+  if (area.value === 'Toda la biblioteca') return t('home.pickDoor')
+  return t('home.explore', { area: areaLabel(area.value) })
 })
 
 function clearFilters() {
@@ -28,13 +29,11 @@ function openEntry(entry: LibraryEntry) {
   reader.show(entry.slug)
 }
 
-useHead({ title: 'Biblioteca de conceptos y casos' })
+useHead({ title: t('home.title') })
 useSeoMeta({
-  description:
-    'Conceptos, patrones y casos reales anonimizados sobre Orca, Hermes, Amp, OpenDesign y el gobierno de agentes en entornos de desarrollo.',
-  ogTitle: 'Golden Path · Biblioteca de conceptos y casos',
-  ogDescription:
-    'Manual vivo sobre cómo diseñar entornos donde los agentes hacen buen trabajo sin llevarse producción puesta.',
+  description: t('home.description'),
+  ogTitle: `Golden Path · ${t('home.title')}`,
+  ogDescription: t('home.ogDescription'),
   ogType: 'website',
 })
 </script>
@@ -53,7 +52,7 @@ useSeoMeta({
         <div class="grid items-end gap-6 md:flex md:justify-between">
           <div>
             <p class="m-0 text-[.78rem] font-bold uppercase tracking-[.16em] text-gold">
-              {{ area === 'Toda la biblioteca' ? 'Toda la biblioteca' : `${areaGlyph(area)} ${area}` }}
+              {{ area === 'Toda la biblioteca' ? areaLabel(area) : `${areaGlyph(area)} ${areaLabel(area)}` }}
             </p>
             <h2
               id="catalog-title"
@@ -84,15 +83,15 @@ useSeoMeta({
         >
           <span class="text-[2rem] text-gold">◇</span>
           <h3 class="mb-1.5 mt-3 font-display text-[1.5rem] font-medium">
-            No apareció nada por ese sendero
+            {{ t('home.emptyTitle') }}
           </h3>
-          <p class="text-faint">Probá con otra palabra o volvé a toda la biblioteca.</p>
+          <p class="text-faint">{{ t('home.emptyText') }}</p>
           <button
             type="button"
             class="mt-5 rounded-xl border border-white/11 bg-white/4 px-3.5 py-2 font-bold text-ink transition hover:brightness-110"
             @click="clearFilters"
           >
-            Limpiar filtros
+            {{ t('home.clear') }}
           </button>
         </div>
       </section>

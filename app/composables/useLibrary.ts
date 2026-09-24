@@ -1,4 +1,5 @@
-import { entries, generatedAt } from '~/generated/entries'
+import { entries as entriesEs, entriesEn, generatedAt } from '~/generated/entries'
+import type { Locale, MessageKey } from '~/i18n/messages'
 import type { EntryType, LibraryEntry } from '~/types/library'
 import {
   ALL_AREAS,
@@ -21,16 +22,24 @@ export interface LibraryFilters {
   query: string
 }
 
-let searchIndex: SearchIndexItem[] | null = null
+const ENTRIES: Record<Locale, LibraryEntry[]> = { es: entriesEs, en: entriesEn }
 
-/** Índice de búsqueda: se arma una vez, la primera vez que se filtra. */
-function getSearchIndex() {
-  searchIndex ??= buildSearchIndex(entries)
-  return searchIndex
+const searchIndex: Partial<Record<Locale, SearchIndexItem[]>> = {}
+
+/** Índice de búsqueda por idioma: se arma la primera vez que se filtra. */
+function getSearchIndex(locale: Locale) {
+  searchIndex[locale] ??= buildSearchIndex(ENTRIES[locale])
+  return searchIndex[locale]
 }
 
+/**
+ * La biblioteca en el idioma de la ruta. Las áreas se siguen identificando por
+ * su nombre en español (es el id del frontmatter); `areaLabel` las traduce.
+ */
 export function useLibrary() {
-  const all = entries
+  const { locale, t } = useI18n()
+  const current = locale.value
+  const all = ENTRIES[current]
 
   const areas = AREA_ORDER.filter(
     area => area === ALL_AREAS || all.some(entry => entry.area === area),
@@ -49,8 +58,8 @@ export function useLibrary() {
   }
 
   function filter({ area, type, query }: LibraryFilters): LibraryEntry[] {
-    const needle = query.trim().toLocaleLowerCase('es')
-    const index = getSearchIndex()
+    const needle = query.trim().toLocaleLowerCase(current)
+    const index = getSearchIndex(current)
 
     return index
       .filter(({ entry, haystack }) => {
@@ -66,7 +75,11 @@ export function useLibrary() {
   }
 
   function typeLabel(type: EntryType | string): string {
-    return TYPE_LABELS[type as EntryType] ?? 'Entrada'
+    return type in TYPE_LABELS ? t(`type.${type as EntryType}`) : t('type.fallback')
+  }
+
+  function areaLabel(area: string): string {
+    return AREA_ORDER.includes(area) ? t(`area.${area}` as MessageKey) : area
   }
 
   function areaGlyph(area: string): string {
@@ -82,6 +95,7 @@ export function useLibrary() {
     filter,
     countByArea,
     typeLabel,
+    areaLabel,
     areaGlyph,
     generatedAt,
   }

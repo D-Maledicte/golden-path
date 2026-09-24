@@ -1,14 +1,15 @@
 <script setup lang="ts">
 const area = defineModel<string>({ required: true })
 
-const { areas, countByArea, areaGlyph } = useLibrary()
+const { areas, countByArea, areaGlyph, areaLabel } = useLibrary()
+const { t, localePath } = useI18n()
 </script>
 
 <template>
-  <aside aria-label="Explorar la biblioteca" class="min-w-0">
+  <aside :aria-label="t('rail.label')" class="min-w-0">
     <div class="md:sticky md:top-6">
       <p class="mb-3.5 hidden text-[.78rem] font-bold uppercase tracking-[.16em] text-dim md:block">
-        Recorridos
+        {{ t('rail.title') }}
       </p>
 
       <nav
@@ -28,7 +29,7 @@ const { areas, countByArea, areaGlyph } = useLibrary()
           @click="area = item"
         >
           <span class="w-[22px] shrink-0 text-center text-gold">{{ areaGlyph(item) }}</span>
-          <span class="whitespace-nowrap md:whitespace-normal">{{ item }}</span>
+          <span class="whitespace-nowrap md:whitespace-normal">{{ areaLabel(item) }}</span>
           <span class="ml-auto hidden font-mono text-[.7rem] text-dim md:inline">
             {{ countByArea(item) }}
           </span>
@@ -40,14 +41,13 @@ const { areas, countByArea, areaGlyph } = useLibrary()
       >
         <span class="text-cyan">✦</span>
         <p class="mt-1.5 text-[.82rem] leading-[1.55] text-[#8e899d]">
-          Cada entrada se puede copiar o descargar en Markdown para pasarle contexto limpio a otro
-          agente.
+          {{ t('rail.tip') }}
         </p>
         <NuxtLink
-          to="/glosario"
+          :to="localePath('/glosario')"
           class="mt-3 inline-flex items-center gap-1.5 text-[.8rem] font-semibold text-cyan hover:text-[#a6f5f7]"
         >
-          Abrir el glosario
+          {{ t('rail.glossary') }}
           <Icon name="lucide:arrow-right" class="size-3.5" />
         </NuxtLink>
       </div>

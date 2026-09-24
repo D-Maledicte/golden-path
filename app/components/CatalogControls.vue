@@ -6,6 +6,7 @@ const type = defineModel<TypeFilter>('type', { required: true })
 
 const { types, typeLabel } = useLibrary()
 const { show: showPalette } = useCommandPalette()
+const { t } = useI18n()
 
 const input = ref<HTMLInputElement>()
 
@@ -29,13 +30,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       class="flex w-full items-center rounded-2xl border border-white/9 bg-white/3.5 px-3.5 py-1 transition duration-200 focus-within:border-gold/52 focus-within:shadow-[0_0_0_4px_rgba(237,195,94,.08)] sm:w-[min(390px,100%)]"
     >
       <span aria-hidden="true" class="mr-2 text-[1.25rem] text-gold">⌕</span>
-      <span class="sr-only">Buscar conceptos</span>
+      <span class="sr-only">{{ t('catalog.searchLabel') }}</span>
       <input
         ref="input"
         v-model="query"
         type="search"
         autocomplete="off"
-        placeholder="Buscar concepto, herramienta o proceso…"
+        :placeholder="t('catalog.placeholder')"
         class="min-w-0 flex-1 bg-transparent py-2.5 text-ink outline-none placeholder:text-[#706b7e]"
       />
       <kbd
@@ -51,7 +52,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       @click="showPalette()"
     >
       <Icon name="lucide:command" class="size-4 text-gold" />
-      Paleta de comandos
+      {{ t('catalog.palette') }}
       <kbd
         class="rounded-[6px] border border-white/10 bg-black/20 px-1.5 py-0.5 font-mono text-[.68rem] text-[#777182]"
       >
@@ -60,7 +61,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
     </button>
   </div>
 
-  <div class="mt-6 flex flex-wrap gap-2" aria-label="Filtrar por tipo">
+  <div class="mt-6 flex flex-wrap gap-2" :aria-label="t('catalog.filterType')">
     <button
       type="button"
       :aria-pressed="type === 'Todos'"
@@ -68,7 +69,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       :class="type === 'Todos' ? 'border-gold/35! bg-gold/8! text-ink!' : ''"
       @click="type = 'Todos'"
     >
-      Todos
+      {{ t('type.all') }}
     </button>
     <button
       v-for="item in types"

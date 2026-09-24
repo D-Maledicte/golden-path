@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
-const { bySlug, areaGlyph } = useLibrary()
+const { bySlug, areaGlyph, areaLabel } = useLibrary()
+const { t, meta, localePath } = useI18n()
 const reader = useReader()
 const config = useRuntimeConfig()
 
@@ -10,7 +11,7 @@ const entry = computed(() => bySlug(slug.value))
 if (!entry.value) {
   throw createError({
     statusCode: 404,
-    statusMessage: 'Esa entrada no existe en la biblioteca',
+    statusMessage: t('entry.notFound'),
     fatal: true,
   })
 }
@@ -19,7 +20,7 @@ if (!entry.value) {
 const ogImage = computed(() => `${config.public.siteUrl}/og/${slug.value}.jpg`)
 
 useHead({
-  title: () => entry.value?.title ?? 'Entrada',
+  title: () => entry.value?.title ?? t('entry.fallbackTitle'),
 })
 
 useSeoMeta({
@@ -33,7 +34,7 @@ useSeoMeta({
   ogImageAlt: () => `Golden Path: ${entry.value?.title ?? ''}`,
   twitterCard: 'summary_large_image',
   twitterImage: ogImage,
-  articleSection: () => entry.value?.area,
+  articleSection: () => (entry.value ? areaLabel(entry.value.area) : undefined),
   articleTag: () => entry.value?.tags ?? [],
 })
 
@@ -47,10 +48,10 @@ useHead({
           '@type': 'Article',
           headline: entry.value?.title,
           description: entry.value?.summary,
-          articleSection: entry.value?.area,
+          articleSection: entry.value ? areaLabel(entry.value.area) : undefined,
           keywords: entry.value?.tags?.join(', '),
-          inLanguage: 'es',
-          url: `${config.public.siteUrl}/entrada/${slug.value}`,
+          inLanguage: meta.value.htmlLang,
+          url: `${config.public.siteUrl}${localePath(`/entrada/${slug.value}`)}`,
           isPartOf: {
             '@type': 'CollectionPage',
             name: 'Golden Path',
@@ -64,15 +65,15 @@ useHead({
 
 <template>
   <main v-if="entry" id="biblioteca" class="px-4 pb-20 pt-6 md:px-[clamp(22px,5vw,74px)] md:pb-24">
-    <nav class="mb-8 flex flex-wrap items-center gap-2 text-[.82rem] text-dim" aria-label="Migas de pan">
-      <NuxtLink to="/" class="text-cyan underline-offset-4 hover:underline">Biblioteca</NuxtLink>
+    <nav class="mb-8 flex flex-wrap items-center gap-2 text-[.82rem] text-dim" :aria-label="t('entry.breadcrumbs')">
+      <NuxtLink :to="localePath('/')" class="text-cyan underline-offset-4 hover:underline">{{ t('entry.library') }}</NuxtLink>
       <span aria-hidden="true">/</span>
-      <span>{{ areaGlyph(entry.area) }} {{ entry.area }}</span>
+      <span>{{ areaGlyph(entry.area) }} {{ areaLabel(entry.area) }}</span>
     </nav>
 
     <header class="mb-10 max-w-[46rem]">
       <p class="mb-2 text-[.78rem] font-bold uppercase tracking-[.16em] text-gold">
-        {{ entry.area }}
+        {{ areaLabel(entry.area) }}
       </p>
       <h1 class="m-0 font-display text-[clamp(2.2rem,5.5vw,3.6rem)] font-medium leading-[1.05] tracking-[-.02em]">
         {{ entry.title }}
@@ -89,17 +90,17 @@ useHead({
 
     <div class="mt-16 flex flex-wrap gap-3">
       <NuxtLink
-        to="/"
+        :to="localePath('/')"
         class="rounded-xl border border-white/11 bg-white/4 px-4 py-2.5 font-bold text-ink transition hover:brightness-110"
       >
-        ← Volver a la biblioteca
+        {{ t('entry.back') }}
       </NuxtLink>
       <button
         type="button"
         class="rounded-xl border border-gold/25 bg-gold/8 px-4 py-2.5 font-bold text-gold-bright transition hover:bg-gold/14"
         @click="reader.show(entry.slug)"
       >
-        Abrir en el lector
+        {{ t('entry.openReader') }}
       </button>
     </div>
   </main>

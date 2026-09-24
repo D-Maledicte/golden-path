@@ -2,6 +2,7 @@
 const props = defineProps<{ total: number }>()
 
 const { show: showPalette } = useCommandPalette()
+const { t, localePath } = useI18n()
 
 /**
  * Capas del hero, de abajo hacia arriba:
@@ -32,7 +33,7 @@ const banner = {
       <source :srcset="banner.webp" sizes="100vw" type="image/webp" />
       <img
         :src="banner.png"
-        alt="Una figura con túnica blanca camina hacia un horizonte dorado en un paisaje egipcio psicodélico"
+        :alt="t('site.ogAlt')"
         width="2000"
         height="771"
         fetchpriority="high"
@@ -100,7 +101,7 @@ const banner = {
       class="absolute inset-x-5 bottom-8 z-10 sm:inset-x-auto sm:bottom-[42px] sm:left-[clamp(28px,5vw,78px)] sm:w-[min(620px,68%)]"
     >
       <TextAnimate
-        text="Manual vivo · casos anonimizados"
+        :text="t('hero.kicker')"
         animation="fade-in"
         by="word"
         :duration="0.5"
@@ -120,7 +121,7 @@ const banner = {
       </h1>
 
       <BlurText
-        text="Conceptos, patrones y aprendizajes transferibles para diseñar entornos donde los agentes puedan hacer buen trabajo sin llevarse producción puesta."
+        :text="t('hero.lead')"
         :delay="24"
         :duration="0.5"
         class="max-w-[54ch] gap-x-[.3em] font-sans text-[.94rem] leading-[1.55] text-ink/82 sm:text-[1.04rem]"
@@ -135,7 +136,7 @@ const banner = {
           class="!h-11 !px-6 !text-[.85rem] !font-bold"
           @click="showPalette()"
         >
-          <span class="text-[#21180b]">Buscar en la biblioteca</span>
+          <span class="text-[#21180b]">{{ t('hero.search') }}</span>
           <kbd
             class="rounded-md border border-black/15 bg-black/8 px-1.5 py-0.5 font-mono text-[.68rem] text-black/70"
           >
@@ -145,11 +146,11 @@ const banner = {
 
         <InteractiveHoverButton
           class="!rounded-full !border-gold/25 !bg-white/4 !px-5 !py-2.5 !text-[.85rem] !font-semibold"
-          @click="navigateTo('/entradas')"
+          @click="navigateTo(localePath('/entradas'))"
         >
-          <span class="text-ink">Índice completo</span>
+          <span class="text-ink">{{ t('hero.index') }}</span>
           <template #hover>
-            <span class="text-[#21180b]">Ver {{ props.total }} entradas</span>
+            <span class="text-[#21180b]">{{ t('hero.indexHover', { total: props.total }) }}</span>
           </template>
         </InteractiveHoverButton>
       </div>
@@ -178,7 +179,7 @@ const banner = {
             :duration="1.4"
             class="block font-display text-[1.7rem] leading-none text-gold-bright"
           />
-          <span class="mt-1 block text-[.7rem] uppercase tracking-[.12em] text-faint">entradas</span>
+          <span class="mt-1 block text-[.7rem] uppercase tracking-[.12em] text-faint">{{ t('hero.entries') }}</span>
         </div>
       </GlassSurface>
     </div>
