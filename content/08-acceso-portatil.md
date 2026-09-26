@@ -5,7 +5,7 @@ type: guide
 order: 8
 summary: Usar otro dispositivo como cliente del mismo entorno de desarrollo, sin duplicar repositorios ni publicar SSH en Internet.
 tags: [orca, tailscale, ssh, wsl, remoto, seguridad]
-related: [hosts-ssh, setup-windows-wsl]
+related: [hosts-ssh, setup-windows-wsl, tailscale-red-privada-identidad, tailscale-entorno-agentes]
 area: Orca
 glyph: ↗
 hue: rgba(87,217,232,.22)
