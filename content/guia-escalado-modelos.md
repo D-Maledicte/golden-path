@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Elegir modelo y nivel de razonamiento
 
-> Vigencia editorial: 12 de septiembre de 2026. Los nombres, límites y catálogos cambian; verificar las fichas oficiales antes de convertir esta guía en política.
+> Revisada el 27 de septiembre de 2026. Los nombres, límites y catálogos cambian; verificar las fichas oficiales antes de convertir esta guía en política.
 
 ## La decisión no empieza por la marca
 
@@ -41,18 +41,17 @@ Antes de cambiar de familia o subir al modelo premium:
 
 Subir razonamiento sirve cuando el modelo **puede** resolver el problema pero necesita explorar más. Subir de modelo sirve cuando aparece una **brecha de capacidad**: pierde relaciones, no sostiene el horizonte, juzga mal los tradeoffs o repite el mismo tipo de error.
 
-## OpenAI: Luna, Terra, Sol y Astra
+## OpenAI: GPT-6 Luna, Sol y Astra
 
 | Modelo | Rol sugerido | Tareas recomendadas | Cuándo subir |
 |---|---|---|---|
-| GPT-5.6 Luna | Worker rápido y económico | Búsqueda, clasificación, transformaciones, resúmenes, tests, documentación y cambios locales verificables | La tarea deja de ser lineal o requiere juicio entre archivos |
-| GPT-5.6 Terra | Generalista cotidiano | Implementación normal, debugging moderado, análisis y coordinación de pocas piezas | Pierde dependencias, necesita mayor autonomía o el error es costoso |
-| GPT-5.6 Sol | Worker senior o coordinador | Código complejo, investigación, uso de herramientas y problemas abiertos con varias restricciones | Aun con razonamiento alto no sostiene el trabajo de punta a punta |
+| GPT-6 Luna | Worker rápido y eficiente | Extracción, resúmenes, tests, documentación y cambios locales verificables | La tarea requiere juicio sostenido entre archivos |
+| GPT-6 Sol | Generalista fuerte o coordinador | Código complejo, investigación, herramientas y flujos agénticos con varias restricciones | Aun con razonamiento alto no sostiene el trabajo de punta a punta |
 | GPT-6 Astra | Coordinador y juez de máxima exigencia | Arquitectura, síntesis extensa, decisiones ambiguas, investigación profunda y workflows largos | Reservar para la cola difícil, no como default |
 
 ### Cuándo pasar de Luna a Sol
 
-Luna es ideal cuando el contrato de la tarea cabe en pocas frases y el resultado tiene una comprobación clara. Antes de saltar directamente a Sol, Terra suele ser el peldaño natural para trabajo cotidiano que ya necesita interpretación.
+Luna es ideal cuando el contrato de la tarea cabe en pocas frases y el resultado tiene una comprobación clara. Sol es el siguiente escalón para trabajo que ya necesita interpretación, autonomía y coordinación.
 
 Pasar a Sol cuando aparezcan varias de estas señales:
 
@@ -64,18 +63,20 @@ Pasar a Sol cuando aparezcan varias de estas señales:
 
 Astra se justifica cuando el problema combina amplitud, ambigüedad y consecuencias: no sólo debe escribir bien, sino preservar coherencia durante un proceso largo y juzgar el conjunto.
 
+Los GPT-5.6 Luna, Terra y Sol todavía pueden figurar en el selector durante el despliegue de GPT-6. La disponibilidad depende del plan, el cliente y el workspace; las familias anteriores pueden servir de fallback cuando ya están validadas en un repositorio.
+
 ## Claude: Haiku, Sonnet, Opus y Fable
 
 | Modelo | Rol sugerido | Tareas recomendadas | Cuándo subir |
 |---|---|---|---|
 | Claude Haiku 4.5 | Worker veloz | Clasificación, extracción, cambios repetitivos, subagentes acotados y tareas de alto volumen | Falta consistencia o el trabajo exige razonamiento entre varias piezas |
 | Claude Sonnet 5 | Default equilibrado | Desarrollo cotidiano, análisis, contenido, uso de herramientas y agentes con alcance medio | El horizonte se alarga o el costo del juicio incorrecto aumenta |
-| Claude Opus 5 | Coordinador senior | Coding agente complejo, planificación amplia, revisión crítica y decisiones de alto impacto | Opus con esfuerzo alto sigue sin cerrar el problema |
+| Claude Opus 5.5 | Coordinador senior | Coding agente complejo, planificación amplia, revisión crítica y decisiones de alto impacto | Opus con esfuerzo alto sigue sin cerrar el problema |
 | Claude Fable 5.1 | Frontera para la cola difícil | Razonamiento muy demandante y trabajo agente de largo horizonte | Usar de forma selectiva y medir si mejora la tasa de resolución |
 
 ### Cuándo pasar de Haiku a Sonnet y de Sonnet a Opus
 
-Haiku funciona mejor como ejecutor de unidades pequeñas y comprobables. Sonnet es el punto de partida general cuando la tarea necesita comprender intención además de seguir instrucciones.
+Haiku funciona mejor como ejecutor de unidades pequeñas y comprobables. Sonnet es un punto de partida práctico cuando la tarea necesita comprender intención además de seguir instrucciones. La documentación actual de Anthropic recomienda comenzar con Opus 5.5 para la mayoría de los trabajos; esta guía prioriza el costo por tarea resuelta dentro de una orquestación con workers.
 
 Subir de Sonnet a Opus cuando:
 
@@ -99,7 +100,7 @@ El nivel de razonamiento es un presupuesto de deliberación, no un multiplicador
 | Max | Un único modelo necesita agotar una investigación difícil | La tarea puede dividirse mejor entre agentes |
 | Ultra | El trabajo se separa naturalmente y conviene delegar en subagentes | Hay una sola pieza indivisible o mucha coordinación accidental |
 
-En OpenAI, `Max` entrega más tiempo al mismo modelo; `Ultra` habilita una estrategia con delegación automática. En Claude, el comportamiento depende del modelo: el pensamiento adaptativo y `effort` son controles blandos, y Haiku 4.5 admite pensamiento extendido pero no el parámetro `effort`.
+En Codex, `Max` entrega más deliberación al mismo modelo; `Ultra` puede delegar automáticamente en subagentes. GPT-6 Luna llega hasta Max, sin Ultra. En Claude, el comportamiento depende del modelo: el pensamiento adaptativo y `effort` son controles blandos, y Haiku 4.5 admite pensamiento extendido pero no el parámetro `effort`.
 
 Dos advertencias:
 
@@ -108,21 +109,24 @@ Dos advertencias:
 
 ## OpenCode Go: mapa práctico del catálogo
 
-OpenCode Go reúne modelos de varios proveedores en un plan único. La tabla siguiente es una **heurística editorial de arranque**, no un benchmark oficial de OpenCode. Agrupa el catálogo vigente por el tipo de trabajo que conviene evaluar primero en nuestro esquema coordinador–workers.
+OpenCode Go reúne modelos de varios proveedores en un plan único. La tabla siguiente es una **heurística editorial de arranque**, no un benchmark oficial de OpenCode. Agrupa opciones relevantes del catálogo consultado el 27 de septiembre; la lista exacta y los límites deben comprobarse en `/models` y en la ficha oficial antes de asignar un worker.
 
 | Familia actual en Go | Punto de partida sugerido | Papel inicial |
 |---|---|---|
-| Grok 4.6 | Revisión independiente, razonamiento amplio y segunda opinión | Coordinador o reviewer selectivo |
+| Grok 4.7 y 4.6 | Revisión independiente, razonamiento amplio y segunda opinión | Coordinador o reviewer selectivo |
 | GLM 5.3 Flash, 5.3, 5.2, 5.1 | 5.3 Flash para trabajo acotado; 5.3 para planificación y cambios cruzados | Worker económico; 5.3 como escalamiento |
-| GPT-5.6 Luna | Implementación, refactors, tests y documentación verificable | Worker general |
+| GPT-6 Luna y GPT-5.6 Luna | GPT-6 Luna para implementación, refactors, tests y documentación verificable; 5.6 como fallback probado | Worker general |
 | Kimi K3, K2.7 Code, K2.6 | K2.7 Code para código; K3 para síntesis y tareas más exigentes | Worker de código; K3 selectivo |
 | LongCat 2.0 | Mantenimiento simple, lotes y tareas repetibles | Worker de volumen |
-| MiMo V2.5 y V2.5 Pro | V2.5 para tareas baratas y comprobables; Pro cuando hace falta más juicio | Worker económico |
+| MiMo V2.6 Flash y Pro; V2.5 | V2.6 Flash para tareas baratas y comprobables; Pro cuando hace falta más juicio; V2.5 como fallback | Worker económico |
 | MiniMax M3 y M2.7 | M3 como generalista; M2.7 como fallback evaluado | Worker general |
 | Muse Spark 1.3 y 1.2 Contributor | Implementación, tests y docs con alcance bien delimitado | Contributor acotado |
 | Qwen3.8 Max, 3.8 Flash, 3.7 Max, 3.7 Plus, 3.6 Plus | 3.8 Flash para volumen; 3.8 Max para planificación y revisión | Worker o reviewer según variante |
 | DeepSeek V4.1 Flash, V4 Pro, V4 Flash, V4 Flash Vision Exp | V4.1 Flash para trabajo corriente; Pro para debugging/revisión; Vision para insumos visuales | Worker especializado |
 | Hy4 preview y Hy3 | Hy4 sólo en sandbox de evaluación; Hy3 después de una prueba contra el repo | Experimental o worker evaluado |
+| Space Bunny Free y LongCat 2.5 Preview Free | Probar sólo con tareas reproducibles y sin depender de su disponibilidad futura | Experimentación temporal |
+
+La página de Go también distingue límites de uso por ventana de cinco horas, semana y mes para cada modelo; una opción aparentemente barata puede tener un cupo mensual menor. El catálogo incluye variantes gratuitas por tiempo limitado. Ni su permanencia ni su desempeño en un repositorio propio se deducen de aparecer en la lista.
 
 ### Cómo usar esta tabla sin enamorarse del ranking
 
