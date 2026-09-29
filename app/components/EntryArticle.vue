@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { LibraryEntry } from '~/types/library'
+import { copyText, downloadText } from '~/lib/utils'
 
 const props = withDefaults(
   defineProps<{
@@ -13,6 +14,9 @@ const props = withDefaults(
 const { relatedOf, typeLabel } = useLibrary()
 const { show: toast } = useToast()
 const reader = useReader()
+const notes = useNotesDialog()
+const { copyEntryLink } = useShare()
+const { notesOf } = useProfile()
 const { t, localePath } = useI18n()
 
 const related = computed(() => relatedOf(props.entry))
@@ -32,28 +36,12 @@ function scrollToHeading(index: number) {
 }
 
 async function copyMarkdown() {
-  try {
-    await navigator.clipboard.writeText(props.entry.raw)
-    toast(t('entry.copied'))
-  } catch {
-    const area = document.createElement('textarea')
-    area.value = props.entry.raw
-    document.body.appendChild(area)
-    area.select()
-    document.execCommand('copy')
-    area.remove()
-    toast(t('entry.copied'))
-  }
+  await copyText(props.entry.raw)
+  toast(t('entry.copied'))
 }
 
 function downloadMarkdown() {
-  const blob = new Blob([props.entry.raw], { type: 'text/markdown;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `${props.entry.slug}.md`
-  link.click()
-  URL.revokeObjectURL(url)
+  downloadText(props.entry.raw, `${props.entry.slug}.md`, 'text/markdown;charset=utf-8')
   toast(t('entry.downloaded'))
 }
 </script>
@@ -82,6 +70,22 @@ function downloadMarkdown() {
             {{ t('entry.copy') }}
           </button>
 
+          <button
+            type="button"
+            class="rounded-xl border border-white/11 bg-white/4 px-3.5 py-2 text-[.84rem] font-bold text-ink transition hover:brightness-110 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-cyan"
+            @click="copyEntryLink(props.entry.slug)"
+          >
+            {{ t('share.copy') }}
+          </button>
+
+          <button
+            type="button"
+            class="rounded-xl border border-violet/23 bg-violet/6 px-3.5 py-2 text-[.84rem] font-bold text-[#cfbafa] transition hover:bg-violet/14 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-cyan"
+            @click="notes.show(props.entry.slug)"
+          >
+            {{ t('notes.open') }}<template v-if="notesOf(props.entry.slug).length"> · {{ notesOf(props.entry.slug).length }}</template>
+          </button>
+
           <ShimmerButton
             background="#edc35e"
             shimmer-color="#fffdf5"
@@ -97,7 +101,6 @@ function downloadMarkdown() {
             v-if="props.variant === 'reader'"
             :to="localePath(`/entrada/${props.entry.slug}`)"
             class="rounded-xl border border-cyan/25 bg-cyan/6 px-3.5 py-2 text-[.84rem] font-bold text-cyan transition hover:bg-cyan/12"
-            @click="reader.close()"
           >
             {{ t('entry.openPage') }}
           </NuxtLink>

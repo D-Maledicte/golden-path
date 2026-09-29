@@ -22,6 +22,54 @@ function sync() {
 watch([entry, dialog], sync, { flush: 'post' })
 onMounted(sync)
 
+/**
+ * La URL refleja la entrada abierta (`/entrada/<slug>`) sin navegar: así se
+ * puede copiar de la barra y compartir. Se escribe directo en `history`
+ * conservando su `state` para no romper al router; al cerrar se restaura la
+ * ruta de origen, y el botón "atrás" del navegador cierra el lector.
+ */
+const { entryPath } = useShare()
+let returnUrl: string | null = null
+let shownUrl: string | null = null
+
+watch(
+  () => reader.slug.value,
+  (slug, previous) => {
+    if (!import.meta.client) return
+    if (slug && !previous) {
+      returnUrl = window.location.pathname + window.location.search + window.location.hash
+      shownUrl = entryPath(slug)
+      history.pushState({ ...history.state }, '', shownUrl)
+    } else if (slug && previous) {
+      shownUrl = entryPath(slug)
+      history.replaceState({ ...history.state }, '', shownUrl)
+    } else if (!slug && returnUrl !== null) {
+      if (window.location.pathname === shownUrl) history.replaceState({ ...history.state }, '', returnUrl)
+      returnUrl = shownUrl = null
+    }
+  },
+)
+
+function onPopState() {
+  if (!reader.slug.value) return
+  // El navegador ya volvió a la URL de origen: sólo hay que cerrar.
+  returnUrl = shownUrl = null
+  reader.close()
+}
+
+/** Una navegación real del router ("Abrir página completa") cierra el lector sin restaurar. */
+const route = useRoute()
+watch(
+  () => route.fullPath,
+  () => {
+    returnUrl = shownUrl = null
+    reader.close()
+  },
+)
+
+onMounted(() => window.addEventListener('popstate', onPopState))
+onBeforeUnmount(() => window.removeEventListener('popstate', onPopState))
+
 function onKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape' && entry.value) {
     event.preventDefault()
