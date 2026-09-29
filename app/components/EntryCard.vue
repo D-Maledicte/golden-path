@@ -33,7 +33,7 @@ const actionClass
     :border-radius="22"
     :glow-intensity="0.34"
     :border-width="1"
-    class="h-full bg-none bg-[linear-gradient(145deg,rgba(25,22,45,.94),rgba(15,14,29,.88))] ring-white/7.5"
+    class="h-full [&>div:last-child]:h-full bg-none bg-[linear-gradient(145deg,rgba(25,22,45,.94),rgba(15,14,29,.88))] ring-white/7.5"
   >
     <div class="group relative flex h-full w-full flex-col p-5 text-left">
       <span class="flex items-center justify-between gap-3">
