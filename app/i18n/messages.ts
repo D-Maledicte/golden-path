@@ -113,9 +113,14 @@ const es = {
   'cloud.sendError': 'No se pudo enviar el link: {error}',
   'cloud.synced': 'Sincronizado como {email}',
   'cloud.syncing': 'Sincronizando…',
+  'cloud.pending': 'Cambios guardados en este navegador; se suben al volver la conexión',
   'cloud.signOut': 'Cerrar sesión',
   'cloud.syncError': 'No se pudo sincronizar con la nube',
   'cloud.pushError': 'No se pudo subir a la nube; queda guardado en este navegador',
+  'cloud.backup': 'Descargar respaldo',
+  'cloud.backupHint': 'Copia de las notas de este navegador tomada antes de la primera sincronización. Se puede importar.',
+  'cloud.otherAccount': 'Las notas de este navegador eran de otra cuenta: no se mezclaron con la tuya (quedaron en una copia local de respaldo).',
+  'cloud.signOutBlocked': 'No cerramos la sesión: hay notas que todavía no se subieron. Reintentá con conexión o exportá tu perfil.',
 
   'index.title': 'Índice completo',
   'index.description':
@@ -319,9 +324,14 @@ const en: Messages = {
   'cloud.sendError': 'Could not send the link: {error}',
   'cloud.synced': 'Synced as {email}',
   'cloud.syncing': 'Syncing…',
+  'cloud.pending': 'Changes saved in this browser; they upload when the connection is back',
   'cloud.signOut': 'Sign out',
   'cloud.syncError': 'Could not sync with the cloud',
   'cloud.pushError': 'Could not upload to the cloud; it stays saved in this browser',
+  'cloud.backup': 'Download backup',
+  'cloud.backupHint': 'Copy of this browser\'s notes taken before the first sync. It can be imported.',
+  'cloud.otherAccount': 'The notes in this browser belonged to another account: they were not merged into yours (a local backup copy was kept).',
+  'cloud.signOutBlocked': 'You are still signed in: some notes have not been uploaded yet. Retry when online or export your profile.',
 
   'index.title': 'Full index',
   'index.description':

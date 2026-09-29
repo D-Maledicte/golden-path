@@ -37,6 +37,10 @@ interface NoteRow {
 }
 
 const STORAGE_KEY = 'golden-path:profile'
+/** Cuenta con la que se sincronizó por última vez este navegador. */
+const OWNER_KEY = 'golden-path:profile-owner'
+/** Copia del perfil local tomada antes de fusionarlo con una cuenta por primera vez. */
+const BACKUP_KEY = 'golden-path:profile-backup'
 
 const emptyProfile = (): Profile => ({ version: 1, notes: {} })
 
@@ -98,6 +102,8 @@ let loaded = false
 export function useProfile() {
   const profile = useState<Profile>('profile', emptyProfile)
   const syncing = useState('profile-syncing', () => false)
+  /** Hay cambios locales que todavía no llegaron a la nube (p. ej. sin conexión). */
+  const pending = useState('profile-pending', () => false)
   const { user } = useAuth()
   const { t } = useI18n()
   const { show: toast } = useToast()
@@ -112,22 +118,82 @@ export function useProfile() {
     }
   }
 
-  /** Sube filas a Supabase; si falla queda en local y se reintenta en el próximo sync. */
-  async function push(rows: NoteRow[]) {
-    if (!user.value || !rows.length) return
-    const supabase = await getSupabase()
-    const { error } = (await supabase?.from('notes').upsert(rows)) ?? {}
-    if (error) toast(t('cloud.pushError'), 3500)
+  /** Cambia el id de una nota local (cuando el suyo no se puede usar en la nube). */
+  function reassignId(slug: string, oldId: string): NoteRow | null {
+    const list = profile.value.notes[slug]
+    const index = list?.findIndex(note => note.id === oldId) ?? -1
+    if (!list || index < 0) return null
+    const note = { ...list[index]!, id: crypto.randomUUID() }
+    const next = [...list]
+    next[index] = note
+    profile.value = { ...profile.value, notes: { ...profile.value.notes, [slug]: next } }
+    persist()
+    return toRow(slug, note)
   }
 
-  /** Fusiona local y nube por id: gana el `updatedAt` más reciente. */
-  async function sync() {
+  /**
+   * Sube filas a Supabase. Si el lote falla se reintenta fila por fila, así una
+   * nota problemática no frena a las demás. Una nota con id inválido o que en
+   * la nube pertenece a otra cuenta (p. ej. importada del JSON de otra persona)
+   * recibe un id nuevo y se vuelve a subir. Lo que falle igual queda en local y
+   * se reintenta en el próximo sync. Devuelve si subió todo.
+   */
+  async function push(rows: NoteRow[]): Promise<boolean> {
+    if (!user.value || !rows.length) return true
     const supabase = await getSupabase()
-    if (!supabase || !user.value || syncing.value) return
+    if (!supabase) return false
+    // Sin conexión no se intenta ni se avisa: queda pendiente y sube al reconectar.
+    if (!navigator.onLine) {
+      pending.value = true
+      return false
+    }
+    if (!(await supabase.from('notes').upsert(rows)).error) return true
+
+    let ok = true
+    for (const row of rows) {
+      let { error } = await supabase.from('notes').upsert(row)
+      // 42501: fila de otra cuenta (RLS) · 22P02: id que no es un UUID.
+      if (error && ['42501', '22P02'].includes(error.code)) {
+        const renamed = reassignId(row.entry_slug, row.id)
+        if (renamed) ({ error } = await supabase.from('notes').upsert(renamed))
+      }
+      if (error) ok = false
+    }
+    if (!ok) {
+      pending.value = true
+      toast(t('cloud.pushError'), 3500)
+    }
+    return ok
+  }
+
+  /**
+   * Fusiona local y nube por id: gana el `updatedAt` más reciente. Nunca borra
+   * notas locales: las que no están en la nube se suben. Devuelve si quedó
+   * todo sincronizado.
+   */
+  async function sync(): Promise<boolean> {
+    const supabase = await getSupabase()
+    if (!supabase || !user.value || syncing.value) return false
+    if (!navigator.onLine) {
+      pending.value = true
+      return false
+    }
     syncing.value = true
     try {
       const { data, error } = await supabase.from('notes').select('*')
       if (error) throw error
+
+      // Primera vez que este navegador se fusiona con esta cuenta: copia de respaldo.
+      const previousOwner = localStorage.getItem(OWNER_KEY)
+      if (previousOwner !== user.value.id && Object.keys(profile.value.notes).length) {
+        localStorage.setItem(BACKUP_KEY, JSON.stringify({ ...profile.value, previousOwner, backedUpAt: new Date().toISOString() }))
+      }
+      // Lo local ya se había sincronizado con OTRA cuenta (sesión vencida sin
+      // cerrar): no se mezcla con esta. Queda en la copia de respaldo.
+      if (previousOwner && previousOwner !== user.value.id) {
+        profile.value = emptyProfile()
+        toast(t('cloud.otherAccount'), 6000)
+      }
       const local = flatten(profile.value)
       const remote = new Map((data as NoteRow[]).map(row => [row.id, row]))
       const toPush: NoteRow[] = []
@@ -147,10 +213,16 @@ export function useProfile() {
       for (const row of remote.values()) add(row.entry_slug, fromRow(row))
 
       profile.value = { version: 1, notes: merged }
-      persist()
-      await push(toPush)
+      if (!persist()) return false
+      const pushed = await push(toPush)
+      localStorage.setItem(OWNER_KEY, user.value.id)
+      pending.value = !pushed
+      return pushed
     } catch {
-      toast(t('cloud.syncError'), 3500)
+      pending.value = true
+      // Un corte a mitad de camino no amerita aviso: se reintenta al reconectar.
+      if (navigator.onLine) toast(t('cloud.syncError'), 3500)
+      return false
     } finally {
       syncing.value = false
     }
@@ -176,6 +248,19 @@ export function useProfile() {
         // Fuera del callback: supabase-js no admite llamadas a la API adentro.
         if (changed && next) setTimeout(sync, 0)
       })
+
+      // Reintentos de lo pendiente: al volver la conexión, al volver a la
+      // pestaña y, por las dudas, cada minuto mientras quede algo sin subir.
+      const retry = () => {
+        if (user.value && (pending.value || !syncing.value)) sync()
+      }
+      window.addEventListener('online', retry)
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && pending.value) retry()
+      })
+      setInterval(() => {
+        if (pending.value && navigator.onLine) retry()
+      }, 60_000)
     })
   }
 
@@ -252,7 +337,37 @@ export function useProfile() {
     return count
   }
 
-  return { profile, total, syncing, notesOf, saveNote, deleteNote, exportJson, importJson, sync }
+  /**
+   * Cierra sesión y limpia las notas de este navegador, para que en una compu
+   * compartida no pasen a la cuenta de quien entre después. Sólo limpia si antes
+   * logró subir todo; si no, no cierra la sesión y avisa.
+   */
+  async function signOut(): Promise<boolean> {
+    if (!(await sync())) {
+      toast(t('cloud.signOutBlocked'), 5000)
+      return false
+    }
+    await useAuth().signOut()
+    profile.value = emptyProfile()
+    try {
+      localStorage.removeItem(STORAGE_KEY)
+      localStorage.removeItem(OWNER_KEY)
+    } catch {
+      // Sin almacenamiento no hay nada que limpiar.
+    }
+    return true
+  }
+
+  /** La copia de respaldo previa a la primera fusión, si existe (se importa como cualquier perfil). */
+  function backupJson(): string | null {
+    try {
+      return localStorage.getItem(BACKUP_KEY)
+    } catch {
+      return null
+    }
+  }
+
+  return { profile, total, syncing, pending, notesOf, saveNote, deleteNote, exportJson, importJson, sync, signOut, backupJson }
 }
 
 /** Entrada cuyo modal de notas está abierto (montado una vez en `app.vue`). */

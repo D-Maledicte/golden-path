@@ -5,7 +5,7 @@ import { downloadText } from '~/lib/utils'
 
 const dialogState = useNotesDialog()
 const { bySlug } = useLibrary()
-const { notesOf, saveNote, deleteNote, exportJson, importJson, syncing } = useProfile()
+const { notesOf, saveNote, deleteNote, exportJson, importJson, syncing, pending, signOut, backupJson } = useProfile()
 const auth = useAuth()
 const { t } = useI18n()
 const { show: toast } = useToast()
@@ -91,6 +91,17 @@ function exportProfile() {
   const date = new Date().toISOString().slice(0, 10)
   downloadText(exportJson(), `golden-path-perfil-${date}.json`, 'application/json;charset=utf-8')
   toast(t('notes.exported'))
+}
+
+/* Se lee al abrir el modal: localStorage no existe en el prerender. */
+const hasBackup = ref(false)
+watch(entry, () => {
+  hasBackup.value = import.meta.client && Boolean(backupJson())
+})
+
+function downloadBackup() {
+  const backup = backupJson()
+  if (backup) downloadText(backup, 'golden-path-perfil-respaldo.json', 'application/json;charset=utf-8')
 }
 
 async function onImport(event: Event) {
@@ -239,8 +250,8 @@ const buttonClass
       <footer class="flex flex-wrap items-center justify-end gap-2 border-t border-white/7 px-5 py-4 sm:px-[clamp(22px,4vw,44px)]">
         <div v-if="auth.enabled.value" class="mr-auto flex min-w-0 flex-wrap items-center gap-2 text-[.82rem] text-faint">
           <template v-if="auth.user.value">
-            <span class="truncate">☁ {{ syncing ? t('cloud.syncing') : t('cloud.synced', { email: auth.user.value.email ?? '' }) }}</span>
-            <button type="button" class="text-cyan underline-offset-4 hover:underline" @click="auth.signOut()">
+            <span class="truncate">☁ {{ syncing ? t('cloud.syncing') : pending ? t('cloud.pending') : t('cloud.synced', { email: auth.user.value.email ?? '' }) }}</span>
+            <button type="button" class="text-cyan underline-offset-4 hover:underline" @click="signOut()">
               {{ t('cloud.signOut') }}
             </button>
           </template>
@@ -260,6 +271,9 @@ const buttonClass
             ☁ {{ t('cloud.cta') }}
           </button>
         </div>
+        <button v-if="hasBackup" type="button" class="text-[.8rem] text-dim underline-offset-4 hover:text-ink hover:underline" :title="t('cloud.backupHint')" @click="downloadBackup">
+          {{ t('cloud.backup') }}
+        </button>
         <label :class="[buttonClass, 'cursor-pointer']">
           {{ t('notes.import') }}
           <input type="file" accept=".json,application/json" class="sr-only" @change="onImport">
