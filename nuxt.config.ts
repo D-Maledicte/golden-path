@@ -86,8 +86,17 @@ export default defineNuxtConfig({
     },
   },
 
+  /**
+   * Supabase guarda las notas de quien inicia sesión. La clave anon es pública
+   * (la protección está en las políticas RLS); sin ella el sitio sigue
+   * funcionando sólo con localStorage.
+   */
   runtimeConfig: {
-    public: { siteUrl },
+    public: {
+      siteUrl,
+      supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL ?? 'https://lsubdkjyyhbyvqmhevri.supabase.co',
+      supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+    },
   },
 
   /**

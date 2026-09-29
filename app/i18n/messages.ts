@@ -105,6 +105,18 @@ const es = {
   'notes.storageError': 'No se pudo guardar: el almacenamiento local está lleno o bloqueado',
   'notes.close': 'Cerrar notas',
 
+  'cloud.cta': 'Guardar en la nube',
+  'cloud.hint': 'Te mandamos un link por email para iniciar sesión. Tus notas locales se suben al entrar.',
+  'cloud.emailPlaceholder': 'tu@email.com',
+  'cloud.send': 'Enviar link',
+  'cloud.sent': 'Revisá tu email: te mandamos el link para entrar',
+  'cloud.sendError': 'No se pudo enviar el link: {error}',
+  'cloud.synced': 'Sincronizado como {email}',
+  'cloud.syncing': 'Sincronizando…',
+  'cloud.signOut': 'Cerrar sesión',
+  'cloud.syncError': 'No se pudo sincronizar con la nube',
+  'cloud.pushError': 'No se pudo subir a la nube; queda guardado en este navegador',
+
   'index.title': 'Índice completo',
   'index.description':
     'Las {count} entradas de Golden Path, agrupadas por recorrido: gobierno de agentes, Orca, diseño agéntico, Hermes, CRM versionado y casos de producto.',
@@ -298,6 +310,18 @@ const en: Messages = {
   'notes.importError': 'That file is not a valid profile',
   'notes.storageError': 'Could not save: local storage is full or blocked',
   'notes.close': 'Close notes',
+
+  'cloud.cta': 'Save to the cloud',
+  'cloud.hint': 'We will email you a sign-in link. Your local notes are uploaded when you sign in.',
+  'cloud.emailPlaceholder': 'you@email.com',
+  'cloud.send': 'Send link',
+  'cloud.sent': 'Check your email: we sent you the sign-in link',
+  'cloud.sendError': 'Could not send the link: {error}',
+  'cloud.synced': 'Synced as {email}',
+  'cloud.syncing': 'Syncing…',
+  'cloud.signOut': 'Sign out',
+  'cloud.syncError': 'Could not sync with the cloud',
+  'cloud.pushError': 'Could not upload to the cloud; it stays saved in this browser',
 
   'index.title': 'Full index',
   'index.description':

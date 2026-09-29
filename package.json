@@ -24,6 +24,7 @@
     "@modelcontextprotocol/sdk": "^1.30.1",
     "@nuxt/icon": "^2.5.1",
     "@shikijs/markdown-it": "^4.4.3",
+    "@supabase/supabase-js": "^2.117.2",
     "@tailwindcss/vite": "^4.3.3",
     "@vercel/analytics": "^2.0.1",
     "@vueuse/core": "^15.0.0",
