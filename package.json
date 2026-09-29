@@ -25,6 +25,7 @@
     "@nuxt/icon": "^2.5.1",
     "@shikijs/markdown-it": "^4.4.3",
     "@tailwindcss/vite": "^4.3.3",
+    "@vercel/analytics": "^2.0.1",
     "@vueuse/core": "^15.0.0",
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
