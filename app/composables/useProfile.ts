@@ -180,7 +180,9 @@ export function useProfile() {
     }
     syncing.value = true
     try {
-      const { data, error } = await supabase.from('notes').select('*')
+      // Sólo las propias: con notas compartidas la base también deja leer las
+      // de otros, y esas no se mezclan con el perfil (ver useSharing).
+      const { data, error } = await supabase.from('notes').select('*').eq('owner_id', user.value.id)
       if (error) throw error
 
       // Primera vez que este navegador se fusiona con esta cuenta: copia de respaldo.
@@ -348,6 +350,7 @@ export function useProfile() {
       return false
     }
     await useAuth().signOut()
+    useSharing().clear()
     profile.value = emptyProfile()
     try {
       localStorage.removeItem(STORAGE_KEY)
