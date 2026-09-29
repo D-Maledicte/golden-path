@@ -77,9 +77,9 @@ function sync() {
   if (!el) return
   if (entry.value && !el.open) {
     selectedId.value = null
-    sharedSelectedId.value = null
+    sharedSelectedId.value = dialogState.intent.value?.noteId ?? null
     draft.value = null
-    tab.value = 'mine'
+    tab.value = dialogState.intent.value?.tab ?? 'mine'
     ensureMarkdown()
     el.showModal()
   } else if (!entry.value && el.open) {
@@ -212,13 +212,15 @@ const buttonClass
             <button
               v-for="item in ([
                 { id: 'mine', label: t('notes.yours') },
-                { id: 'shared', label: sharedNotes.length ? `${t('share.withMe')} · ${sharedNotes.length}` : t('share.withMe') },
+                { id: 'shared', label: sharedNotes.length ? `${t('share.withMeShort')} · ${sharedNotes.length}` : t('share.withMeShort'), title: t('share.withMe') },
                 { id: 'share', label: t('share.tab') },
               ] as const)"
               :key="item.id"
               type="button"
               role="tab"
               :aria-selected="tab === item.id"
+              :title="'title' in item ? item.title : undefined"
+              :aria-label="'title' in item ? item.title : undefined"
               class="flex-1 cursor-pointer truncate rounded-lg px-2.5 py-2 text-[.78rem] font-bold transition focus-visible:outline-[3px] focus-visible:outline-offset-[2px] focus-visible:outline-cyan"
               :class="tab === item.id ? 'bg-violet/18 text-ink' : 'text-[#8e899d] hover:text-ink'"
               @click="tab = item.id"

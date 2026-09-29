@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onClickOutside, useEventListener } from '@vueuse/core'
-
 /**
  * Acceso a la cuenta: iniciar sesión con magic link, estado de sincronización
  * de las notas y cierre de sesión. El panel se abre hacia arriba porque vive
@@ -25,41 +23,16 @@ const { total, syncing, pending, signOut } = useProfile()
 const { t } = useI18n()
 const { show: toast } = useToast()
 
-const open = ref(false)
 const root = ref<HTMLElement>()
 const trigger = ref<HTMLElement>()
 const panel = ref<HTMLElement>()
-onClickOutside(root, () => (open.value = false), { ignore: [panel] })
-
-/**
- * Posición fija del panel: arriba del botón si entra en la ventana y, si no,
- * abajo. Se mide después de renderizar, cuando ya se conoce su alto.
- */
-const panelStyle = ref<Record<string, string>>({})
-async function place() {
-  const rect = trigger.value?.getBoundingClientRect()
-  if (!rect) return
-  const horizontal = props.align === 'right'
-    ? { right: `${Math.max(12, window.innerWidth - rect.right)}px` }
-    : { left: `${Math.max(12, rect.left)}px` }
-  panelStyle.value = { ...horizontal, bottom: `${window.innerHeight - rect.top + 10}px`, visibility: 'hidden' }
-  await nextTick()
-  const height = panel.value?.offsetHeight ?? 0
-  const fitsAbove = rect.top - 10 - height >= 12
-  panelStyle.value = fitsAbove
-    ? { ...horizontal, bottom: `${window.innerHeight - rect.top + 10}px` }
-    : { ...horizontal, top: `${rect.bottom + 10}px` }
-}
-
-watch(open, (value) => {
-  if (value && props.teleport) place()
+const { open, onKeydown, panelClass, panelStyle } = useAnchoredPanel({
+  root,
+  trigger,
+  panel,
+  align: () => props.align,
+  teleport: () => props.teleport,
 })
-// Con scroll o resize el botón se mueve: se cierra en vez de perseguirlo
-// (salvo el scroll dentro del propio panel).
-useEventListener('scroll', (event: Event) => {
-  if (props.teleport && !panel.value?.contains(event.target as Node)) open.value = false
-}, { passive: true, capture: true })
-useEventListener('resize', () => (open.value = false))
 
 const email = ref('')
 const sending = ref(false)
@@ -110,13 +83,6 @@ async function onSignOut() {
   if (await signOut()) open.value = false
 }
 
-function onKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape' && open.value) {
-    event.stopPropagation()
-    open.value = false
-  }
-}
-
 const primaryButton
   = 'inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gold px-4 text-[.84rem] font-bold text-[#21180b] transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-cyan'
 const secondaryButton
@@ -161,8 +127,8 @@ const secondaryButton
         role="dialog"
         :aria-label="t('account.title')"
         class="z-[120] max-h-[calc(100vh-24px)] w-[min(310px,calc(100vw-24px))] overflow-y-auto rounded-2xl border border-white/10 bg-[#110f22]/96 p-4 text-left shadow-[0_24px_70px_rgba(0,0,0,.55)] backdrop-blur-xl"
-        :class="props.teleport ? 'fixed' : ['absolute bottom-[calc(100%+10px)]', props.align === 'right' ? 'right-0' : 'left-0']"
-        :style="props.teleport ? panelStyle : undefined"
+        :class="panelClass"
+        :style="panelStyle"
         @keydown="onKeydown"
       >
         <!-- Con sesión -->

@@ -7,8 +7,10 @@
  * lados por `id` y gana el `updatedAt` más reciente. Los borrados son lógicos
  * (`deletedAt`) para que también se propaguen.
  *
- * Se carga recién con la app hidratada (`onNuxtReady`) para que el HTML
- * prerenderizado y el primer render del cliente coincidan.
+ * Se carga recién con la app hidratada para que el HTML prerenderizado y el
+ * primer render del cliente coincidan. No se usa `onNuxtReady`: espera a que
+ * el navegador quede ocioso, y con la aurora WebGL del hero eso puede no pasar
+ * nunca en equipos sin aceleración gráfica (no cargaban sesión ni notas).
  */
 
 export interface ProfileNote {
@@ -99,6 +101,13 @@ function flatten(profile: Profile) {
 
 let loaded = false
 
+/** Corre `callback` apenas termina la hidratación (o ya, si terminó). */
+function afterHydration(callback: () => void) {
+  const nuxtApp = useNuxtApp()
+  if (nuxtApp.isHydrating) nuxtApp.hooks.hookOnce('app:suspense:resolve', () => callback())
+  else callback()
+}
+
 export function useProfile() {
   const profile = useState<Profile>('profile', emptyProfile)
   const syncing = useState('profile-syncing', () => false)
@@ -109,6 +118,7 @@ export function useProfile() {
   // Se toman acá (no después de un await): useState necesita el contexto de Nuxt.
   const sharing = useSharing()
   const userProfile = useUserProfile()
+  const notifications = useNotifications()
   const { t } = useI18n()
   const { show: toast } = useToast()
 
@@ -236,7 +246,7 @@ export function useProfile() {
 
   if (import.meta.client && !loaded) {
     loaded = true
-    onNuxtReady(async () => {
+    afterHydration(async () => {
       try {
         const stored = localStorage.getItem(STORAGE_KEY)
         const parsed = stored ? parseProfile(JSON.parse(stored)) : null
@@ -361,6 +371,7 @@ export function useProfile() {
     await auth.signOut()
     sharing.clear()
     userProfile.clear()
+    notifications.clear()
     profile.value = emptyProfile()
     try {
       localStorage.removeItem(STORAGE_KEY)
@@ -383,16 +394,27 @@ export function useProfile() {
   return { profile, total, syncing, pending, notesOf, saveNote, deleteNote, exportJson, importJson, sync, signOut, backupJson }
 }
 
+/** Con qué pestaña y nota abrir el modal (p. ej. desde un aviso). */
+export interface NotesDialogIntent {
+  tab: 'mine' | 'shared' | 'share'
+  /** Nota compartida a seleccionar. */
+  noteId?: string
+}
+
 /** Entrada cuyo modal de notas está abierto (montado una vez en `app.vue`). */
 export function useNotesDialog() {
   const slug = useState<string | null>('notes-slug', () => null)
+  const intent = useState<NotesDialogIntent | null>('notes-intent', () => null)
   return {
     slug,
-    show: (value: string) => {
+    intent,
+    show: (value: string, openWith: NotesDialogIntent | null = null) => {
+      intent.value = openWith
       slug.value = value
     },
     close: () => {
       slug.value = null
+      intent.value = null
     },
   }
 }

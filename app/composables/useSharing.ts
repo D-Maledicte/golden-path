@@ -19,6 +19,7 @@ export interface NoteGrant {
 
 export interface SharedNote {
   id: string
+  ownerId: string
   entrySlug: string
   name: string
   body: string
@@ -55,6 +56,7 @@ export function useSharing() {
         const nicknames = new Map((profiles ?? []).map(p => [p.id as string, p.nickname as string | null]))
         shared.value = (notes.data ?? []).map(row => ({
           id: row.id,
+          ownerId: row.owner_id,
           entrySlug: row.entry_slug,
           name: row.name,
           body: row.body,

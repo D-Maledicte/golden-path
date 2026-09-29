@@ -155,7 +155,10 @@ const banner = {
         </InteractiveHoverButton>
 
         <ClientOnly>
-          <AccountMenu class="sm:hidden" align="left" />
+          <div class="flex items-center gap-2 sm:hidden">
+            <AccountMenu align="left" />
+            <NotificationBell align="left" />
+          </div>
         </ClientOnly>
       </div>
     </div>
@@ -165,7 +168,10 @@ const banner = {
          especificidad de scope y gana sobre las utilidades de Tailwind. -->
     <div class="absolute bottom-[30px] right-[34px] z-10 hidden items-end gap-3 sm:flex">
       <ClientOnly>
-        <AccountMenu class="mb-[24px]" />
+        <div class="mb-[24px] flex items-center gap-2">
+          <NotificationBell />
+          <AccountMenu />
+        </div>
       </ClientOnly>
       <GlassSurface
         :width="118"
