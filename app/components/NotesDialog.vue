@@ -5,8 +5,7 @@ import { downloadText } from '~/lib/utils'
 
 const dialogState = useNotesDialog()
 const { bySlug } = useLibrary()
-const { notesOf, saveNote, deleteNote, exportJson, importJson, syncing, pending, signOut, backupJson } = useProfile()
-const auth = useAuth()
+const { notesOf, saveNote, deleteNote, exportJson, importJson, backupJson } = useProfile()
 const { t } = useI18n()
 const { show: toast } = useToast()
 
@@ -111,24 +110,6 @@ async function onImport(event: Event) {
   if (!file) return
   const count = importJson(await file.text())
   toast(count === null ? t('notes.importError') : t('notes.imported', { count }), 3000)
-}
-
-/* Inicio de sesión con magic link. */
-const signingIn = ref(false)
-const email = ref('')
-const sending = ref(false)
-
-async function sendLink() {
-  if (!email.value.trim() || sending.value) return
-  sending.value = true
-  const { error } = await auth.signIn(email.value.trim())
-  sending.value = false
-  if (error) {
-    toast(t('cloud.sendError', { error }), 4000)
-    return
-  }
-  signingIn.value = false
-  toast(t('cloud.sent'), 5000)
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -248,29 +229,7 @@ const buttonClass
       </div>
 
       <footer class="flex flex-wrap items-center justify-end gap-2 border-t border-white/7 px-5 py-4 sm:px-[clamp(22px,4vw,44px)]">
-        <div v-if="auth.enabled.value" class="mr-auto flex min-w-0 flex-wrap items-center gap-2 text-[.82rem] text-faint">
-          <template v-if="auth.user.value">
-            <span class="truncate">☁ {{ syncing ? t('cloud.syncing') : pending ? t('cloud.pending') : t('cloud.synced', { email: auth.user.value.email ?? '' }) }}</span>
-            <button type="button" class="text-cyan underline-offset-4 hover:underline" @click="signOut()">
-              {{ t('cloud.signOut') }}
-            </button>
-          </template>
-          <form v-else-if="signingIn" class="flex flex-wrap items-center gap-2" @submit.prevent="sendLink">
-            <input
-              v-model="email"
-              type="email"
-              required
-              autocomplete="email"
-              :placeholder="t('cloud.emailPlaceholder')"
-              class="w-[220px] rounded-xl border border-white/11 bg-white/4 px-3 py-2 text-[.84rem] text-ink outline-none focus:border-violet/50"
-            >
-            <button type="submit" :class="[buttonClass, 'border-violet/40 bg-violet/14']" :disabled="sending">{{ t('cloud.send') }}</button>
-            <button type="button" class="text-[.8rem] text-dim hover:text-ink" @click="signingIn = false">{{ t('notes.cancel') }}</button>
-          </form>
-          <button v-else type="button" :class="buttonClass" :title="t('cloud.hint')" @click="signingIn = true">
-            ☁ {{ t('cloud.cta') }}
-          </button>
-        </div>
+        <AccountMenu class="mr-auto" align="left" />
         <button v-if="hasBackup" type="button" class="text-[.8rem] text-dim underline-offset-4 hover:text-ink hover:underline" :title="t('cloud.backupHint')" @click="downloadBackup">
           {{ t('cloud.backup') }}
         </button>

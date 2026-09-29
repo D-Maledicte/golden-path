@@ -153,13 +153,20 @@ const banner = {
             <span class="text-[#21180b]">{{ t('hero.indexHover', { total: props.total }) }}</span>
           </template>
         </InteractiveHoverButton>
+
+        <ClientOnly>
+          <AccountMenu class="sm:hidden" align="left" />
+        </ClientOnly>
       </div>
     </div>
 
     <!-- Contador de entradas -->
     <!-- El wrapper posiciona: `.gs-surface` fija `position: relative` con
          especificidad de scope y gana sobre las utilidades de Tailwind. -->
-    <div class="absolute bottom-[30px] right-[34px] z-10 hidden sm:block">
+    <div class="absolute bottom-[30px] right-[34px] z-10 hidden items-end gap-3 sm:flex">
+      <ClientOnly>
+        <AccountMenu class="mb-[24px]" />
+      </ClientOnly>
       <GlassSurface
         :width="118"
         :height="92"
