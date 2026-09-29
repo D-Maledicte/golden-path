@@ -315,7 +315,7 @@ const buttonClass
               <div v-if="sharedSelected" class="mt-5 flex items-center gap-2 border-b border-white/7 pb-3 text-[.78rem]">
                 <Icon name="lucide:eye" class="size-3.5 shrink-0 text-cyan" />
                 <span class="truncate text-dim">
-                  {{ t('share.readOnlyFrom', { email: sharedSelected.ownerEmail }) }} · {{ new Date(sharedSelected.updatedAt).toLocaleDateString() }}
+                  {{ t('share.readOnlyFrom', { email: sharedSelected.ownerNickname ?? sharedSelected.ownerEmail }) }} · {{ new Date(sharedSelected.updatedAt).toLocaleDateString() }}
                 </span>
               </div>
               <!-- Markdown ajeno renderizado con `html: false`. -->
@@ -389,7 +389,7 @@ const buttonClass
       </div>
 
       <footer class="flex flex-wrap items-center justify-end gap-2 border-t border-white/7 px-5 py-4 sm:px-[clamp(22px,4vw,44px)]">
-        <AccountMenu class="mr-auto" align="left" />
+        <AccountMenu class="mr-auto" align="left" :teleport="false" />
         <button v-if="hasBackup" type="button" class="text-[.8rem] text-dim underline-offset-4 hover:text-ink hover:underline" :title="t('cloud.backupHint')" @click="downloadBackup">
           {{ t('cloud.backup') }}
         </button>

@@ -104,7 +104,11 @@ export function useProfile() {
   const syncing = useState('profile-syncing', () => false)
   /** Hay cambios locales que todavía no llegaron a la nube (p. ej. sin conexión). */
   const pending = useState('profile-pending', () => false)
-  const { user } = useAuth()
+  const auth = useAuth()
+  const { user } = auth
+  // Se toman acá (no después de un await): useState necesita el contexto de Nuxt.
+  const sharing = useSharing()
+  const userProfile = useUserProfile()
   const { t } = useI18n()
   const { show: toast } = useToast()
 
@@ -248,7 +252,12 @@ export function useProfile() {
         const changed = next?.id !== user.value?.id
         user.value = next
         // Fuera del callback: supabase-js no admite llamadas a la API adentro.
-        if (changed && next) setTimeout(sync, 0)
+        if (changed && next) {
+          setTimeout(() => {
+            sync()
+            userProfile.load()
+          }, 0)
+        }
       })
 
       // Reintentos de lo pendiente: al volver la conexión, al volver a la
@@ -349,8 +358,9 @@ export function useProfile() {
       toast(t('cloud.signOutBlocked'), 5000)
       return false
     }
-    await useAuth().signOut()
-    useSharing().clear()
+    await auth.signOut()
+    sharing.clear()
+    userProfile.clear()
     profile.value = emptyProfile()
     try {
       localStorage.removeItem(STORAGE_KEY)

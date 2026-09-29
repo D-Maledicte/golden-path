@@ -24,6 +24,8 @@ export interface SharedNote {
   body: string
   updatedAt: string
   ownerEmail: string
+  /** Nickname del dueño, si lo definió (la base sólo lo muestra a sus invitados). */
+  ownerNickname: string | null
 }
 
 export function useSharing() {
@@ -47,6 +49,10 @@ export function useSharing() {
       if (!mine.error) grants.value = mine.data as NoteGrant[]
       if (!received.error && !notes.error) {
         const emails = new Map((received.data ?? []).map(g => [g.owner_id as string, g.owner_email as string]))
+        const { data: profiles } = emails.size
+          ? await supabase.from('profiles').select('id, nickname').in('id', [...emails.keys()])
+          : { data: [] }
+        const nicknames = new Map((profiles ?? []).map(p => [p.id as string, p.nickname as string | null]))
         shared.value = (notes.data ?? []).map(row => ({
           id: row.id,
           entrySlug: row.entry_slug,
@@ -54,6 +60,7 @@ export function useSharing() {
           body: row.body,
           updatedAt: row.updated_at,
           ownerEmail: emails.get(row.owner_id) ?? '',
+          ownerNickname: nicknames.get(row.owner_id) ?? null,
         }))
       }
     } finally {

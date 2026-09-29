@@ -65,6 +65,7 @@ useSeoMeta({
       <GlossaryPanel />
       <EntryReader />
       <NotesDialog />
+      <ProfileDialog />
       <SearchCommand />
     </div>
     <ToastHost />

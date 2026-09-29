@@ -34,11 +34,22 @@ export function useAuth() {
     return { error: error?.message ?? null }
   }
 
+  /** GitHub: redirige a autorizar y vuelve a la misma página con la sesión iniciada. */
+  async function signInWithGitHub() {
+    const supabase = await getSupabase()
+    if (!supabase) return { error: 'disabled' }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: { redirectTo: window.location.origin + window.location.pathname },
+    })
+    return { error: error?.message ?? null }
+  }
+
   async function signOut() {
     const supabase = await getSupabase()
     await supabase?.auth.signOut()
     user.value = null
   }
 
-  return { user, enabled, signIn, signOut }
+  return { user, enabled, signIn, signInWithGitHub, signOut }
 }
