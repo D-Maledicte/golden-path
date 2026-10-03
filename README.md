@@ -160,7 +160,7 @@ app/
   components/             componentes del sitio (SiteHero, EntryCard, …)
   components/ui/          componentes de nxui (vendorizados, sin modificar)
   composables/            useLibrary, useReader, useToast, useCommandPalette…
-  data/glossary.ts        los 24 términos del glosario
+  data/glossary.ts        glosario bilingüe compartido por el sitio y MCP
   generated/entries.ts    AUTO-GENERADO — no editar a mano
   lib/utils.ts            `cn()` (clsx + tailwind-merge)
   pages/                  index, entrada/[slug], entradas, glosario, conectar
