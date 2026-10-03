@@ -196,15 +196,15 @@ const es = {
 
   'glossary.title': 'Glosario',
   'glossary.description':
-    'Glosario de {count} términos esenciales: ADE, harness, worktree, MCP, Orb, Runner, DESIGN.md y el resto del vocabulario de Golden Path.',
+    'Glosario de {count} términos esenciales: agentes, permisos, memoria, redes, verificación y métricas de OpenRouter en Golden Path.',
   'glossary.kicker': 'Referencia rápida',
   'glossary.lead':
-    '{count} conceptos esenciales del vocabulario de Golden Path. Cada término con entrada propia enlaza al contexto donde se explica.',
+    '{count} conceptos esenciales del vocabulario de Golden Path. Cada definición enlaza a una entrada donde podés profundizar.',
   'glossary.reveal': 'El vocabulario compartido del trabajo con agentes',
   'glossary.inContext': 'Leer en contexto →',
   'glossary.close': 'Cerrar glosario',
   'glossary.searchLabel': 'Buscar en el glosario',
-  'glossary.placeholder': 'Buscar Orca, CLI, harness…',
+  'glossary.placeholder': 'Buscar harness, Engram, TTFT…',
   'glossary.count': '{count} conceptos esenciales',
   'glossary.result': '{count} resultado',
   'glossary.results': '{count} resultados',
@@ -468,15 +468,15 @@ const en: Messages = {
 
   'glossary.title': 'Glossary',
   'glossary.description':
-    'Glossary of {count} essential terms: ADE, harness, worktree, MCP, Orb, Runner, DESIGN.md and the rest of the Golden Path vocabulary.',
+    'Glossary of {count} essential terms: agents, permissions, memory, networking, verification and OpenRouter metrics in Golden Path.',
   'glossary.kicker': 'Quick reference',
   'glossary.lead':
-    '{count} essential concepts from the Golden Path vocabulary. Every term with its own entry links to the context where it is explained.',
+    '{count} essential concepts from the Golden Path vocabulary. Every definition links to an article where you can explore it further.',
   'glossary.reveal': 'The shared vocabulary of working with agents',
   'glossary.inContext': 'Read in context →',
   'glossary.close': 'Close glossary',
   'glossary.searchLabel': 'Search the glossary',
-  'glossary.placeholder': 'Search Orca, CLI, harness…',
+  'glossary.placeholder': 'Search harness, Engram, TTFT…',
   'glossary.count': '{count} essential concepts',
   'glossary.result': '{count} result',
   'glossary.results': '{count} results',

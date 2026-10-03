@@ -12,13 +12,14 @@
     "migrate": "node scripts/migrate-content.mjs",
     "predev": "node scripts/build-content.mjs",
     "dev": "nuxt dev",
-    "prebuild": "node scripts/build-content.mjs",
+    "prebuild": "npm run check:glossary && node scripts/build-content.mjs",
     "build": "nuxt build",
-    "pregenerate": "node scripts/build-content.mjs",
+    "pregenerate": "npm run check:glossary && node scripts/build-content.mjs",
     "generate": "nuxt generate",
     "prepreview": "node scripts/build-content.mjs",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "check:glossary": "node scripts/check-glossary.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.1",
