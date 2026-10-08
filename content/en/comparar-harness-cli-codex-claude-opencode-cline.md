@@ -1,23 +1,23 @@
 ---
 slug: comparar-harness-cli-codex-claude-opencode-cline
-title: "Comparing CLI harnesses: Codex, Claude Code, OpenCode V2 and Cline"
+title: "Comparing CLI harnesses: Codex, Claude Code, OpenCode V2, Cline and OMP"
 type: editorial
 order: 18
-summary: "The strengths, differences and drawbacks of four coding harnesses: how to choose them, assign responsibilities and assess the real cost of agent work."
-tags: [harness, cli, codex, claude-code, opencode, cline, agents, permissions]
-related: [guia-escalado-modelos, terminal-vs-web-superficies-trabajo, orquestacion]
+summary: "The strengths, differences and drawbacks of five coding harnesses: how to choose them, assign responsibilities and assess the real cost of agent work."
+tags: [harness, cli, codex, claude-code, opencode, cline, omp, agents, permissions]
+related: [guia-escalado-modelos, terminal-vs-web-superficies-trabajo, orquestacion, enrutamiento-modelo-esfuerzo-rol-harness]
 area: Gobierno de agentes
 glyph: ⚿
 hue: rgba(168,106,255,.24)
 ---
 
-# Comparing CLI harnesses: Codex, Claude Code, OpenCode V2 and Cline
+# Comparing CLI harnesses: Codex, Claude Code, OpenCode V2, Cline and OMP
 
-> Reviewed on September 29, 2026. Capabilities depend on the installed version and configuration.
+> Updated on October 8, 2026. Capabilities depend on the installed version and configuration.
 
 Choosing a coding agent often begins with a question: which model should I use? Another decision shapes everyday work: which harness will turn that model's responses into actions on a project?
 
-Codex CLI, Claude Code, OpenCode and Cline can fill that role. They share the goal of working with code and tools, but organize context, permissions, extensions and execution differently. Understanding those differences helps you choose deliberately and combine tools without turning the repository into four agents competing for the same file.
+Codex CLI, Claude Code, OpenCode, Cline and Oh My Pi (OMP) can fill that role. They share the goal of working with code and tools, but organize context, permissions, extensions and execution differently. Understanding those differences helps you choose deliberately and combine tools without turning the repository into four agents competing for the same file.
 
 This comparison separates documented capabilities from editorial recommendations. The suggested roles are a proposed operating model, rather than a benchmark of quality, speed or cost.
 
@@ -85,6 +85,16 @@ Headless describes execution without an interactive interface; it does not estab
 
 **Suggested role:** a flexible tool for bounded tasks and a second look at changes prepared by another agent. It can also handle primary work when that better suits the project; the supporting role is an operational choice.
 
+## Oh My Pi (OMP) and harness instrumentation
+
+OMP is a coding-oriented fork of Pi. It combines support for multiple providers with built-in search, LSP, debugging, execution and hash-anchored editing tools. It also supports extensions and subagents. [OMP project](https://github.com/can1357/oh-my-pi).
+
+**Editorial advantage:** a compelling candidate for experimenting with the same model family across different tool surfaces. Its specialized tools may be especially useful for symbolic navigation, localized refactors and code inspection.
+
+**Practical drawback:** additional tools do not guarantee better outcomes. LSP availability depends on the environment and language, extensions require maintenance, and its permissions should not automatically be equated with Codex's sandbox.
+
+**Suggested role:** structural exploration, narrowly scoped changes and A/B testing against another harness using the same model. Benchmarks published by its maintainers must be verified on your own codebase; they are not an independent Codex comparison.
+
 ## Comparing strengths and operating costs
 
 This table summarizes the editorial recommendations above.
@@ -95,8 +105,9 @@ This table summarizes the editorial recommendations above.
 | Claude Code | Specialization through context, extensions and subagents | Consumption and configuration maintenance | Responsibility coordination |
 | OpenCode V2 | Flexibility to combine providers and agents | Operator-owned evaluation and configuration | Specialized executors |
 | Cline CLI | Interactive assignments or script integration | Scope control and output acceptance | Flexible support and additional review |
+| OMP | LSP, specialized editing tools and multi-provider extensibility | Configuration burden and verification of execution controls | Structural exploration and cross-harness experiments |
 
-These roles overlap. The table suggests where to begin testing each tool, rather than exclusive assignments.
+These roles overlap. The extended model of choosing a harness per responsibility is covered in [Advanced routing: model, effort, role and harness](/entrada/enrutamiento-modelo-esfuerzo-rol-harness). The table suggests where to begin testing each tool, rather than exclusive assignments.
 
 ## Combining tools without multiplying disorder
 
@@ -109,7 +120,7 @@ For example, to fix an integration:
 3. Another agent reviews the diff with read access and looks for omitted cases.
 4. The owner checks actual execution, resolves findings and prepares delivery.
 
-The work can be distributed across these four harnesses without using all of them. Two tools with clear responsibilities can contribute more than four open sessions with duplicated context.
+The work can be distributed across these five harnesses without using all of them. Two tools with clear responsibilities can contribute more than five open sessions with duplicated context.
 
 Delegation across products requires explicit integration: a command, script, API or another available mechanism. A native subagent in one harness does not automatically become a session in another.
 
@@ -125,7 +136,7 @@ The useful question is how much reliable work you get for the total cost. That i
 
 ## Choose according to the responsibility you delegate
 
-Codex, Claude Code, OpenCode and Cline offer different entry points to the same problem: turning an intention into executable, reviewable work.
+Codex, Claude Code, OpenCode, Cline and OMP offer different entry points to the same problem: turning an intention into executable, reviewable work.
 
 The choice improves when the project keeps its contracts, conventions and checks outside any particular session. The harness can then change while the team still knows what needed doing, what was done and how it was verified.
 
