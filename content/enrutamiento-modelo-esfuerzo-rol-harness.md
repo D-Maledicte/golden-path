@@ -5,7 +5,7 @@ type: editorial
 order: 19
 summary: "Por qué elegir un agente exige evaluar no solo el modelo y su razonamiento, sino la función y el harness: Codex frente a OMP como caso de contraste."
 tags: [orquestacion, harness, cli, codex, omp, routing, agentes, benchmarks, gobierno]
-related: [comparar-harness-cli-codex-claude-opencode-cline, guia-escalado-modelos, orquestacion]
+related: [comparar-harness-cli-codex-claude-opencode-cline, guia-escalado-modelos, orquestacion, protocolos-humanos-cuota-rct-overdrive]
 area: Gobierno de agentes
 glyph: ⌘
 hue: rgba(87,217,232,.24)
@@ -123,3 +123,6 @@ Un coordinador maduro debería poder responder: **¿qué combinación de modelo,
 La respuesta no sale de preferencias de marca. Sale de contratos portables, experimentos reproducibles y métricas de tareas aceptadas. El harness se convierte así en una variable de planificación, no en una religión del terminal.
 
 Para una panorámica de los productos y sus compensaciones, ver [Comparar harness CLI](/entrada/comparar-harness-cli-codex-claude-opencode-cline).
+
+
+Para administrar una ronda ante escasez o vencimiento de cuota, ver [RCT y Overdrive: protocolos humanos de gestión de proveedores](/entrada/protocolos-humanos-cuota-rct-overdrive). La activación corresponde al operador; es una capa distinta del enrutamiento delegado.
