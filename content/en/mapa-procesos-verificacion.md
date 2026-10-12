@@ -3,7 +3,7 @@ slug: mapa-procesos-verificacion
 title: From backup to process map
 type: case-study
 order: 3
-summary: A faithful but silent repository became a surface where any agent can analyze a flow and verify improvements without touching production.
+summary: The process map enables analysis without production access; the new change path connects verifiable findings with review and controlled deployment.
 tags: [processes, audit, agents, verification, zoho-crm]
 related: [backup-versionado-crm, arquitectura-read-only, orquestacion]
 area: CRM versionado
@@ -12,6 +12,8 @@ hue: rgba(168,106,255,.24)
 ---
 
 # From backup to process map
+
+> Updated on October 12, 2026. The analysis pilot is preserved and distinguished from the subsequent multiuser deployment stage.
 
 ## The second-stage leap
 
@@ -46,7 +48,7 @@ The process for a person or agent is deliberately bounded:
 | `mejoras-propuestas.md` | Rank findings by consequence, anchored to file and line |
 | `validar.sh` | Turn every finding into an executable check |
 
-The agent starts from computed reports rather than a blind search across more than thirteen hundred functions. That cuts time, cost and variability.
+In the original test, the agent started from computed reports rather than a blind search across more than thirteen hundred functions. That size describes the inventory at the time, not an updated count. The advantage of the method is bounded context and repeatable analysis.
 
 ## The limit that sustains quality
 
@@ -60,6 +62,22 @@ When someone reports they fixed a finding, there is no need to pay for reasoning
 
 Prose goes stale; the check gets re-evaluated. This separation reduces supervision and keeps the report from becoming a frozen truth.
 
+## From finding to deployable proposal
+
+The new stage adds continuity to the work: a verifiable finding can become a change proposal separate from the snapshot, pass through a pull request and reach an owner with deployment authority. The map helps choose where to look; the contract determines what evidence to deliver; the deployment path governs when writing is allowed.
+
+These are different checks:
+
+| Check | What it establishes | What it does not establish |
+| --- | --- | --- |
+| Finding check | Whether the code satisfies a specific condition | Whether the whole process works correctly |
+| Comparison with the production baseline | Whether drift is detected under normalized comparison since the proposal was prepared | Changes erased by normalization, semantic equivalence or unchanged dependencies |
+| Download after deployment | Whether downloaded code matches what was sent under the implemented comparison | Whether business effects are as expected |
+
+An idempotency fix, for example, can have a static check detecting its guard condition and still need a repeated-execution test to demonstrate that it does not duplicate effects. Having `validar.sh` improves review; it does not justify confusing code inspection with comprehensive validation.
+
+The multiuser-stage documentation records controls tested with writes disabled and keeps the first real deployment from `cambios/` pending. The full workflow is the direction implemented by the project, with that operational validation still open. The pilot below demonstrates analysis and its deliverables, not a subsequent deployment.
+
 ## Pilot test
 
 A branch with no previous manual was analyzed following only the contract. The agent delivered the three files and the priority findings were verified against the code.
@@ -67,6 +85,10 @@ A branch with no previous manual was analyzed following only the contract. The a
 The test found idempotency bugs, incomplete validations and external execution surface that needed review. The anonymization rules keep the problem categories, but do not publish the flow, the names or the client’s exact conditions.
 
 The analysis also flagged as unconfirmed the points the API did not allow checking. That discipline was part of the success, not a limitation to hide.
+
+## Choosing the next step
+
+For an unfamiliar flow, start with the map, contract and checks before preparing changes. Once a finding has evidence, use the [function platform](/en/entrada/backup-versionado-crm) to organize the proposal and the [separation of authorities](/en/entrada/arquitectura-read-only) to bound publication. A broad redesign or a condition that the snapshot cannot establish needs a different investigation; it should not be disguised as a fix ready to deploy.
 
 ## The benefit
 
