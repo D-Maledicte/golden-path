@@ -67,6 +67,14 @@ El contrato de la tarea tiene que pedir evidencia concreta: comando ejecutado, s
 
 Si el preflight falla, el agente corrige y repite la prueba. Si falta configuración que sólo existe en producción, registra qué pudo verificar y qué queda pendiente para un entorno equivalente; no convierte una suposición en aprobación.
 
+## Del test local al efecto publicado
+
+Los registros del caso operativo revisados el 12 de octubre de 2026 aportan otra variante del mismo problema. Una integración n8n había pasado 56 tests, auditoría y revisión estática, pero todavía no había ejecutado su nodo HTTP real. La primera petición real al workflow ya publicado falló en su nodo HTTP. Es un resultado de ese circuito y esa configuración, no un defecto universal de n8n ni una prueba de que los tests fueran inútiles: faltaba cubrir el camino que producía el efecto.
+
+En la aceptación posterior quedaron registrados dos recorridos: modificar un parámetro autorizado, publicar, leer el estado y comprobar la respuesta del webhook; después restaurar, **volver a publicar** y verificar que el webhook recuperara el comportamiento original. Restaurar una definición sin comprobar la versión activa no cerraba el ciclo.
+
+Esta evidencia fue leída en los registros del proyecto, no reproducida para esta editorial. Tampoco cubrió fallos o timeouts del hook de control. La distinción vigente es útil para cualquier handoff: **listo local no es aplicado; aplicado no es aceptado**. El postflight inmediato prueba una condición puntual; cuando el objetivo depende del uso habitual, hace falta observar el ciclo natural acordado antes de cerrar. Ver [la evolución del cockpit](/entrada/caso-orca-cockpit-multiagente).
+
 ## Regla transferible
 
 **La publicación empieza antes del botón de deploy.** Primero hay que demostrar que el mismo programa que va a recibir tráfico puede arrancar y responder. Después, el hosting tiene que negarse a declarar exitoso un despliegue que no supera esa prueba.

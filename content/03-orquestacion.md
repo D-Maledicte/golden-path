@@ -40,7 +40,9 @@ Es el patrón que puede aplicarse hoy usando workspaces y terminales normales:
 3. cada implementador trabaja en un worktree aislado;
 4. los agentes entregan diff, pruebas, riesgos y pendientes;
 5. el gerente revisa e integra;
-6. las acciones productivas quedan detrás de una decisión humana.
+6. las acciones productivas respetan el alcance autorizado y el gate aplicable.
+
+El caso inicial exigía intervención humana para cada paso productivo. En su evolución V4, revisada el 12 de octubre de 2026, ciertas operaciones LIVE pequeñas tienen autonomía previamente delimitada; otras, como borrados, siguen necesitando permiso explícito. La política del proyecto decide ese borde: Orca no lo concede por abrir una terminal. El [caso del cockpit](/entrada/caso-orca-cockpit-multiagente#evolucion-del-caso-v4-octubre-de-2026) detalla la separación actual entre dirección general, integración y coordinación de paquetes.
 
 Esta capa no depende de una función experimental. Su autoridad está en el contrato de trabajo, Git y el proceso de revisión.
 

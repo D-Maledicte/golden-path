@@ -3,7 +3,7 @@ slug: caso-orca-cockpit-multiagente
 title: Caso real — Orca como cockpit multiagente
 type: case-study
 order: 9
-summary: Un agente coordinador conserva el contexto integral y delega implementaciones y auditorías a workers especializados en worktrees aislados.
+summary: La evolución de un coordinador único a dirección, integración y paquetes separados, con auditoría cruzada y aceptación verificable.
 tags: [orca, caso-real, multiagente, worktrees, orquestacion]
 related: [orquestacion, workspaces-y-worktrees, continuidad-y-observabilidad]
 area: Orca
@@ -19,7 +19,7 @@ Un proyecto de transformación digital combinaba integraciones, datos, APIs, seg
 
 La alternativa de lanzar agentes sin estructura tampoco servía: aumentaba el riesgo de cambios superpuestos, decisiones contradictorias y pérdida de contexto al cambiar de sesión.
 
-## Modelo adoptado
+## Modelo inicial adoptado
 
 ### Agente coordinador
 
@@ -48,7 +48,7 @@ Cada worker recibe:
 
 Los agentes de revisión se separan, cuando corresponde, de quienes realizaron la implementación.
 
-## Flujo operativo
+## Flujo operativo inicial
 
 1. El coordinador inspecciona el proyecto y prepara una tarea.
 2. Se crea un worktree desde una base conocida.
@@ -56,6 +56,31 @@ Los agentes de revisión se separan, cuando corresponde, de quienes realizaron l
 4. Entrega cambios, pruebas, riesgos y pendientes.
 5. Otro agente o el coordinador revisa el resultado.
 6. La integración y cualquier acción productiva permanecen detrás de un gate humano.
+
+## Evolución del caso: V4, octubre de 2026
+
+La documentación V4, revisada el 12 de octubre de 2026, separa responsabilidades que antes se concentraban en un solo coordinador. El diseño anterior queda como historia del caso; la distribución vigente distingue tres niveles:
+
+| Nivel | Asignación del entorno | Responsabilidad |
+| --- | --- | --- |
+| Dirección general | Opus | Conversación con la persona, prioridades y decisiones transversales |
+| Integración | Sol con esfuerzo low | Reconstruir estado, ordenar dependencias e integrar evidencia de los paquetes |
+| Coordinación de paquete | Sol con esfuerzo medium | Conducir una capacidad acotada hasta su aceptación |
+
+Son asignaciones de este proyecto, no una recomendación universal ni una equivalencia entre modelos. Para implementación LIVE se usa Luna con esfuerzo high o Sonnet; la auditoría cambia a la familia opuesta al implementador. Separar familias agrega diversidad de revisión, pero no garantiza detectar errores ni reemplaza las pruebas.
+
+La unidad sigue siendo una capacidad, una tarea, una rama y un worktree. **BUILD/LIVE y el gate de tres partes ya existían en V3**: paridad con el comportamiento del CRM, recuperación preparada y auditoría. V4 modifica el reparto de autoridad y permite operaciones LIVE pequeñas dentro de un alcance previamente autorizado, con verificación y reversión automática acotada. Borrados y tombstones, las marcas de eliminación, requieren permiso humano explícito. Tener una regla en el repositorio no concede permisos en otra sesión o herramienta.
+
+La dirección general recibe una bandeja de decisiones agrupadas por urgencia: incidentes, destrabes y asuntos sin apuro. El integrador reúne evidencia; no interrumpe a la persona por cada avance ni convierte una decisión pendiente en permiso implícito.
+
+### Del merge al resultado aceptado
+
+El circuito vigente distingue **listo local, aplicado y aceptado**. Un PR integrado demuestra integración; un postflight inmediato demuestra el comportamiento que efectivamente midió. La aceptación natural requiere observar el ciclo real acordado. Si queda trabajo, el handoff conserva el remanente, su responsable y la evidencia que falta: entregar el problema a otra persona no equivale a resolverlo.
+
+Al retomar, primero se reconstruyen PRs, ramas, workers y despliegues reales. Sólo después se abre trabajo nuevo. Esa comprobación evita duplicar una implementación que siguió avanzando mientras la conversación estaba cerrada.
+
+Esta actualización resume documentación y registros del proyecto revisados el 12 de octubre, anonimizados. No constituye una nueva ejecución de sus pruebas ni una validación universal de sus controles. Los contratos de rol deben contrastarse con los permisos efectivos del runtime, como explica [el entorno es la política](/entrada/modelos-guiados-el-entorno-es-la-politica).
+
 
 ## Qué aportó Orca
 

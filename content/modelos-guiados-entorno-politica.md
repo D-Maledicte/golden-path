@@ -154,6 +154,14 @@ En V1, Plan restringe ediciones y bash; `--auto` aprueba solicitudes que quedar�
 
 La conclusión no es que OpenCode carezca de control. Es que **hay que diseñarlo**: sus defaults priorizan fluidez y no representan automáticamente una política conservadora.
 
+## Control declarado y control comprobado en el caso V4
+
+La revisión operativa del 12 de octubre de 2026 agrega una distinción práctica a este principio. Un perfil de rol puede decir “sólo lectura” y, aun así, no haber demostrado que la sesión cargue esas reglas o que todas sus herramientas respeten el límite. En la instalación OMP revisada, el enforcement efectivo seguía sin verificarse y las operaciones LSP requerían atención específica. Eso es un control pendiente de validar, no un sandbox garantizado.
+
+En la integración n8n del mismo caso se retiró un proxy que generaba copias y se pasó a un catálogo positivo de herramientas, un filtro de escrituras acotadas y readback, la lectura posterior que compara el estado real con el cambio permitido. Los registros revisados muestran pruebas positivas y negativas para ese circuito; no demuestran todos los posibles modos de falla. No se midieron fallo, salida inválida ni timeout del hook, por lo que lectura posterior y recuperación siguieron siendo necesarias.
+
+El aprendizaje no es que un filtro vuelva segura cualquier herramienta. Es que la autorización debe describir el objeto y la operación, la comprobación debe observar su efecto y los límites no probados deben permanecer visibles. La autonomía LIVE pequeña del [caso V4](/entrada/caso-orca-cockpit-multiagente) depende de ese alcance explícito; no permite aplicar la misma autoridad a cualquier agente o proyecto.
+
 ## Un perfil portable de trabajo guiado
 
 Más que memorizar nombres de modos que cambian entre herramientas, conviene definir capacidades estables.

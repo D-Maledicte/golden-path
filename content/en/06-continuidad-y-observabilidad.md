@@ -45,6 +45,14 @@ Before killing processes or cleaning up workspaces, it pays to look at the state
 
 The rule is simple: **identify first, intervene second**.
 
+## Resume from actual state: V4 review
+
+The October 12, 2026 operational case review reinforces a step before relaunching: reconstruct open or merged PRs, branches and worktrees, workers still running and actual deployments. The last conversation summary is a lead, not a substitute for that inspection. If work already exists or is still running, opening another worker can duplicate it or create competition for the same resource.
+
+The handoff must also distinguish **locally ready, applied and accepted**. An integrated change may still await publication; a published change may need the next real cycle to confirm its objective. When work remains, record its owner, missing evidence and next step. A finished process or delivery to the operator does not prove the original need has been resolved.
+
+This evolves the [multi-agent case](/en/entrada/caso-orca-cockpit-multiagente); it is not an Orca recovery guarantee. Operational state must be verified outside the interface.
+
 ## Per-pane observability
 
 Orca’s stable identifiers let you relate workspace, worktree, tab and terminal to the process running there. That relationship is enough to build read-only observability without controlling the agent’s session.

@@ -95,6 +95,12 @@ El ejemplo conserva **coordinadores en Sol medium y Luna en high**, según el re
 
 Más concurrencia también aumenta el costo de integración. Conviene aislar ramas o worktrees, asignar archivos y responsabilidades, y evitar que varios agentes resuelvan el mismo problema sin una comparación planificada. Las auditorías aportan poco si repiten observaciones sin criterio de aceptación ni alguien que las revise.
 
+### Preset del protocolo y reparto del proyecto
+
+Actualización contextual del 12 de octubre de 2026: el preset Sol medium/Luna high anterior se conserva como parte del protocolo humano original. El [caso operativo V4](/entrada/caso-orca-cockpit-multiagente) separa ahora dirección general con Opus, integración con Sol low y coordinación de paquetes con Sol medium. Esa distribución corresponde a funciones diferentes dentro de ese proyecto; no modifica automáticamente el protocolo ni establece una rebaja por falta de cuota.
+
+La regla común sigue siendo elegir esfuerzo por complejidad y responsabilidad, manteniendo los permisos del encargo. Los avisos de cuota son informativos: no activan solos RCT, Overdrive ni un cambio de proveedor. Del mismo modo, una autonomía LIVE pequeña previamente autorizada no nace de tener cuota disponible.
+
 ### La capacidad humana pone el límite
 
 Antes de abrir otro frente, el operador debería poder responder:

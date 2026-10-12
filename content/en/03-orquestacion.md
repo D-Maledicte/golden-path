@@ -40,7 +40,9 @@ The pattern you can apply today with regular workspaces and terminals:
 3. each implementer works in an isolated worktree;
 4. agents deliver a diff, tests, risks and open items;
 5. the manager reviews and merges;
-6. production actions stay behind a human decision.
+6. production actions respect the authorized scope and applicable gate.
+
+The initial case required human intervention for every production step. In its V4 evolution, reviewed on October 12, 2026, certain small LIVE operations have previously bounded autonomy; others, such as deletions, still require explicit permission. Project policy defines that boundary: opening an Orca terminal does not grant authority. The [cockpit case](/en/entrada/caso-orca-cockpit-multiagente#case-evolution-v4-october-2026) details the current separation between general direction, integration and package coordination.
 
 This layer does not depend on an experimental feature. Its authority lives in the work contract, Git and the review process.
 

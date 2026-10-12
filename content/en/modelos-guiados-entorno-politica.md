@@ -154,6 +154,14 @@ In V1, Plan restricts edits and bash; `--auto` approves requests that would be `
 
 The conclusion is not that OpenCode lacks control. It is that **you have to design it**: its defaults prioritize fluency and do not automatically represent a conservative policy.
 
+## Declared and verified controls in the V4 case
+
+The October 12, 2026 operational review adds a practical distinction. A role profile can say “read-only” without demonstrating that the session loads its rules or that every tool respects the boundary. In the reviewed OMP installation, effective enforcement remained unverified and LSP operations needed specific attention. That is a control awaiting validation, not a guaranteed sandbox.
+
+In the same case's n8n integration, a copy-generating proxy was replaced with a positive tool catalog, a bounded-write filter and readback: reading the resulting state to compare it with the permitted change. The reviewed records show positive and negative tests for that circuit; they do not demonstrate every failure mode. Hook failure, invalid output and timeout were not measured, so readback and recovery remained necessary.
+
+The lesson is not that a filter makes any tool safe. Authorization must describe the object and operation, verification must observe the effect, and untested boundaries must stay visible. Small LIVE autonomy in the [V4 case](/en/entrada/caso-orca-cockpit-multiagente) depends on that explicit scope; it does not extend the same authority to any agent or project.
+
 ## A portable guided-work profile
 
 Rather than memorizing mode names that change between tools, it is better to define stable capabilities.

@@ -93,6 +93,14 @@ outputs: ["summary", "diff", "tests", "usage", "blockers"]
 
 This contract must be translated into **actual** harness and operating-system enforcement. Writing `network: false` in YAML does not disable the network. A harness unable to satisfy critical constraints must be ineligible, no matter its benchmark score.
 
+## From proposed design to a contextual assignment
+
+October 12, 2026 update: the [V4 operational case](/en/entrada/caso-orca-cockpit-multiagente) now documents general direction with Opus, integration with Sol low and package coordination with Sol medium. LIVE implementation and auditing are split across different families. This establishes a policy adopted in one project, **not a validated automatic router or a measured performance advantage**. This article's proposed A/B experiment still awaits that validation.
+
+Harness verification also remains an eligibility condition. In the reviewed OMP 18.10.0 installation, role rules existed in configuration, but effective session loading and enforcement were not demonstrated; allowing LSP also left rename operations to be checked. A “read” label does not prove the absence of writes. Before assigning a read-only auditor, verify effective runtime behavior and negative actions, not just the configuration file.
+
+For the same reason, a quota notice does not automatically change model, effort or provider. Technical-failure recovery and human quota management are separate decisions; neither authorizes seeking a route with weaker controls.
+
 ## A/B benchmarking: isolate the harness effect
 
 For paired tasks, hold constant the starting commit, fixtures, effective model version where possible, reasoning effort, functional instructions, scope, budget and acceptance checks. Record unavoidable differences in system prompts, tools and compaction, because **these are part of the experimental treatment**.

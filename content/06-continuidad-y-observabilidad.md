@@ -45,6 +45,14 @@ Antes de detener procesos o limpiar workspaces, conviene observar el estado del 
 
 La regla es sencilla: **primero identificar, después intervenir**.
 
+## Retomar con el estado real: revisión V4
+
+La revisión del caso operativo del 12 de octubre de 2026 refuerza un paso anterior al relanzamiento: reconstruir PRs abiertos o integrados, ramas y worktrees, workers todavía activos y despliegues efectivos. El resumen de la última conversación sirve como pista; no reemplaza esa lectura. Si el trabajo ya existe o sigue ejecutándose, abrir otro worker puede duplicarlo o competir por el mismo recurso.
+
+El handoff también debe separar **listo local, aplicado y aceptado**. Un cambio integrado puede seguir esperando publicación; uno publicado puede necesitar el siguiente ciclo real para confirmar el objetivo. Cuando queda un remanente, registrá responsable, evidencia faltante y próximo paso. Un proceso finalizado o una entrega al operador no prueban que la necesidad original esté resuelta.
+
+Es una evolución del [caso multiagente](/entrada/caso-orca-cockpit-multiagente), no una garantía de recuperación de Orca: el estado operativo debe verificarse fuera de la interfaz.
+
 ## Observabilidad por pane
 
 Los identificadores estables de Orca permiten relacionar workspace, worktree, tab y terminal con el proceso que está ejecutándose. Esa relación alcanza para construir observabilidad de solo lectura sin controlar la sesión del agente.

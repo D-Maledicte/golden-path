@@ -93,6 +93,14 @@ outputs: ["resumen", "diff", "tests", "uso", "bloqueos"]
 
 Ese contrato debe traducirse a mecanismos **reales** del harness y del sistema operativo. Escribir `network: false` en un YAML no desconecta la red por arte de magia. Si el harness no puede respetar una restricción crítica, se descarta como candidato, aunque su benchmark sea excelente.
 
+## Del diseño propuesto a una asignación contextual
+
+Actualización del 12 de octubre de 2026: el [caso operativo V4](/entrada/caso-orca-cockpit-multiagente) ya documenta dirección general con Opus, integración con Sol low y coordinación de paquetes con Sol medium. Implementación LIVE y auditoría se reparten entre familias distintas. Es evidencia de una política adoptada en un proyecto, **no de un router automático validado ni de una ventaja medida de rendimiento**. La propuesta A/B de este artículo sigue pendiente de esa validación.
+
+La comprobación del harness también sigue siendo una condición de elegibilidad. En la revisión de una instalación OMP 18.10.0 había reglas de rol escritas, pero su carga efectiva y enforcement en sesión no estaban demostrados; además, permitir LSP dejaba por revisar operaciones de renombre. Una etiqueta “lectura” no prueba ausencia de escritura. Antes de asignar un auditor read-only, hay que comprobar el runtime efectivo y las acciones negativas, no sólo el archivo de configuración.
+
+Por la misma razón, un aviso de cuota no cambia automáticamente modelo, esfuerzo ni proveedor. La recuperación por fallo técnico y la gestión humana de cuota son decisiones distintas; ninguna autoriza buscar una ruta con menos controles.
+
 ## Benchmark A/B: aislar el efecto del harness
 
 La comparación útil no enfrenta modelos distintos por accidente. Para tareas pareadas, mantener iguales: commit inicial, fixtures, modelo e identificador de versión cuando sea posible, esfuerzo efectivo, instrucciones funcionales, alcance, presupuesto y pruebas de aceptación. Documentar diferencias inevitables en prompts de sistema, herramientas y compactación: **son precisamente parte del tratamiento experimental**.

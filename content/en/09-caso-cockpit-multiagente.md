@@ -3,7 +3,7 @@ slug: caso-orca-cockpit-multiagente
 title: Case study — Orca as a multi-agent cockpit
 type: case-study
 order: 9
-summary: A coordinating agent keeps the full context and delegates implementations and audits to specialized workers in isolated worktrees.
+summary: The evolution from one coordinator to separate direction, integration and packages, with cross-family auditing and verifiable acceptance.
 tags: [orca, case-study, multi-agent, worktrees, orchestration]
 related: [orquestacion, workspaces-y-worktrees, continuidad-y-observabilidad]
 area: Orca
@@ -19,7 +19,7 @@ A digital transformation project combined integrations, data, APIs, security and
 
 Launching agents without structure did not work either: it increased the risk of overlapping changes, contradictory decisions and lost context when switching sessions.
 
-## The model we adopted
+## The initial model
 
 ### Coordinating agent
 
@@ -48,7 +48,7 @@ Each worker gets:
 
 Review agents are kept separate, when appropriate, from those who did the implementation.
 
-## Operational flow
+## Initial operational flow
 
 1. The coordinator inspects the project and prepares a task.
 2. A worktree is created from a known base.
@@ -56,6 +56,31 @@ Review agents are kept separate, when appropriate, from those who did the implem
 4. It delivers changes, tests, risks and open items.
 5. Another agent or the coordinator reviews the result.
 6. Merging and any production action stay behind a human gate.
+
+## Case evolution: V4, October 2026
+
+The V4 documentation, reviewed on October 12, 2026, separates responsibilities previously concentrated in one coordinator. The earlier design remains part of the case history; the current allocation distinguishes three levels:
+
+| Level | Assignment in this environment | Responsibility |
+| --- | --- | --- |
+| General direction | Opus | Conversation with the human operator, priorities and cross-cutting decisions |
+| Integration | Sol at low effort | Reconstruct state, order dependencies and integrate package evidence |
+| Package coordination | Sol at medium effort | Lead a bounded capability through acceptance |
+
+These are project assignments, not universal recommendations or model equivalences. LIVE implementation uses Luna at high effort or Sonnet; auditing switches to the opposite model family. Different families add review diversity, but do not guarantee error detection or replace tests.
+
+The unit remains one capability, one task, one branch and one worktree. **BUILD/LIVE and the three-part gate already existed in V3**: parity with CRM behavior, prepared recovery and auditing. V4 changes authority allocation and permits small LIVE operations within a previously authorized scope, with verification and bounded automatic rollback. Deletions and tombstones, the records marking deletion, require explicit human permission. A repository rule does not grant permissions in another session or tool.
+
+General direction receives a decision queue grouped by urgency: incidents, unblocking decisions and non-urgent matters. The integrator gathers evidence; it does not interrupt the person for every update or treat a pending decision as implied permission.
+
+### From merge to accepted outcome
+
+The current circuit distinguishes **locally ready, applied and accepted**. A merged PR proves integration; an immediate postflight proves only the behavior it actually measured. Natural acceptance requires observing the agreed real operating cycle. If work remains, the handoff retains the remainder, its owner and the missing evidence: handing a problem to another person does not resolve it.
+
+Resumption also requires reconstructing actual PRs, branches, workers and deployments before opening new work. This prevents duplicating an implementation that kept advancing while the conversation was closed.
+
+This update summarizes anonymized project documentation and records reviewed on October 12. It is not a fresh execution of those tests or universal validation of the controls. Role contracts must be checked against effective runtime permissions, as explained in [the environment is the policy](/en/entrada/modelos-guiados-el-entorno-es-la-politica).
+
 
 ## What Orca contributed
 

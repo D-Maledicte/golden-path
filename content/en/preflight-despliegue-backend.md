@@ -67,6 +67,14 @@ The task contract has to ask for concrete evidence: the command run, relevant ou
 
 If the preflight fails, the agent fixes and repeats the test. If configuration is missing that only exists in production, it records what it could verify and what is left pending for an equivalent environment; it does not turn an assumption into approval.
 
+## From local tests to published effects
+
+Operational case records reviewed on October 12, 2026 add another version of the same problem. An n8n integration had passed 56 tests, an audit and static review, but had not executed its actual HTTP node. The first real request to the already published workflow failed in its HTTP node. This was a result in that circuit and configuration, not a universal n8n defect or proof that tests were useless: the path producing the effect was missing from coverage.
+
+Later acceptance records documented two runs: change an authorized parameter, publish, read back the state and check the webhook response; then restore, **publish again** and verify that the webhook recovered its original behavior. Restoring a definition without checking the active version did not close the loop.
+
+This evidence was read in project records, not reproduced for this editorial. It also did not cover control-hook failures or timeouts. The current distinction is useful for any handoff: **locally ready is not applied; applied is not accepted**. An immediate postflight proves a specific condition; when the objective depends on routine use, observe the agreed natural operating cycle before closing. See [the cockpit's evolution](/en/entrada/caso-orca-cockpit-multiagente).
+
 ## Transferable rule
 
 **Publishing starts before the deploy button.** First you have to prove that the same program that will receive traffic can start and respond. Then the hosting has to refuse to declare a deploy successful if it does not pass that test.

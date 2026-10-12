@@ -95,6 +95,12 @@ The example keeps **coordinators on Sol medium and Luna on high**, following the
 
 Concurrency adds integration cost. Isolate branches or worktrees, assign file ownership, and avoid duplicating investigations unless a comparison is intentional. Repeated audit findings provide little value without acceptance criteria and a reviewer.
 
+### Protocol preset and project allocation
+
+Contextual update, October 12, 2026: the Sol medium/Luna high preset above is preserved as part of the original human protocol. The [V4 operational case](/en/entrada/caso-orca-cockpit-multiagente) now separates general direction with Opus, integration with Sol low and package coordination with Sol medium. That allocation serves different functions within that project; it does not automatically amend the protocol or establish a downgrade due to quota scarcity.
+
+The shared rule remains choosing effort by complexity and responsibility while preserving the task's permissions. Quota notices are informational: they do not activate RCT, Overdrive or a provider switch on their own. Likewise, previously authorized small LIVE autonomy does not arise from spare quota.
+
 ### Human review is a capacity limit
 
 Before opening another front, the operator should answer:
