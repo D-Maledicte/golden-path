@@ -13,9 +13,11 @@ hue: rgba(237,195,94,.25)
 
 # Orca as an ADE and control plane
 
+> External product documentation reviewed on October 12, 2026. Historical cases and local operating choices are preserved.
+
 ## The idea in one sentence
 
-Orca is an **Agent Development Environment**: an interface for running and supervising different coding agents on real projects, each with its own terminal, session and workspace.
+Orca is an **Agent Development Environment**: an interface for running and supervising different coding agents on real projects, with identifiable sessions and workspaces. The terminal remains a central surface, but it is no longer the only one: Orca documents an [experimental Chat UI](https://www.onorca.dev/docs/agents/native-chat) for supported agents. WSL and SSH sessions use a terminal-backed variant; do not assume parity with local structured chat.
 
 It does not bring a new “brain”. The brains are still Codex, Claude Code, OpenCode, Pi or other CLI agents. Orca provides the place where you can see who is working, on which branch, on which host and in what state.
 

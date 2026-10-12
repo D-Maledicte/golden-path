@@ -44,6 +44,8 @@ An **SSH host** lets Orca open and manage workspaces directly on another machine
 
 A **Remote Orca Server** is another Orca runtime instance prepared for paired clients and more federated scenarios. To use local WSL from Orca Desktop, the simple pattern is an SSH connection over the loopback interface.
 
+The current documentation, checked on October 12, 2026, also describes an **Orca-managed server inside the SSH host**, installed on first connection when the host supports it, with compatibility and migration paths for existing sessions. The distinction above is between connection modes, not between having a server and having none. This describes the current product; it does not establish that an existing installation has already migrated. [SSH worktrees](https://www.onorca.dev/docs/ssh)
+
 ## Our pattern
 
 On the main desktop:

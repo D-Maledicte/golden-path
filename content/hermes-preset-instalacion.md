@@ -13,6 +13,8 @@ hue: rgba(168,106,255,.24)
 
 # Preset de instalación de Hermes
 
+> Referencia de producto revisada el 12 de octubre de 2026: [Hermes Agent de Nous Research](https://hermes-agent.nousresearch.com/docs). Los circuitos y permisos de esta guía son decisiones de diseño, no garantías automáticas del producto.
+
 ## Antes del instalador
 
 Levantar Hermes no empieza con un comando. Empieza con cinco decisiones que determinan costo, seguridad y utilidad. El preset no prescribe un proveedor: funciona como guía para diseñar la instancia según el contexto.
@@ -23,7 +25,9 @@ Opciones habituales:
 
 - VPS propio nuevo o existente;
 - servicio gestionado;
-- cluster o runtime serverless con GPU.
+- infraestructura propia o un host compatible con el gateway.
+
+Separá el host del gateway del backend donde ejecuta herramientas: Hermes documenta backends como Docker, SSH, Daytona y Modal. Elegir un sandbox serverless no resuelve por sí solo la disponibilidad del gateway ni exige una GPU local para usar un modelo remoto.
 
 Preguntas útiles:
 
@@ -74,3 +78,8 @@ Para cada MCP o herramienta conectada, declarar:
 - [ ] Secretos fuera de documentación y repositorio.
 - [ ] Pruebas de consulta, alerta y separación de canales.
 - [ ] Métricas para decidir el siguiente ajuste.
+
+## Fuentes oficiales
+
+- [Messaging Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/messaging)
+- [Security](https://hermes-agent.nousresearch.com/docs/user-guide/security)

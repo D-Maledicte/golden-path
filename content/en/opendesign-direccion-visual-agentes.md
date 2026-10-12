@@ -13,7 +13,7 @@ hue: rgba(236,95,189,.24)
 
 # OpenDesign and the visual direction of agents
 
-> Editorial validity: September 14, 2026. OpenDesign evolves quickly; check adapters, catalog and requirements in the official documentation before setting them as policy.
+> Editorial validity: October 12, 2026. OpenDesign evolves quickly; check adapters, catalog and requirements in the official documentation before setting them as policy.
 
 Coding agents learned to build interfaces before they learned to sustain a visual identity. They can turn a brief into HTML, CSS and working components, but they still tend to design each run as if it were the first: they invent a palette, change the type scale, alter the spacing and end up back at the same generic dashboard with floating cards.
 
@@ -67,7 +67,7 @@ The proposed flow is:
 brief → template → direction → DESIGN.md → artifact → handoff → memory
 ```
 
-The agent receives the visual system and the relevant instructions, writes real files and updates an isolated preview. The result can continue as code or be exported, depending on the format, to HTML, ZIP, PDF, PPTX or video.
+The agent receives the visual system and relevant instructions. A CLI with filesystem tools writes project files; a BYOK/API run without those tools returns an artifact block for preview. These are not equivalent editing paths. [Execution contract](https://github.com/nexu-io/open-design#quick-start). The result can continue as code or be exported, depending on the format, to HTML, ZIP, PDF, PPTX or video.
 
 This changes the unit of value. It is no longer only about generating an attractive screen, but about building a process capable of producing a coherent family of artifacts.
 
@@ -98,6 +98,8 @@ OpenDesign is closer to an agent-driven visual IDE than to a traditional collabo
 | Systems portable across agents | Mature component libraries |
 | Automation and repetition | Precise comments and redlines |
 | Direct handoff to engineering | Multi-person visual collaboration |
+
+The comparison describes workflow emphasis, not exclusive capabilities: OpenDesign also documents comments and team workspaces. Its FAQ says there is no Figma export, so do not assume a native round-trip. [Current scope](https://open-design.ai/).
 
 There is no need to pick one as an absolute replacement for the other. A team can explore and produce in OpenDesign, review or refine in Figma when the kind of work calls for it and bring the confirmed decisions back into the portable system.
 

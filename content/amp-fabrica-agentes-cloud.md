@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # Amp y la fábrica de agentes en la nube
 
-> Vigencia editorial: 13 de septiembre de 2026. Amp declara una filosofía de frontera y sin compromiso de compatibilidad hacia atrás; modelos, routing, precios y funciones pueden cambiar con rapidez.
+> Vigencia editorial: 12 de octubre de 2026. Amp declara una filosofía de frontera y sin compromiso de compatibilidad hacia atrás; modelos, routing, precios y funciones pueden cambiar con rapidez.
 
 Amp no resulta interesante porque haya inventado otro agente capaz de editar archivos. Ese espacio ya está lleno. Lo atractivo es que intenta convertir en producto todo lo que rodea al agente: la máquina donde trabaja, el contexto que conserva, el repositorio que modifica, las pruebas que ejecuta, los agentes que coordina y la continuidad necesaria para terminar aunque la computadora del usuario esté apagada.
 
@@ -33,7 +33,7 @@ Esa combinación permite pedir algo más exigente que “escribí esta función�
 
 ## The Dial: elegir esfuerzo antes que marca
 
-Amp organiza la capacidad mediante un selector de cuatro niveles: `low`, `medium`, `high` y `ultra`. La idea es elegir según la dificultad y el costo de equivocarse, no enamorarse del nombre de un modelo.
+Amp ofrece cuatro modos de base en The Dial: `low`, `medium`, `high` y `ultra`. La idea es elegir según la dificultad y el costo de equivocarse, no enamorarse del nombre de un modelo.
 
 | Modo | Lectura práctica |
 |---|---|
@@ -47,6 +47,8 @@ Detrás de cada posición, Amp puede combinar modelo principal, nivel de razonam
 La abstracción es sana: una organización no debería reescribir su política cada vez que cambia el ranking de proveedores. “Usar capacidad alta cuando una omisión sutil sería cara” envejece mejor que “usar siempre el modelo X”.
 
 Sin embargo, Amp no obliga a entregar todo el control. Es posible fijar modelos y esfuerzo por separado para el agente principal, el Oracle y los subagentes, además de definir modos personalizados mediante plugins.
+
+El [Dial](https://ampcode.com/docs/the-dial) se puede personalizar, pero el modo de un Thread queda fijado al enviar su primer mensaje: cambiarlo exige abrir otro hilo. Conviene elegir el esfuerzo antes de empezar.
 
 ## Dos formas de delegar
 
@@ -100,7 +102,9 @@ La continuidad no reemplaza al gobierno. Lo vuelve más importante.
 
 ## El costo real no es sólo el modelo
 
-Amp separa el uso de agentes y herramientas del costo de cómputo de los Orbs. Permite conectar suscripciones compatibles, usar claves propias o consumir créditos de Amp. Los Orbs se cobran por minuto según CPU y memoria y dejan de generar costo cuando están pausados.
+La [tarifa actual](https://ampcode.com/docs/pricing) combina planes mensuales y pago por uso; distingue consumo de agentes y herramientas de la asignación de Orbs. Los Orbs se miden por minuto, los tamaños mayores consumen más asignación y la pausa no genera costo.
+
+Se pueden conectar claves o suscripciones compatibles, pero hay que revisar el routing efectivo. La suscripción de Claude cubre el modo **Claude Code**, no los modos propios de Amp. Con ChatGPT, las llamadas y herramientas no cubiertas siguen consumiendo créditos de Amp; la suscripción tampoco cubre el Orb. [Detalle por modo](https://ampcode.com/docs/the-dial).
 
 Para evaluar el producto no alcanza con comparar precio por token. Hay que medir:
 

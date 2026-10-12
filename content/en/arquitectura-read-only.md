@@ -13,9 +13,11 @@ hue: rgba(87,217,232,.22)
 
 # Read-only as an architectural decision
 
+> External product documentation reviewed on October 12, 2026. Historical cases and local operating choices are preserved.
+
 ## Why promising not to write is not enough
 
-Deluge has no draft stage equivalent to a review environment. Creating or updating a function publishes the change immediately. A badly executed `PUT` is a production deploy with no safety net.
+For Zoho CRM Deluge functions, creating or updating through the API publishes the change immediately. API V8 distinguishes this behavior from Java, Node.js and Python, which support drafts and separate publication. A `PUT` against Deluge in production can affect active code: do not generalize the draft protection of other runtimes. [Functions in V8](https://www.zoho.com/crm/developer/docs/api/v8/whats-new.html).
 
 That is why reading was not treated as a convention of the script, but as a property of the system.
 

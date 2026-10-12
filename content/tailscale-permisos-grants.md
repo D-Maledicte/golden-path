@@ -54,6 +54,8 @@ Una forma esquemática de llevarla a grants sería:
 
 Es un ejemplo para adaptar: los nombres y la identidad son ficticios; los tags sólo tienen sentido si los dispositivos tienen esas etiquetas asignadas. Antes de aplicar una política real, revisá los grants y ACL existentes: una regla amplia que permanezca activa puede seguir habilitando tráfico. Las políticas permiten sumar accesos, no escribir una regla `deny` para restar los que otra ya concedió. [Sintaxis de grants](https://tailscale.com/docs/reference/syntax/grants) · [Tags](https://tailscale.com/docs/features/tags)
 
+El `src` por correo identifica al usuario, no exclusivamente a su notebook: también puede habilitar sus otros dispositivos con identidad de usuario. Para limitarlo a una sola máquina, usá un selector de dispositivo, como su IP de Tailscale o un alias `hosts`, y verificá el alcance en la vista previa. [Selectores de grants](https://tailscale.com/docs/reference/syntax/grants)
+
 ## SSH tiene dos modos de operación
 
 **SSH habitual sobre Tailscale** conserva `sshd`, usuarios y claves SSH del host; la tailnet aporta una ruta privada y el grant habilita el puerto. **Tailscale SSH** deja que Tailscale gestione autenticación y autorización SSH en nodos compatibles, con sus propias reglas `ssh` y opciones como `check`. Activar sólo el grant de TCP 22 no equivale a haber configurado Tailscale SSH. Tampoco sirve para hacer Tailscale SSH hacia una máquina que sólo está detrás de un subnet router. [Tailscale SSH](https://tailscale.com/docs/features/tailscale-ssh)

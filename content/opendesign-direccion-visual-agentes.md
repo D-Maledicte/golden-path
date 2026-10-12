@@ -13,7 +13,7 @@ hue: rgba(236,95,189,.24)
 
 # OpenDesign y la dirección visual de los agentes
 
-> Vigencia editorial: 14 de septiembre de 2026. OpenDesign evoluciona rápido; verificar adaptadores, catálogo y requisitos en la documentación oficial antes de fijarlos como política.
+> Vigencia editorial: 12 de octubre de 2026. OpenDesign evoluciona rápido; verificar adaptadores, catálogo y requisitos en la documentación oficial antes de fijarlos como política.
 
 Los agentes de código aprendieron a construir interfaces antes de aprender a sostener una identidad visual. Pueden transformar una consigna en HTML, CSS y componentes funcionales, pero todavía tienden a diseñar cada ejecución como si fuera la primera: inventan una paleta, cambian la escala tipográfica, alteran el espaciado y terminan regresando al mismo dashboard genérico con cards flotantes.
 
@@ -67,7 +67,7 @@ El flujo propuesto es:
 brief → template → dirección → DESIGN.md → artefacto → handoff → memoria
 ```
 
-El agente recibe el sistema visual y las instrucciones correspondientes, escribe archivos reales y actualiza una preview aislada. El resultado puede continuar como código o exportarse, según el formato, a HTML, ZIP, PDF, PPTX o video.
+El agente recibe el sistema visual y las instrucciones correspondientes. Con un CLI y herramientas de filesystem escribe los archivos del proyecto; una ejecución BYOK/API sin esas herramientas devuelve un bloque de artefacto para la preview. No son recorridos equivalentes de edición. [Contrato de ejecución](https://github.com/nexu-io/open-design#quick-start). El resultado puede continuar como código o exportarse, según el formato, a HTML, ZIP, PDF, PPTX o video.
 
 Esto cambia la unidad de valor. Ya no se trata sólo de generar una pantalla atractiva, sino de construir un proceso capaz de producir una familia coherente de artefactos.
 
@@ -98,6 +98,8 @@ OpenDesign se acerca más a un IDE visual dirigido por agentes que a un canvas c
 | Sistemas portables entre agentes | Bibliotecas maduras de componentes |
 | Automatización y repetición | Comentarios y redlines precisos |
 | Handoff directo a ingeniería | Colaboración visual multipersona |
+
+La comparación describe énfasis de trabajo, no exclusividades: OpenDesign también documenta comentarios y espacios de equipo. Su FAQ aclara que no hay exportación a Figma, por lo que no conviene asumir un round-trip nativo. [Alcance actual](https://open-design.ai/).
 
 No hace falta elegir uno como reemplazo absoluto del otro. Un equipo puede explorar y producir en OpenDesign, revisar o refinar en Figma cuando el tipo de trabajo lo requiera y devolver las decisiones confirmadas al sistema portable.
 

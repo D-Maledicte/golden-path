@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Planning a scalable AM5 workstation
 
-> Reviewed on September 27, 2026. Specific models are architectural references, not a permanent shopping list. Before buying, validate prices, BIOS support, memory QVL, physical clearances and power requirements against current manufacturer documentation.
+> External references reviewed on October 12, 2026. Specific models are architectural references, not a permanent shopping list. Before buying, validate prices, BIOS support, memory QVL, physical clearances and power requirements against current manufacturer documentation.
 
 ## Design the destination before buying the entry point
 
@@ -111,9 +111,9 @@ Buying a minimal motherboard only to replace it later destroys much of the value
 
 For development with WSL, Docker, browsers, IDEs, agents and local services, **2×32 GB** is a more durable starting point than 2×16 GB.
 
-It also leaves two DIMM slots free. Filling all four DIMM slots can reduce supported memory clocks and make stability more difficult, so “buy two now and add two matching sticks later” is not always the cleanest strategy.
+On a four-DIMM motherboard, it also leaves two DIMM slots free. Filling all four DIMM slots can reduce supported memory clocks and make stability more difficult, so “buy two now and add two matching sticks later” is not always the cleanest strategy.
 
-DDR5-6000 with EXPO and reasonable timings is a useful Ryzen reference point, but the exact kit must be validated against CPU, board and QVL.
+DDR5-6000 with EXPO and reasonable timings is a useful Ryzen reference point, but EXPO is memory overclocking, not a guaranteed processor memory speed. Validate the exact kit against CPU, board and QVL, then test the chosen capacity and module count. [AMD EXPO](https://www.amd.com/en/products/processors/technologies/expo.html)
 
 ## 🔵 Mid-range: add capability, not replacements for their own sake
 
@@ -131,6 +131,8 @@ For a hybrid workstation that combines development, heavy multitasking and gamin
 
 The Ryzen 9 9950X3D combines 16 cores / 32 threads with 3D V-Cache. The Ryzen 9 9950X3D2 Dual Edition keeps 16/32 and extends the 3D V-Cache approach across both CCDs.
 
+AMD specifies a 200 W TDP for the X3D2, versus 170 W for the 9950X3D, and recommends liquid cooling for optimal performance. If that is the destination, size the VRM, cooler and PSU for that model from the start; sharing a socket does not guarantee equal thermal headroom. [9950X3D2 Dual Edition](https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x3d2-dual-edition.html) · [9950X3D](https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x3d.html)
+
 That does not automatically make the X3D2 the right purchase. It only makes sense when the workload and budget can use what it provides.
 
 For gaming-first systems, a Ryzen 7 X3D can be more rational. For compilation, virtualization, creation, heavy multitasking and many concurrent processes, 16 cores can deliver real value.
@@ -142,6 +144,8 @@ Do not choose a chipset for prestige.
 **B850** can be enough when you need one GPU, several NVMe drives, solid USB and a robust platform.
 
 **X870E** starts to justify its cost when the design truly needs more connectivity and PCIe resources, multiple high-speed devices, USB4 or expansion options that will actually be used.
+
+USB4 is standard on X870E and optional on B850: the chipset name alone does not tell you which ports a particular board provides. Compare its manual and lane sharing as slots are populated. [AM5 chipsets](https://www.amd.com/en/products/processors/chipsets/am5.html)
 
 The right question is not “which one is more high-end?”, but:
 

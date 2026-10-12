@@ -13,9 +13,11 @@ hue: rgba(237,195,94,.25)
 
 # Backup versionado de funciones CRM
 
+> Documentación externa revisada el 12 de octubre de 2026. Se conservan los casos históricos y las decisiones operativas del entorno.
+
 ## El problema
 
-El código Deluge de las automatizaciones vive dentro de Zoho CRM. La interfaz no ofrece un historial consultable equivalente a Git y una edición reemplaza el estado anterior. Sin una copia externa, recuperar una versión depende de memoria, archivos sueltos o suerte.
+El código Deluge de las automatizaciones vive dentro de Zoho CRM. La interfaz actual ya ofrece una pestaña Revisions con las últimas 30 versiones; para Deluge, cada guardado crea una revisión. Ese historial acotado no reemplaza un repositorio externo con diffs, análisis y una política propia de conservación. [Gestión de funciones](https://www.zoho.com/crm/developer/docs/functions/management.html).
 
 El proyecto descarga código y metadata de todas las funciones, genera un árbol determinista y crea un commit sólo cuando algo cambió realmente.
 
@@ -47,7 +49,7 @@ El snapshot convirtió intuiciones en inventario. La primera auditoría encontr�
 
 Las cifras concretas no son necesarias para reutilizar el método. El aprendizaje importante es que esos riesgos no eran observables desde una revisión casual de la interfaz: aparecieron al descargar, normalizar y clasificar el árbol completo.
 
-La API no informa dónde está asociada una función. Por eso el reporte puede marcar candidatas, pero no afirmar que una función esté en desuso.
+El snapshot del caso no verificaba todas las asociaciones, por lo que el reporte sólo podía marcar candidatas, no afirmar que una función estuviera en desuso. La interfaz actual de Zoho sí documenta asociaciones, referencias y dependencias en Glance. Consultarlas agrega evidencia; no demuestra que el cliente de backup las descargue ni descarta invocaciones externas. [Gestión de funciones](https://www.zoho.com/crm/developer/docs/functions/management.html).
 
 ## La regla de valor
 

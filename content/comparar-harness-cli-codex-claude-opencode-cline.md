@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Comparar harness CLI: Codex, Claude Code, OpenCode V2, Cline y OMP
 
-> Actualizada el 8 de octubre de 2026. Las capacidades dependen de la versión y la configuración instalada.
+> Actualizada el 12 de octubre de 2026. Las capacidades dependen de la versión y la configuración instalada.
 
 Elegir un agente de programación suele empezar por una pregunta: ¿qué modelo conviene usar? Pero hay otra decisión que cambia el trabajo cotidiano: qué harness va a convertir las respuestas de ese modelo en acciones sobre un proyecto.
 
@@ -41,7 +41,7 @@ Su sandbox establece límites para los comandos que ejecuta, con implementación
 
 **Desventaja práctica:** un entorno mal preparado puede bloquear instalaciones, acceso de red o herramientas que el proyecto necesita. Resolverlo exige configurar permisos y dependencias; dar acceso total como respuesta automática elimina una parte del control que motivó la elección.
 
-También conviene evaluar la oferta de modelos y autenticación disponible en tu instalación. Si tu prioridad es alternar libremente entre muchos proveedores, esa necesidad debe formar parte de la comparación desde el comienzo.
+Codex también admite proveedores personalizados con un endpoint compatible con Responses API y proveedores locales mediante `--oss`. No basta con que el servicio ofrezca Chat Completions: hay que validar protocolo, herramientas y autenticación. [Configuración de proveedores](https://learn.chatgpt.com/docs/config-file/config-advanced).
 
 **Dónde lo pondría:** implementación delimitada, diagnóstico de errores y revisión de cambios que se puedan comprobar con las herramientas reales del repositorio.
 
@@ -63,11 +63,13 @@ Su propuesta está centrada en el ecosistema Claude. Eso simplifica algunas deci
 
 El sitio oficial de OpenCode referencia V2 en su instalación y presenta una herramienta abierta disponible en terminal, editor y escritorio, con soporte para múltiples proveedores y modelos locales. [OpenCode](https://opencode.ai/). Esta editorial cubre su oferta actual; no atribuye a V2 un listado de mejoras frente a V1 sin una comparación de versiones.
 
-OpenCode documenta agentes principales, subagentes y configuración de modelos por agente. Incluye Build y Plan, con distinto acceso a herramientas. [Agentes](https://opencode.ai/docs/agents/). Sus permisos permiten autorizar, preguntar o denegar acciones; la documentación describe defaults mayormente permisivos. [Permisos](https://opencode.ai/docs/permissions/).
+OpenCode documenta agentes principales, subagentes y configuración de modelos por agente. Incluye Build y Plan, con distinto acceso a herramientas. [Agentes](https://opencode.ai/v2/docs/agents/). Sus permisos permiten autorizar, preguntar o denegar acciones; la documentación describe defaults mayormente permisivos. [Permisos](https://opencode.ai/v2/docs/permissions/).
 
 **Ventaja editorial:** permite diseñar un reparto de modelos según la tarea. Podés probar un proveedor para exploración y otro para implementación sin reemplazar necesariamente toda la interfaz de trabajo.
 
 **Desventaja práctica:** esa libertad traslada decisiones al operador. Hay que evaluar modelos, compatibilidad con herramientas, límites del proveedor y comportamiento ante errores. Que dos modelos aparezcan en el mismo selector no significa que resuelvan una tarea con la misma confiabilidad.
+
+V2 tiene documentación y esquema propios: `permissions`, `shell` y `subagent` reemplazan nombres de V1. “Allow always” guarda aprobaciones por proyecto; los subagentes usan sus propios permisos. Revisá esos alcances antes de migrar. [Permisos V2](https://opencode.ai/v2/docs/permissions/).
 
 La configuración de permisos merece atención propia. Una regla del harness y una barrera del sistema operativo son mecanismos diferentes; no corresponde tratarlos como equivalentes.
 
@@ -80,6 +82,8 @@ Cline tiene CLI interactiva y modo headless. Documenta ejecución desde pipes, s
 **Ventaja editorial:** es un candidato práctico para encargos puntuales que reciben una entrada concreta y devuelven un resultado: analizar un diff, explicar un fallo o preparar una revisión. Su CLI permite incorporar esas tareas a scripts.
 
 **Desventaja práctica:** un encargo aparentemente pequeño puede crecer si no tiene límite. Un pedido de revisión puede terminar convertido en una sesión de implementación si el objetivo y los permisos quedan abiertos. Además, cambiar de proveedor requiere volver a evaluar la calidad del resultado.
+
+La referencia actual de Cline marca `--auto-approve` con default `true` y no ofrece una allowlist/denylist nativa de comandos shell: remite a hooks `PreToolUse`. No des por hecho que habrá confirmación ni que un encargo de revisión será de sólo lectura. [Controles de CLI](https://docs.cline.bot/usage/cli-overview).
 
 Headless describe una forma de ejecutar sin interfaz interactiva; no acredita por sí solo aislamiento ni confiabilidad. Para automatizar, hace falta decidir qué cambios están autorizados y cómo se acepta la salida.
 

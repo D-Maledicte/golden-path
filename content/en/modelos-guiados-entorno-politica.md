@@ -13,6 +13,8 @@ hue: rgba(237,195,94,.25)
 
 # Guided models — the environment is the policy
 
+> External product documentation reviewed on October 12, 2026. Historical cases and local operating choices are preserved.
+
 ## Core idea
 
 A guided model is an agent that is allowed to reason and propose broadly, but whose ability to act is trimmed by an environment designed to require human intervention at the sensitive points.
@@ -91,11 +93,11 @@ It is the last net. Even if the agent escapes the previous layers, it should not
 
 In an OpenCode session with GLM 5.3, the agent could install a library or connect over SSH without asking. It only stopped if the instruction explicitly told it to request permission first.
 
-The behavior is not explained solely by the model’s personality. In OpenCode, most permissions currently start at `allow`; the Build agent has broad access, and both installing dependencies and running `ssh` go through `bash`. If `bash` is enabled, there is no mandatory pause between the decision and the execution.
+The behavior is not explained solely by the model’s personality. In OpenCode V1, most permissions start at `allow`; the Build agent has broad access, and both installing dependencies and running `ssh` go through `bash`. If `bash` is enabled, there is no mandatory pause between the decision and the execution.
 
 The instruction “ask me first” added a convention. The environment still allowed acting without it.
 
-The durable solution is not writing a more dramatic threat into the prompt. It is configuring `bash` so sensitive actions are `ask` or `deny`, and removing from the environment the credentials the agent does not need.
+For that V1 configuration, the durable solution is not writing a more dramatic threat into the prompt. It is configuring `bash` so sensitive actions are `ask` or `deny`, and removing from the environment the credentials the agent does not need.
 
 ## Do not confuse model, provider and harness
 
@@ -127,7 +129,7 @@ The three classic sandbox levels are:
 
 But that is not the same as three complete operating modes. Approval is configured separately through policies such as `on-request`, `never` or granular per-category controls. There are also built-in permission profiles such as `:read-only`, `:workspace` and `:danger-full-access`.
 
-The value of this separation is that you can allow editing inside the workspace and, at the same time, require approval for an escalation or flatly reject certain kinds of request.
+The value of this separation is that you can allow editing inside the workspace and, at the same time, require approval for an escalation or flatly reject certain kinds of request. The current reference adds `approvals_reviewer = "user" | "auto_review"`: it changes who reviews eligible requests, not the sandbox or actions already allowed inside it. [Codex configuration](https://learn.chatgpt.com/docs/config-file/config-reference).
 
 ### Claude Code
 
@@ -137,7 +139,10 @@ Claude Code offers interaction modes such as:
 - `acceptEdits`;
 - `plan`;
 - `bypassPermissions` when enabled;
-- `auto` in versions that support it.
+- `auto` when available in the session;
+- `dontAsk`, which rejects calls that would need to prompt.
+
+In `auto`, a classifier reviews eligible actions; that is not human approval at every step. `bypassPermissions` retains documented exceptions and does not remove every control. [Current permissions](https://code.claude.com/docs/en/permissions).
 
 On top of those modes, rules let you classify tools or commands as allow, ask or deny. `bypassPermissions` should not be confused with “working faster”: it removes pauses and only makes sense inside a container or VM where the scope is already controlled from outside.
 
@@ -145,7 +150,7 @@ On top of those modes, rules let you classify tools or commands as allow, ask or
 
 OpenCode uses `allow`, `ask` and `deny` permissions, configurable globally and per agent. It can apply rules to editing, shell, access to external directories, web, skills and subagents, even distinguishing commands through patterns.
 
-Its Plan agent restricts edits and bash, but the Build agent starts from a much more permissive profile. The `--auto` mode approves whatever would have been `ask`, although it still respects explicit `deny` rules.
+In V1, Plan restricts edits and bash; `--auto` approves requests that would be `ask`, while respecting `deny`. V2 changes the schema to a `permissions` array with `action`, `resource` and `effect`, and renames `bash` to `shell` and `task` to `subagent`. Its Plan agent blocks edits except planning files, but that is not a blanket shell restriction. [V2 permissions](https://opencode.ai/v2/docs/permissions/).
 
 The conclusion is not that OpenCode lacks control. It is that **you have to design it**: its defaults prioritize fluency and do not automatically represent a conservative policy.
 
@@ -197,7 +202,7 @@ Use: long jobs where manual pauses cost more than recreating the environment.
 
 ## A conservative example for OpenCode
 
-This profile allows local exploration, asks before editing or installing and blocks access that should not happen from a regular worker:
+This example preserves V1 syntax: do not copy it as V2 configuration. V2 requires migrating the rules and testing their effects; renaming a key does not turn the object into the required array. This profile allows local exploration, asks before editing or installing and blocks access that should not happen from a regular worker:
 
 ```json
 {
@@ -288,6 +293,6 @@ The quality of the model determines how much useful work it produces inside the 
 ## References
 
 - [Codex — configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
-- [Claude Code — permissions](https://docs.anthropic.com/en/docs/claude-code/permissions)
+- [Claude Code — permissions](https://code.claude.com/docs/en/permissions)
 - [OpenCode — permissions](https://opencode.ai/docs/permissions/)
 - [OpenCode — agents](https://opencode.ai/docs/agents)

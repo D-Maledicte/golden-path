@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Comparing CLI harnesses: Codex, Claude Code, OpenCode V2, Cline and OMP
 
-> Updated on October 8, 2026. Capabilities depend on the installed version and configuration.
+> Updated on October 12, 2026. Capabilities depend on the installed version and configuration.
 
 Choosing a coding agent often begins with a question: which model should I use? Another decision shapes everyday work: which harness will turn that model's responses into actions on a project?
 
@@ -41,7 +41,7 @@ Its sandbox sets boundaries for executed commands, with platform-specific enforc
 
 **Practical drawback:** an unprepared environment can block installations, network access or tools the project requires. Resolving that requires configuring permissions and dependencies. Automatically granting full access removes part of the control that motivated the choice.
 
-The model and authentication options available in your installation also deserve evaluation. If freely alternating between many providers is your priority, include that requirement from the outset.
+Codex also supports custom providers with a Responses API-compatible endpoint and local providers through `--oss`. Chat Completions support alone is insufficient: validate protocol, tools and authentication. [Provider configuration](https://learn.chatgpt.com/docs/config-file/config-advanced).
 
 **Suggested role:** bounded implementation, error diagnosis and change review that can be checked with the repository's actual tools.
 
@@ -63,11 +63,13 @@ The product is centered on the Claude ecosystem. That simplifies some decisions,
 
 OpenCode's official site references V2 in its installation instructions and presents an open tool available in terminal, editor and desktop, with multiple providers and local models. [OpenCode](https://opencode.ai/). This editorial covers the current offering; it does not assign improvements to V2 without comparing releases.
 
-OpenCode documents primary agents, subagents and per-agent model configuration. Build and Plan have different tool access. [Agents](https://opencode.ai/docs/agents/). Permissions can allow, request approval for or deny actions; the documentation describes mostly permissive defaults. [Permissions](https://opencode.ai/docs/permissions/).
+OpenCode documents primary agents, subagents and per-agent model configuration. Build and Plan have different tool access. [Agents](https://opencode.ai/v2/docs/agents/). Permissions can allow, request approval for or deny actions; the documentation describes mostly permissive defaults. [Permissions](https://opencode.ai/v2/docs/permissions/).
 
 **Editorial advantage:** you can assign models by task. A provider can handle exploration and another implementation without necessarily replacing the working interface.
 
 **Practical drawback:** that freedom transfers decisions to the operator. Models, tool compatibility, provider limits and error behavior need evaluation. Two models appearing in the same selector does not mean they complete a task with equal reliability.
+
+V2 has its own documentation and schema: `permissions`, `shell` and `subagent` replace V1 names. “Allow always” saves project-scoped approvals; subagents use their own permissions. Review these scopes before migration. [V2 permissions](https://opencode.ai/v2/docs/permissions/).
 
 Permission configuration deserves its own attention. A harness rule and an operating-system boundary are different mechanisms and should not be treated as equivalent.
 
@@ -80,6 +82,8 @@ Cline has an interactive CLI and headless mode. Its documentation covers pipes, 
 **Editorial advantage:** it is a practical candidate for focused assignments with a concrete input and result: analyzing a diff, explaining a failure or preparing a review. Its CLI can integrate those tasks into scripts.
 
 **Practical drawback:** a seemingly small assignment can grow without boundaries. A review request can turn into implementation if its objective and permissions remain open. Changing providers also calls for reassessing output quality.
+
+Cline’s current reference lists `--auto-approve` as defaulting to `true` and has no native shell-command allow/deny list, pointing to `PreToolUse` hooks instead. Do not assume confirmation will occur or that a review assignment will be read-only. [CLI controls](https://docs.cline.bot/usage/cli-overview).
 
 Headless describes execution without an interactive interface; it does not establish isolation or reliability by itself. Automation requires deciding which changes are authorized and how output will be accepted.
 

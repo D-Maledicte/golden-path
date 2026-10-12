@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Choosing a model and reasoning level
 
-> Editorial validity: September 12, 2026. Names, limits and catalogs change; check the official model pages before turning this guide into policy.
+> Reviewed on October 12, 2026. Names, limits and catalogs change; check the official model pages before turning this guide into policy.
 
 ## The decision does not start with the brand
 
@@ -41,18 +41,17 @@ Before switching families or moving up to the premium model:
 
 Raising reasoning helps when the model **can** solve the problem but needs to explore more. Moving up a model helps when there is a **capability gap**: it misses relationships, cannot hold the horizon, misjudges tradeoffs or repeats the same kind of mistake.
 
-## OpenAI: Luna, Terra, Sol and Astra
+## OpenAI: GPT-6 Luna, GPT-6.1 Sol and GPT-6 Astra
 
 | Model | Suggested role | Recommended tasks | When to move up |
 |---|---|---|---|
-| GPT-5.6 Luna | Fast, cheap worker | Search, classification, transformations, summaries, tests, documentation and verifiable local changes | The task stops being linear or needs judgment across files |
-| GPT-5.6 Terra | Everyday generalist | Normal implementation, moderate debugging, analysis and coordinating a few pieces | It loses dependencies, needs more autonomy or mistakes are expensive |
-| GPT-5.6 Sol | Senior worker or coordinator | Complex code, research, tool use and open problems with several constraints | Even with high reasoning it cannot carry the work end to end |
+| GPT-6 Luna | Fast, efficient worker | Extraction, summaries, tests, documentation and verifiable local changes | The task needs sustained judgment across files |
+| GPT-6.1 Sol | Strong generalist or coordinator, when available | Complex code, research, tool use and agentic workflows with several constraints | Even with high reasoning it cannot carry the work end to end |
 | GPT-6 Astra | Coordinator and judge for the hardest demands | Architecture, extensive synthesis, ambiguous decisions, deep research and long workflows | Reserve it for the hard tail, not as the default |
 
 ### When to go from Luna to Sol
 
-Luna is ideal when the task contract fits in a few sentences and the result has a clear check. Before jumping straight to Sol, Terra is usually the natural step for everyday work that already needs interpretation.
+Luna is ideal when the task contract fits in a few sentences and the result has a clear check. Sol is the next step for work that needs interpretation, autonomy and coordination.
 
 Move to Sol when several of these signals show up:
 
@@ -64,18 +63,22 @@ Move to Sol when several of these signals show up:
 
 Astra is justified when the problem combines breadth, ambiguity and consequences: it must not only write well, but preserve coherence over a long process and judge the whole.
 
+GPT-6.1 Sol is OpenAI’s current recommendation for complex coding where the account and client support it. GPT-6 Sol and GPT-5.6 remain alternatives during rollout. Availability depends on plan, client and workspace; changing a configuration name does not grant access. [Models and availability](https://learn.chatgpt.com/docs/models).
+
 ## Claude: Haiku, Sonnet, Opus and Fable
+
+Haiku 5.5 was released on October 7 and Sonnet 5.5 on September 28, 2026. These are Anthropic catalog versions; each provider and harness must expose them separately. [Haiku](https://platform.claude.com/docs/en/models/haiku-5-5/overview) · [Sonnet](https://platform.claude.com/docs/en/models/sonnet-5-5/overview).
 
 | Model | Suggested role | Recommended tasks | When to move up |
 |---|---|---|---|
-| Claude Haiku 4.5 | Fast worker | Classification, extraction, repetitive changes, bounded subagents and high-volume tasks | Consistency is lacking or the work needs reasoning across several pieces |
-| Claude Sonnet 5 | Balanced default | Everyday development, analysis, content, tool use and medium-scope agents | The horizon gets longer or the cost of wrong judgment rises |
-| Claude Opus 5 | Senior coordinator | Complex agentic coding, broad planning, critical review and high-impact decisions | Opus at high effort still does not close the problem |
+| Claude Haiku 5.5 | Fast worker | Classification, extraction, repetitive changes, bounded subagents and high-volume tasks | Consistency is lacking or the work needs reasoning across several pieces |
+| Claude Sonnet 5.5 | Balanced default | Everyday development, analysis, content, tool use and medium-scope agents | The horizon gets longer or the cost of wrong judgment rises |
+| Claude Opus 5.5 | Senior coordinator | Complex agentic coding, broad planning, critical review and high-impact decisions | Opus at high effort still does not close the problem |
 | Claude Fable 5.1 | Frontier for the hard tail | Very demanding reasoning and long-horizon agentic work | Use selectively and measure whether it improves the resolution rate |
 
 ### When to go from Haiku to Sonnet and from Sonnet to Opus
 
-Haiku works best as an executor of small, checkable units. Sonnet is the general starting point when the task needs to understand intent as well as follow instructions.
+Haiku works best as an executor of small, checkable units. Sonnet is a practical starting point when the task needs to understand intent as well as follow instructions. Anthropic currently recommends starting with Opus 5.5 for most workloads; this guide instead prioritizes cost per accepted task in a worker orchestration.
 
 Move from Sonnet to Opus when:
 
@@ -99,30 +102,35 @@ The reasoning level is a deliberation budget, not a magic intelligence multiplie
 | Max | A single model needs to exhaust a hard investigation | The task could be split better across agents |
 | Ultra | The work splits naturally and it pays to delegate to subagents | There is a single indivisible piece or lots of accidental coordination |
 
-In OpenAI, `Max` gives the same model more time; `Ultra` enables a strategy with automatic delegation. In Claude, behavior depends on the model: adaptive thinking and `effort` are soft controls, and Haiku 4.5 supports extended thinking but not the `effort` parameter.
+In Codex, `Max` gives the same model more time; `Ultra` can delegate to subagents. GPT-6 Luna supports up to Max, without Ultra. In Claude, behavior depends on the model: adaptive thinking and `effort` are soft controls. Haiku 5.5 supports adaptive thinking and `effort`, unlike Haiku 4.5. [Haiku 5.5 specifications](https://platform.claude.com/docs/en/models/haiku-5-5/overview).
 
 Two warnings:
 
 - high reasoning does not replace context, tools or tests;
-- showing the *thinking* text does not, on its own, change how much the model reasons. In OpenCode, `/thinking` controls the display and the model variants control the actual reasoning.
+- showing the *thinking* text does not, on its own, change how much the model reasons. In OpenCode V2, `provider/model#variant` selects options such as effort or token budget; names and effects depend on model and provider. [Variants](https://opencode.ai/v2/docs/models/).
 
 ## OpenCode Go: a practical map of the catalog
 
-OpenCode Go brings models from several providers together in a single plan. The following table is an **editorial starting heuristic**, not an official OpenCode benchmark. It groups the current catalog by the kind of work worth evaluating first in our coordinator–workers setup.
+OpenCode Go brings models from several providers together through Go and Go Plus. The following table is an **editorial starting heuristic**, not an official OpenCode benchmark. It groups relevant options from the catalog checked on October 12, 2026. Check the actual list in `/models` and the official page before assigning a worker.
 
-| Current family in Go | Suggested starting point | Initial role |
+| Go catalog options | Suggested starting point | Initial role |
 |---|---|---|
-| Grok 4.6 | Independent review, broad reasoning and second opinion | Selective coordinator or reviewer |
-| GLM 5.3 Flash, 5.3, 5.2, 5.1 | 5.3 Flash for bounded work; 5.3 for planning and cross-cutting changes | Cheap worker; 5.3 as escalation |
-| GPT-5.6 Luna | Implementation, refactors, tests and verifiable documentation | General worker |
+| Grok 4.7 and 4.6 | Independent review, broad reasoning and second opinion | Selective coordinator or reviewer |
+| GLM 5.3 Flash, 5.3, 5.2 | 5.3 Flash for bounded work; 5.3 for planning and cross-cutting changes | Cheap worker; 5.3 as escalation |
+| GPT-6 Luna and GPT-5.6 Luna | GPT-6 Luna for implementation, refactors, tests and verifiable docs; 5.6 as a tested fallback | General worker |
 | Kimi K3, K2.7 Code, K2.6 | K2.7 Code for code; K3 for synthesis and more demanding tasks | Code worker; K3 selectively |
 | LongCat 2.0 | Simple maintenance, batches and repeatable tasks | Volume worker |
-| MiMo V2.5 and V2.5 Pro | V2.5 for cheap, checkable tasks; Pro when more judgment is needed | Cheap worker |
+| MiMo V2.6 Flash and Pro; V2.5 and Pro | V2.6 Flash for cheap, checkable tasks; Pro when more judgment is needed; V2.5 as fallback | Cheap worker |
 | MiniMax M3 and M2.7 | M3 as a generalist; M2.7 as an evaluated fallback | General worker |
-| Muse Spark 1.3 and 1.2 Contributor | Implementation, tests and docs with a well-defined scope | Bounded contributor |
-| Qwen3.8 Max, 3.8 Flash, 3.7 Max, 3.7 Plus, 3.6 Plus | 3.8 Flash for volume; 3.8 Max for planning and review | Worker or reviewer depending on the variant |
+| Muse Spark 1.3 and 1.2 Contributor (limited regions) | Implementation, tests and docs with a well-defined scope | Bounded contributor |
+| Qwen3.8 Max, 3.8 Flash, 3.7 Plus | 3.8 Flash for volume; 3.8 Max for planning and review | Worker or reviewer depending on the variant |
 | DeepSeek V4.1 Flash, V4 Pro, V4 Flash, V4 Flash Vision Exp | V4.1 Flash for routine work; Pro for debugging/review; Vision for visual inputs | Specialized worker |
 | Hy4 preview and Hy3 | Hy4 only in an evaluation sandbox; Hy3 after a test against the repo | Experimental or evaluated worker |
+| LongCat 2.5 Preview Free and Step 5 Preview Free | Reproducible tests without relying on future availability | Temporary experimentation |
+| Claude Haiku 5.5 | Extraction, classification and bounded subagents | Volume worker |
+| Space Bunny | Evaluate small changes with tests | Experimental worker |
+
+Five-hour, weekly and monthly allowances are expressed as dollar amounts per model: request counts are estimates, not guarantees. An inexpensive option can have a smaller allowance; free variants are temporary. [Catalog and limits](https://opencode.ai/v2/docs/console/go).
 
 ### How to use this table without falling in love with the ranking
 
@@ -169,5 +177,5 @@ The selector is not a hierarchy of employees. It is a gearbox: the best gear is 
 - [Anthropic: choosing a model](https://platform.claude.com/docs/en/about-claude/models/choosing-a-model)
 - [Anthropic: optimizing for cost and intelligence](https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence)
 - [Anthropic: thinking, effort and cost](https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost)
-- [OpenCode Go: current models, pricing and limits](https://opencode.ai/docs/go/)
-- [OpenCode: TUI and reasoning variants](https://opencode.ai/docs/tui/)
+- [OpenCode Go: current models, pricing and limits](https://opencode.ai/v2/docs/console/go)
+- [OpenCode V2: models and reasoning variants](https://opencode.ai/v2/docs/models/)

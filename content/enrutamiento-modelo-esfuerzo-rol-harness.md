@@ -42,7 +42,7 @@ La diferencia **no demuestra que uno programe mejor que el otro**. LSP puede aho
 | Seguridad | Sandbox y aprobaciones explícitos | Controles dependientes de configuración y herramientas | ¿Cuál respeta el mismo contrato de permisos? |
 | Costo | Cuota de suscripción o API, según acceso | Suscripción compatible u otras API, según proveedor | ¿Cuál reduce costo total por tarea aceptada? |
 
-No hay que confundir **harness** con **proveedor de inferencia**. En OMP, la ruta de autenticación puede afectar facturación, límites y modelos disponibles; una suscripción de Codex y una clave de OpenAI API no son intercambiables por definición. Antes del A/B, fijar el identificador efectivo de modelo y las condiciones de acceso.
+No hay que confundir **harness** con **proveedor de inferencia**. En OMP, la ruta de autenticación puede afectar facturación, límites y modelos disponibles; una suscripción de Codex y una clave de OpenAI API no son intercambiables por definición. Antes del A/B, fijar el identificador efectivo de modelo y las condiciones de acceso. Un alias del harness tampoco basta: OpenCode V2, por ejemplo, separa el ID del catálogo de `modelID`, enviado al proveedor. Registrá ambos antes de afirmar que dos ejecuciones usaron el mismo modelo. [Aliases y proveedores](https://opencode.ai/v2/docs/providers/).
 
 ## El selector como planificador de trabajo
 

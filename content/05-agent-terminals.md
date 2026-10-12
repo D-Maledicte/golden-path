@@ -13,6 +13,8 @@ hue: rgba(87,217,232,.22)
 
 # Agent terminals y ciclo de sesión
 
+> Documentación externa revisada el 12 de octubre de 2026. Se conservan los casos históricos y las decisiones operativas del entorno.
+
 ## Qué es una agent terminal
 
 En Orca, una sesión de agente es un CLI ejecutándose dentro de una terminal y un worktree concretos. Ese vínculo le permite al sistema mostrar identidad y estado sin obligar al operador a abrir cada panel.
@@ -47,7 +49,7 @@ Orca reconoce cambios de ciclo mediante señales de terminal y hooks del agente.
 - **idle:** permanece abierto pero sin actividad relevante;
 - **plain shell:** terminal sin un agente reconocido.
 
-El dashboard permite supervisar varios agentes por excepción: atender primero los que necesitan intervención y revisar los que terminaron, sin recorrer panel por panel.
+El Agent Dashboard requiere habilitarse en Settings → Experimental. Los indicadores de las filas de worktrees siguen disponibles sin ese tablero. El dashboard permite supervisar varios agentes por excepción: atender primero los que necesitan intervención y revisar los que terminaron, sin recorrer panel por panel.
 
 ## Identidad estable de los panes
 

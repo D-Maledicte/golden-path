@@ -13,15 +13,17 @@ hue: rgba(87,217,232,.22)
 
 # CLI vs. web — the agent inside the project
 
+> External product documentation reviewed on October 12, 2026. Historical cases and local operating choices are preserved.
+
 ## It is not an intelligence contest
 
 Working from Codex, Claude Code or OpenCode in a terminal does not make the model more capable than the one chatting on the web. It changes its **position relative to the work**.
 
-In a web conversation, the model usually receives a question, files the person chose or a copy of the context. In a CLI, the agent can inhabit the repository: read its current state, inspect history, modify files, run commands and observe the result.
+In a chat without a connected execution environment, the model receives a question, files the person chose or a copy of the context. In a CLI, the agent can inhabit the repository: read its current state, inspect history, modify files, run commands and observe the result.
 
-The useful difference is not *chat versus code*. It is **handed-over context versus verifiable context**, and **recommendation versus execution loop**.
+The useful difference is **handed-over context versus verifiable context**, and **recommendation versus execution loop**. That boundary does not necessarily match browser versus terminal: Claude Code can also work on repositories from the web. Choose by environment access, tools and permissions, not just the appearance of the interface. [Official surfaces](https://code.claude.com/docs/en/overview).
 
-> The web is a great workbench. The terminal is the workshop wired to the machine.
+> The decisive difference is whether the agent can inspect, act and verify in the actual execution environment.
 
 ## What the terminal really enables
 

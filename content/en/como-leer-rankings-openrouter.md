@@ -15,13 +15,13 @@ hue: rgba(168,106,255,.24)
 
 *A tracking guide for choosing which models to test*
 
-Reviewed on October 3, 2026 · The main page showed usage data through October 2, 2026
+Interface walkthrough from October 3, 2026 · Documentation reviewed October 12, 2026. On the latter visit, the main page showed usage data through October 11.
 
 A ranking is useful when it helps you make a concrete decision: which model is worth testing, for what work and at what cost if you get it wrong. The problem arises when a position becomes a conclusion that the measurement never promised.
 
 OpenRouter brings together signals of real usage, spend, speed and capability evaluations. This guide proposes a tour of its sections, identifying what each one counts and turning them into a repeatable tracking process. **First we choose what to observe; then we check whether that signal improves our work.**
 
-The main tour covers the thirteen subsections of Text. It also includes the other Rankings tabs and their units. Names and controls correspond to the review date above; the numerical examples are illustrative and do not present current winners. [[1]](https://openrouter.ai/rankings)
+The main tour covers the thirteen subsections of Text. It also includes the other Rankings tabs and their units. Walkthrough names and controls correspond to October 3; the numerical examples are illustrative and do not present current winners. [[1]](https://openrouter.ai/rankings)
 
 ## The question to ask before looking at first place
 
@@ -113,7 +113,9 @@ This is the section for comparing evaluation results. The reviewed selector brou
 
 In an accuracy evaluation, the denominator is the cases evaluated under a protocol. A composite index involves several tests and their combination rules. Elo involves comparisons and relative results. These methodologies answer different questions: they should not be averaged as if they shared a scale.
 
-**GPQA Diamond** uses a fixed set of scientific questions. Its detail page aggregates runs from the last 90 days, weighted by question count, with a minimum coverage requirement per model-provider pair whose number is not specified. There is a difference worth preserving: while the widget tooltip describes a median across providers, the detail page prioritizes the result with default routing and uses the median when that result is missing. Cite the exact view your figure comes from. [[23]](https://openrouter.ai/benchmarks/gpqa-diamond/)
+**GPQA Diamond** uses multiple-choice science questions. Its current page presents run variability and cost, and publishes downloadable snapshots. The 90-day protocol described in the earlier review could not be reconfirmed in the page accessible on October 12: do not assume it remains the current rule. The widget and detail table may use different representations; cite the precise view and snapshot your figure comes from. [[23]](https://openrouter.ai/benchmarks/gpqa-diamond/)
+
+The following VGI-Bench description is retained as an October 3 record: its page could not be reconfirmed on October 12. Do not treat these thresholds as a current contract.
 
 **VGI-Bench** stands for Video General Intelligence Bench and evaluates understanding of long videos. OpenRouter's implementation supplies the video and a multiple-choice question in a single turn, with temperature 0, and grades the final letter. It uses a public set of 439 questions, requires at least 395 answers for a run to be included and considers the last 90 days. It is useful for investigating temporal and audiovisual understanding; its accuracy is not a video-generation score. [[21]](https://openrouter.ai/benchmarks/vgi-bench)
 
@@ -144,6 +146,8 @@ This lets you segment by natural language and switch between absolute quantity a
 **How to track it:** for a product in Spanish, look at Spanish even if English dominates the overall picture. Then test real tasks: understanding instructions, register, regional expressions, extraction and the faithfulness of responses. Traffic in a language does not, by itself, evaluate quality in that language.
 
 A conversation may mix languages, code and quotations. Without a published definition of the classifier and its error, small changes deserve caution. Extrapolation provides a volume estimate; it does not remove selection bias or guarantee that the sample represents all use of Spanish.
+
+For automation: `category` and `language_type` use weekly estimates, reject `period=day`, and cannot combine with exact modality/context filters or each other. The last week can extend beyond `end_date`; monthly grouping assigns each week to its starting month. Monthly boundaries are therefore approximate. [[7]](https://openrouter.ai/docs/api/api-reference/datasets/daily-token-totals-for-top-50-models)
 
 ### 9 Programming
 
@@ -261,7 +265,7 @@ For Golden Path, the final criterion is practical: **choose the combination of m
 
 ## Sources and direct access
 
-Official sources consulted on October 3, 2026. Rankings links open dynamic views; their values may change after this review. The reference screenshots provided for the guide cover Text navigation and Top models by task.
+Original walkthrough and sources dated October 3, 2026. On October 12, Rankings, Data API, token and session datasets, task classification and τ²-Bench Airline were reconfirmed, and the current GPQA page was reviewed. Dynamic controls and the other pages retain the original date. Rankings links open dynamic views; their values may change after this review. The reference screenshots provided for the guide cover Text navigation and Top models by task.
 
 1. [Rankings and interface controls](https://openrouter.ai/rankings)
 

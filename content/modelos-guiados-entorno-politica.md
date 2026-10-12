@@ -13,6 +13,8 @@ hue: rgba(237,195,94,.25)
 
 # Modelos guiados — el entorno es la política
 
+> Documentación externa revisada el 12 de octubre de 2026. Se conservan los casos históricos y las decisiones operativas del entorno.
+
 ## Idea central
 
 Un modelo guiado es un agente al que se le permite razonar y proponer con amplitud, pero cuya capacidad de actuar está recortada por un entorno diseñado para exigir intervención humana en los puntos sensibles.
@@ -91,11 +93,11 @@ Es la última red. Aunque el agente escape de las capas anteriores, no debería 
 
 En una sesión de OpenCode con GLM 5.3, el agente podía instalar una librería o conectarse por SSH sin consultar. Sólo frenaba si la instrucción le pedía expresamente solicitar permiso primero.
 
-El comportamiento no se explica únicamente por la personalidad del modelo. En OpenCode, la mayoría de los permisos parten actualmente de `allow`; el agente Build tiene acceso amplio y tanto instalar dependencias como ejecutar `ssh` pasan por `bash`. Si `bash` está habilitado, no hay una pausa obligatoria entre la decisión y la ejecución.
+El comportamiento no se explica únicamente por la personalidad del modelo. En OpenCode V1, la mayoría de los permisos parten de `allow`; el agente Build tiene acceso amplio y tanto instalar dependencias como ejecutar `ssh` pasan por `bash`. Si `bash` está habilitado, no hay una pausa obligatoria entre la decisión y la ejecución.
 
 La instrucción “preguntame antes” agregaba una convención. El entorno seguía permitiendo actuar sin ella.
 
-La solución durable no es redactar una amenaza más dramática en el prompt. Es configurar `bash` para que las acciones sensibles sean `ask` o `deny`, y quitar del entorno las credenciales que el agente no necesita.
+Para esa configuración V1, la solución durable no es redactar una amenaza más dramática en el prompt. Es configurar `bash` para que las acciones sensibles sean `ask` o `deny`, y quitar del entorno las credenciales que el agente no necesita.
 
 ## No confundir modelo, proveedor y harness
 
@@ -127,7 +129,7 @@ Los tres niveles clásicos del sandbox son:
 
 Pero eso no equivale a tres modos completos de operación. La aprobación se configura aparte mediante políticas como `on-request`, `never` o controles granulares por categoría. También existen perfiles de permisos integrados como `:read-only`, `:workspace` y `:danger-full-access`.
 
-El valor de esta separación es que se puede permitir edición dentro del workspace y, al mismo tiempo, exigir aprobación para una escalada o rechazar directamente ciertas clases de solicitud.
+El valor de esta separación es que se puede permitir edición dentro del workspace y, al mismo tiempo, exigir aprobación para una escalada o rechazar directamente ciertas clases de solicitud. La referencia actual agrega `approvals_reviewer = "user" | "auto_review"`: cambia quién revisa solicitudes elegibles, no el sandbox ni las acciones ya permitidas dentro de él. [Configuración de Codex](https://learn.chatgpt.com/docs/config-file/config-reference).
 
 ### Claude Code
 
@@ -137,7 +139,10 @@ Claude Code ofrece modos de interacción como:
 - `acceptEdits`;
 - `plan`;
 - `bypassPermissions` cuando está habilitado;
-- `auto` en versiones que lo soportan.
+- `auto` cuando está disponible en la sesión;
+- `dontAsk`, que rechaza llamadas que necesitarían preguntar.
+
+En `auto`, un clasificador revisa acciones elegibles; no equivale a aprobación humana en cada paso. `bypassPermissions` conserva excepciones documentadas y no elimina todos los controles. [Permisos actuales](https://code.claude.com/docs/en/permissions).
 
 Además de esos modos, las reglas permiten clasificar herramientas o comandos como allow, ask o deny. `bypassPermissions` no debe confundirse con “trabajar más rápido”: elimina pausas y sólo tiene sentido dentro de un contenedor o VM donde el alcance ya esté controlado por afuera.
 
@@ -145,7 +150,7 @@ Además de esos modos, las reglas permiten clasificar herramientas o comandos co
 
 OpenCode usa permisos `allow`, `ask` y `deny`, configurables globalmente y por agente. Puede aplicar reglas a edición, shell, acceso a directorios externos, web, skills y subagentes, incluso discriminando comandos mediante patrones.
 
-Su agente Plan restringe ediciones y bash, pero el agente Build parte de un perfil mucho más permisivo. El modo `--auto` aprueba lo que hubiera quedado en `ask`, aunque sigue respetando reglas explícitas en `deny`.
+En V1, Plan restringe ediciones y bash; `--auto` aprueba solicitudes que quedarían en `ask`, respetando `deny`. V2 cambia el esquema a un array `permissions` con `action`, `resource` y `effect`, y renombra `bash` a `shell` y `task` a `subagent`. Su Plan bloquea ediciones salvo archivos de planificación, pero eso no constituye un bloqueo general de shell. [Permisos V2](https://opencode.ai/v2/docs/permissions/).
 
 La conclusión no es que OpenCode carezca de control. Es que **hay que diseñarlo**: sus defaults priorizan fluidez y no representan automáticamente una política conservadora.
 
@@ -197,7 +202,7 @@ Uso: trabajos largos donde las pausas manuales cuestan más que recrear el entor
 
 ## Ejemplo conservador para OpenCode
 
-Este perfil permite exploración local, pregunta antes de editar o instalar y bloquea accesos que no deberían ocurrir desde un worker común:
+Este ejemplo conserva el formato V1: no lo copies como configuración V2. En V2 hay que migrar reglas y probar sus efectos; renombrar una clave no convierte el objeto en el array requerido. Este perfil permite exploración local, pregunta antes de editar o instalar y bloquea accesos que no deberían ocurrir desde un worker común:
 
 ```json
 {
@@ -288,6 +293,6 @@ La calidad del modelo determina cuánto trabajo útil produce dentro del períme
 ## Referencias
 
 - [Codex — referencia de configuración](https://learn.chatgpt.com/docs/config-file/config-reference)
-- [Claude Code — permisos](https://docs.anthropic.com/en/docs/claude-code/permissions)
+- [Claude Code — permisos](https://code.claude.com/docs/en/permissions)
 - [OpenCode — permisos](https://opencode.ai/docs/permissions/)
 - [OpenCode — agentes](https://opencode.ai/docs/agents)

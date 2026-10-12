@@ -13,11 +13,13 @@ hue: rgba(236,95,189,.24)
 
 # Hermes as an operational agent
 
+> Product reference reviewed October 12, 2026: [Hermes Agent by Nous Research](https://hermes-agent.nousresearch.com/docs). The workflows and permissions here are design decisions, not automatic product guarantees.
+
 ## The core idea
 
 Hermes is useful when the agent’s value is not only in talking to a technical person, but in **being available inside an operational loop**: taking questions from a shared channel, querying connected systems and sending alerts before someone remembers to look at a dashboard.
 
-It does not replace Codex, Claude Code or OpenCode. It is a different kind of product. Development CLIs live close to the repository; Hermes lives close to the team and its channels.
+In this workflow it complements Codex, Claude Code or OpenCode. Hermes also offers a CLI and development tools; the focus here is its messaging gateway, which brings those capabilities closer to the team and its channels.
 
 ## What problem it solves
 

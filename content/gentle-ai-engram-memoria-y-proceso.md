@@ -13,6 +13,8 @@ hue: rgba(168,106,255,.24)
 
 # Gentle AI y Engram: memoria y proceso para agentes de código
 
+> Revisión documental: 12 de octubre de 2026. Las integraciones y sus capacidades varían; esta revisión no implica una nueva prueba del entorno.
+
 ## El problema no empieza cuando el agente se equivoca
 
 Un agente puede terminar una tarea correctamente y, al abrir una sesión nueva, volver a preguntar por decisiones que el equipo ya tomó. También puede recordar una regla vieja, aplicar un proceso enorme a un cambio trivial o entregar código sin una prueba verificable. Son fallas distintas: continuidad, vigencia del contexto y evidencia del resultado.
@@ -32,7 +34,7 @@ Esa proporcionalidad importa. Si corregir una etiqueta exige el mismo ritual que
 | Verificación | ¿Qué comportamiento se comprobó? | Pruebas, revisión o chequeos pertinentes |
 | Memoria | ¿Qué conviene recuperar en la próxima sesión? | Observaciones con contexto y proyecto |
 
-Los modos de revisión y TDD pueden sumar una barrera útil, pero su valor depende del tipo de cambio y de la calidad de las pruebas. Un workflow prolijo no convierte una comprobación superficial en evidencia.
+La [documentación actual](https://github.com/Gentleman-Programming/gentle-ai) establece test-first cuando existe una prueba pertinente y ejecutable; si no, exige explicar la excepción y verificar por otra vía. RDD está habilitado por defecto con opt-out, respeta desactivaciones explícitas y vincula la revisión al candidato congelado. La revisión automática se reserva para candidatos de alto riesgo; las capacidades difieren por integración. Eso no autoriza commit, push ni release. Un workflow prolijo no convierte una comprobación superficial en evidencia.
 
 ## Engram: recordar decisiones, no grabar todo
 
@@ -40,7 +42,7 @@ Los modos de revisión y TDD pueden sumar una barrera útil, pero su valor depen
 
 Supongamos que un portal usa IDs largos como strings para no perder precisión en JavaScript. Al terminar una sesión, guardar «los IDs de CRM se tratan como strings en API, ordenamiento y exportación; revisar el adaptador antes de normalizarlos» sirve más que conservar cien mensajes donde apareció el tema. La próxima sesión puede buscar la decisión, comprobar que sigue vigente en el código y trabajar desde ahí.
 
-Esa última comprobación es crucial. Una memoria es una pista con procedencia, no una orden superior ni la fuente de verdad del repositorio. Si el contrato cambió, hay que corregir o reemplazar la observación. Engram agrupa recuerdos por proyecto y puede compartirlos mediante sincronización opcional, pero eso exige definir quién puede escribir, qué información se guarda y cómo se resuelven decisiones contradictorias.
+Esa última comprobación es crucial. Una memoria es una pista con procedencia, no una orden superior ni la fuente de verdad del repositorio. Si el contrato cambió, hay que corregir o reemplazar la observación. Engram mantiene SQLite local como fuente autoritativa: Git Sync exporta fragmentos portables y Engram Cloud ofrece replicación y acceso compartido opcionales por proyecto. Compartir memoria exige definir quién puede escribir, qué información se guarda y cómo se resuelven decisiones contradictorias.
 
 ## Un punto dulce para un entorno con varios agentes
 

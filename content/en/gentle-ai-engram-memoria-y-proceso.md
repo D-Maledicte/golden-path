@@ -13,6 +13,8 @@ hue: rgba(168,106,255,.24)
 
 # Gentle AI and Engram: memory and process for coding agents
 
+> Documentation reviewed: October 12, 2026. Integration capabilities vary; this review does not imply a new environment test.
+
 ## The problem does not begin when the agent makes a mistake
 
 An agent can complete a task and, in a new session, ask again about decisions the team already made. It can also recall an obsolete rule, apply a heavyweight process to a tiny change, or deliver code without verifiable evidence. These are different failures: continuity, context freshness and proof of the result.
@@ -32,7 +34,7 @@ That proportionality matters. If fixing a label requires the same ritual as migr
 | Verification | Which behavior was checked? | Relevant tests, review or checks |
 | Memory | What should the next session retrieve? | Observations with context and project |
 
-Review and TDD modes can add a useful barrier, but their value depends on the change and the quality of the tests. A tidy workflow does not turn a superficial check into evidence.
+The [current documentation](https://github.com/Gentleman-Programming/gentle-ai) specifies test-first when a relevant runnable test exists; otherwise, explain the exception and verify another way. RDD defaults to on with opt-out, respects explicit disabling, and binds review to a frozen candidate. Automatic review is reserved for high-risk candidates; capabilities differ by integration. This does not authorize commit, push or release. A tidy workflow does not turn a superficial check into evidence.
 
 ## Engram: remember decisions instead of recording everything
 
@@ -40,7 +42,7 @@ Review and TDD modes can add a useful barrier, but their value depends on the ch
 
 Suppose a portal treats long CRM IDs as strings to avoid precision loss in JavaScript. After a session, saving “CRM IDs remain strings in the API, sorting and exports; inspect the adapter before normalizing them” is more useful than retaining a hundred messages where the subject appeared. The next session can retrieve the decision, check that it still matches the code and proceed.
 
-That last check is essential. A memory is a clue with provenance, not a higher-priority instruction or the repository's source of truth. If the contract changes, update or replace the observation. Engram groups memories by project and offers optional sync, which also means deciding who can write, what may be stored and how conflicting decisions are resolved.
+That last check is essential. A memory is a clue with provenance, not a higher-priority instruction or the repository's source of truth. If the contract changes, update or replace the observation. Engram keeps local SQLite authoritative: Git Sync exports portable chunks, while optional Engram Cloud provides project-scoped replication and shared access. Sharing memory also means deciding who can write, what may be stored and how conflicting decisions are resolved.
 
 ## A sweet spot for a multi-agent environment
 

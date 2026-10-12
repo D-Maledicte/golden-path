@@ -13,6 +13,8 @@ hue: rgba(87,217,232,.22)
 
 # Agent terminals and the session lifecycle
 
+> External product documentation reviewed on October 12, 2026. Historical cases and local operating choices are preserved.
+
 ## What an agent terminal is
 
 In Orca, an agent session is a CLI running inside a specific terminal and worktree. That link lets the system show identity and state without forcing the operator to open every pane.
@@ -47,7 +49,7 @@ Orca recognizes lifecycle changes through terminal signals and agent hooks. In o
 - **idle:** still open but with no relevant activity;
 - **plain shell:** a terminal with no recognized agent.
 
-The dashboard lets you supervise several agents by exception: deal first with the ones that need intervention and review the ones that finished, without going pane by pane.
+Agent Dashboard must be enabled under Settings → Experimental. Worktree-row indicators remain available without that board. The dashboard lets you supervise several agents by exception: deal first with the ones that need intervention and review the ones that finished, without going pane by pane.
 
 ## Stable pane identity
 

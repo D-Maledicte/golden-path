@@ -42,7 +42,7 @@ OMP, a Pi fork, includes specialized tools such as LSP integration, debugging an
 | Safety | Sandbox and explicit approvals | Controls depend on setup and tools | Which enforces the same restrictions? |
 | Cost | Subscription quota or API, depending on access | Compatible subscription or separate API, depending on provider | Which lowers cost per accepted task? |
 
-The **harness** and the **inference provider** are different choices. OMP authentication paths can change billing, model availability and limits. A Codex subscription and an OpenAI API key must not be assumed interchangeable. Record the effective model ID and authentication route before benchmarking.
+The **harness** and the **inference provider** are different choices. OMP authentication paths can change billing, model availability and limits. A Codex subscription and an OpenAI API key must not be assumed interchangeable. Record the effective model ID and authentication route before benchmarking. A harness alias is also insufficient: OpenCode V2, for example, separates its catalog ID from the `modelID` sent to the provider. Record both before claiming two runs used the same model. [Aliases and providers](https://opencode.ai/v2/docs/providers/).
 
 ## Routing as a planning problem
 

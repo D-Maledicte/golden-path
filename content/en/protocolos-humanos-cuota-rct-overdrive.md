@@ -87,6 +87,8 @@ Overdrive applies when the operator has evidence that available quota will expir
 
 In the originating setup, the instruction is **`/fast` in all Codex terminals participating in the round**. This records that setup's choice, not a promise of availability, speed, price, or quota consumption for every account. The operator checks command support, active mode, and provider conditions. A speed setting does not authorize a reasoning change.
 
+As external context on October 12, 2026, Fast consumes included limits at 2.5 times the Standard rate; purchased credits and Enterprise pay-as-you-go are billed at twice Standard. Check which allowance the account uses before the round. [Codex speed and usage](https://learn.chatgpt.com/docs/agent-configuration/speed).
+
 Capacity goes toward **more parallel BUILD work, audits, preliminary reviews, tests, and documentation**. Each front needs an output and a closure condition: a regression test, impact report, focused diff, or operational guide checked against the code.
 
 The example keeps **coordinators on Sol medium and Luna on high**, following the operator's usual allocation. These are concrete assignments, not universal equivalences across model families. The exception allowing LIVE-gate auditors or difficult designs to move to high applies to assignments that start at medium; Luna is already high. Spare quota is not a reason for blanket escalation.

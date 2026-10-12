@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # Amp and the cloud agent factory
 
-> Editorial validity: September 13, 2026. Amp states a frontier philosophy with no commitment to backward compatibility; models, routing, pricing and features can change quickly.
+> Editorial validity: October 12, 2026. Amp states a frontier philosophy with no commitment to backward compatibility; models, routing, pricing and features can change quickly.
 
 Amp is not interesting because it invented yet another agent capable of editing files. That space is already crowded. What is appealing is that it tries to turn everything around the agent into a product: the machine where it works, the context it keeps, the repository it modifies, the tests it runs, the agents it coordinates and the continuity needed to finish even when the user’s computer is off.
 
@@ -33,7 +33,7 @@ That combination lets you ask for something more demanding than “write this fu
 
 ## The Dial: choose effort before brand
 
-Amp organizes capability through a four-level selector: `low`, `medium`, `high` and `ultra`. The idea is to choose by difficulty and the cost of being wrong, not to fall in love with a model’s name.
+Amp offers four built-in modes through The Dial: `low`, `medium`, `high` and `ultra`. The idea is to choose by difficulty and the cost of being wrong, not to fall in love with a model’s name.
 
 | Mode | Practical reading |
 |---|---|
@@ -47,6 +47,8 @@ Behind each position, Amp can combine a main model, reasoning level, tools, inst
 The abstraction is healthy: an organization should not rewrite its policy every time the provider ranking changes. “Use high capability when a subtle omission would be expensive” ages better than “always use model X”.
 
 That said, Amp does not force you to hand over all control. You can pin models and effort separately for the main agent, the Oracle and the subagents, and define custom modes through plugins.
+
+The [Dial](https://ampcode.com/docs/the-dial) is customizable, but a Thread keeps the mode selected for its first message: switching requires a new thread. Choose the effort before starting.
 
 ## Two ways to delegate
 
@@ -100,7 +102,9 @@ Continuity does not replace governance. It makes it more important.
 
 ## The real cost is not just the model
 
-Amp separates the use of agents and tools from the compute cost of Orbs. You can connect compatible subscriptions, use your own keys or spend Amp credits. Orbs are billed per minute by CPU and memory and stop costing money while paused.
+The [current pricing](https://ampcode.com/docs/pricing) combines monthly tiers and pay-as-you-go, separating agent and tool usage from the Orb allowance. Orbs are metered by the minute, larger sizes use more allowance, and paused Orbs cost nothing.
+
+Compatible keys and subscriptions can be connected, but check the effective routing. A Claude subscription covers **Claude Code mode**, not Amp’s own modes. With ChatGPT, uncovered calls and tools still consume Amp credits; the subscription does not cover the Orb either. [Mode-specific details](https://ampcode.com/docs/the-dial).
 
 To evaluate the product, comparing price per token is not enough. You have to measure:
 

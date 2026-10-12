@@ -87,6 +87,8 @@ Overdrive parte de otra condición: el operador tiene motivos para creer que cie
 
 En el entorno que dio origen a este protocolo, la pauta es activar **`/fast` en todas las terminales de Codex que participan en la ronda**. Se registra como una elección de ese entorno, no como una promesa de disponibilidad, velocidad, precio o consumo para cualquier cuenta. El operador debe comprobar que el comando exista en su versión, que el modo quede activo y qué condiciones aplica el proveedor. Cambiar velocidad no autoriza cambiar razonamiento.
 
+Como referencia externa al 12 de octubre de 2026, Fast consume los límites incluidos a 2,5 veces la tasa Standard; los créditos comprados y Enterprise pay-as-you-go se facturan a 2 veces. Confirmá qué bolsa usa la cuenta antes de activar la ronda. [Velocidad y consumo de Codex](https://learn.chatgpt.com/docs/agent-configuration/speed).
+
 La capacidad se orienta a **más frentes BUILD en paralelo, más auditorías y pre-revisiones, más tests y documentación**. Para que eso produzca valor, cada frente necesita una salida y una condición de cierre: una prueba de regresión, un informe de impacto, un diff acotado o una guía contrastada con el código.
 
 El ejemplo conserva **coordinadores en Sol medium y Luna en high**, según el reparto habitual del operador. Son asignaciones concretas, no una tabla universal de equivalencias entre familias. La excepción “subir a high para auditores de gate LIVE o diseños difíciles” se refiere a elevar las asignaciones que parten de medium; Luna ya está en high. La cuota sobrante no justifica una escalada general.

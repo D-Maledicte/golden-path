@@ -54,6 +54,8 @@ One schematic implementation using grants is:
 
 Adapt this example: the identity and names are fictitious, and the devices must actually be assigned those tags. Review existing grants and ACLs before applying a real policy. A broad existing rule can still allow traffic: policies add permissions; they do not offer a `deny` rule to subtract access granted elsewhere. [Grant syntax](https://tailscale.com/docs/reference/syntax/grants) · [Tags](https://tailscale.com/docs/features/tags)
 
+An email `src` identifies the user, not just their laptop: it can also allow their other user-owned devices. To restrict this to one machine, use a device selector, such as its Tailscale IP or a `hosts` alias, and verify the scope in the preview. [Grant selectors](https://tailscale.com/docs/reference/syntax/grants)
+
 ## SSH has two operating modes
 
 **Regular SSH over Tailscale** keeps the host's `sshd`, local users, and SSH keys; the tailnet provides a private route, while the grant permits the port. **Tailscale SSH** lets Tailscale manage SSH authentication and authorization on supported nodes, with separate `ssh` policy rules and options such as `check`. Opening TCP 22 with a grant does not configure Tailscale SSH. Tailscale SSH also cannot connect to a machine that only sits behind a subnet router. [Tailscale SSH](https://tailscale.com/docs/features/tailscale-ssh)

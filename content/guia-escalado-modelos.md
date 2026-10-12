@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Elegir modelo y nivel de razonamiento
 
-> Revisada el 27 de septiembre de 2026. Los nombres, límites y catálogos cambian; verificar las fichas oficiales antes de convertir esta guía en política.
+> Revisada el 12 de octubre de 2026. Los nombres, límites y catálogos cambian; verificar las fichas oficiales antes de convertir esta guía en política.
 
 ## La decisión no empieza por la marca
 
@@ -41,12 +41,12 @@ Antes de cambiar de familia o subir al modelo premium:
 
 Subir razonamiento sirve cuando el modelo **puede** resolver el problema pero necesita explorar más. Subir de modelo sirve cuando aparece una **brecha de capacidad**: pierde relaciones, no sostiene el horizonte, juzga mal los tradeoffs o repite el mismo tipo de error.
 
-## OpenAI: GPT-6 Luna, Sol y Astra
+## OpenAI: GPT-6 Luna, GPT-6.1 Sol y GPT-6 Astra
 
 | Modelo | Rol sugerido | Tareas recomendadas | Cuándo subir |
 |---|---|---|---|
 | GPT-6 Luna | Worker rápido y eficiente | Extracción, resúmenes, tests, documentación y cambios locales verificables | La tarea requiere juicio sostenido entre archivos |
-| GPT-6 Sol | Generalista fuerte o coordinador | Código complejo, investigación, herramientas y flujos agénticos con varias restricciones | Aun con razonamiento alto no sostiene el trabajo de punta a punta |
+| GPT-6.1 Sol | Generalista fuerte o coordinador, cuando esté disponible | Código complejo, investigación, herramientas y flujos agénticos con varias restricciones | Aun con razonamiento alto no sostiene el trabajo de punta a punta |
 | GPT-6 Astra | Coordinador y juez de máxima exigencia | Arquitectura, síntesis extensa, decisiones ambiguas, investigación profunda y workflows largos | Reservar para la cola difícil, no como default |
 
 ### Cuándo pasar de Luna a Sol
@@ -63,14 +63,16 @@ Pasar a Sol cuando aparezcan varias de estas señales:
 
 Astra se justifica cuando el problema combina amplitud, ambigüedad y consecuencias: no sólo debe escribir bien, sino preservar coherencia durante un proceso largo y juzgar el conjunto.
 
-Los GPT-5.6 Luna, Terra y Sol todavía pueden figurar en el selector durante el despliegue de GPT-6. La disponibilidad depende del plan, el cliente y el workspace; las familias anteriores pueden servir de fallback cuando ya están validadas en un repositorio.
+GPT-6.1 Sol es la recomendación actual de OpenAI para código complejo cuando la cuenta y el cliente lo habilitan. GPT-6 Sol y GPT-5.6 siguen siendo alternativas durante el despliegue. La disponibilidad depende del plan, el cliente y el workspace; cambiar el nombre en una configuración no concede acceso. [Modelos y disponibilidad](https://learn.chatgpt.com/docs/models).
 
 ## Claude: Haiku, Sonnet, Opus y Fable
 
+Haiku 5.5 se publicó el 7 de octubre y Sonnet 5.5 el 28 de septiembre de 2026. Son versiones del catálogo de Anthropic; cada proveedor y harness debe exponerlas por separado. [Haiku](https://platform.claude.com/docs/en/models/haiku-5-5/overview) · [Sonnet](https://platform.claude.com/docs/en/models/sonnet-5-5/overview).
+
 | Modelo | Rol sugerido | Tareas recomendadas | Cuándo subir |
 |---|---|---|---|
-| Claude Haiku 4.5 | Worker veloz | Clasificación, extracción, cambios repetitivos, subagentes acotados y tareas de alto volumen | Falta consistencia o el trabajo exige razonamiento entre varias piezas |
-| Claude Sonnet 5 | Default equilibrado | Desarrollo cotidiano, análisis, contenido, uso de herramientas y agentes con alcance medio | El horizonte se alarga o el costo del juicio incorrecto aumenta |
+| Claude Haiku 5.5 | Worker veloz | Clasificación, extracción, cambios repetitivos, subagentes acotados y tareas de alto volumen | Falta consistencia o el trabajo exige razonamiento entre varias piezas |
+| Claude Sonnet 5.5 | Default equilibrado | Desarrollo cotidiano, análisis, contenido, uso de herramientas y agentes con alcance medio | El horizonte se alarga o el costo del juicio incorrecto aumenta |
 | Claude Opus 5.5 | Coordinador senior | Coding agente complejo, planificación amplia, revisión crítica y decisiones de alto impacto | Opus con esfuerzo alto sigue sin cerrar el problema |
 | Claude Fable 5.1 | Frontera para la cola difícil | Razonamiento muy demandante y trabajo agente de largo horizonte | Usar de forma selectiva y medir si mejora la tasa de resolución |
 
@@ -100,33 +102,35 @@ El nivel de razonamiento es un presupuesto de deliberación, no un multiplicador
 | Max | Un único modelo necesita agotar una investigación difícil | La tarea puede dividirse mejor entre agentes |
 | Ultra | El trabajo se separa naturalmente y conviene delegar en subagentes | Hay una sola pieza indivisible o mucha coordinación accidental |
 
-En Codex, `Max` entrega más deliberación al mismo modelo; `Ultra` puede delegar automáticamente en subagentes. GPT-6 Luna llega hasta Max, sin Ultra. En Claude, el comportamiento depende del modelo: el pensamiento adaptativo y `effort` son controles blandos, y Haiku 4.5 admite pensamiento extendido pero no el parámetro `effort`.
+En Codex, `Max` entrega más deliberación al mismo modelo; `Ultra` puede delegar automáticamente en subagentes. GPT-6 Luna llega hasta Max, sin Ultra. En Claude, el comportamiento depende del modelo: el pensamiento adaptativo y `effort` son controles blandos, y Haiku 5.5 admite pensamiento adaptativo y `effort`, a diferencia de Haiku 4.5. [Ficha de Haiku 5.5](https://platform.claude.com/docs/en/models/haiku-5-5/overview).
 
 Dos advertencias:
 
 - razonamiento alto no reemplaza contexto, herramientas ni tests;
-- mostrar el texto de *thinking* no cambia por sí solo cuánto razona el modelo. En OpenCode, `/thinking` controla la visualización y las variantes del modelo controlan el razonamiento efectivo.
+- mostrar el texto de *thinking* no cambia por sí solo cuánto razona el modelo. En OpenCode V2, las variantes `provider/model#variant` configuran opciones como esfuerzo o presupuesto; sus nombres y efectos dependen del modelo y proveedor. [Variantes](https://opencode.ai/v2/docs/models/).
 
 ## OpenCode Go: mapa práctico del catálogo
 
-OpenCode Go reúne modelos de varios proveedores en un plan único. La tabla siguiente es una **heurística editorial de arranque**, no un benchmark oficial de OpenCode. Agrupa opciones relevantes del catálogo consultado el 27 de septiembre; la lista exacta y los límites deben comprobarse en `/models` y en la ficha oficial antes de asignar un worker.
+OpenCode Go reúne modelos de varios proveedores y ofrece Go y Go Plus. La tabla siguiente es una **heurística editorial de arranque**, no un benchmark oficial de OpenCode. Agrupa opciones relevantes del catálogo consultado el 12 de octubre de 2026; la lista exacta y los límites deben comprobarse en `/models` y en la ficha oficial antes de asignar un worker.
 
-| Familia actual en Go | Punto de partida sugerido | Papel inicial |
+| Opciones del catálogo de Go | Punto de partida sugerido | Papel inicial |
 |---|---|---|
 | Grok 4.7 y 4.6 | Revisión independiente, razonamiento amplio y segunda opinión | Coordinador o reviewer selectivo |
-| GLM 5.3 Flash, 5.3, 5.2, 5.1 | 5.3 Flash para trabajo acotado; 5.3 para planificación y cambios cruzados | Worker económico; 5.3 como escalamiento |
+| GLM 5.3 Flash, 5.3, 5.2 | 5.3 Flash para trabajo acotado; 5.3 para planificación y cambios cruzados | Worker económico; 5.3 como escalamiento |
 | GPT-6 Luna y GPT-5.6 Luna | GPT-6 Luna para implementación, refactors, tests y documentación verificable; 5.6 como fallback probado | Worker general |
 | Kimi K3, K2.7 Code, K2.6 | K2.7 Code para código; K3 para síntesis y tareas más exigentes | Worker de código; K3 selectivo |
 | LongCat 2.0 | Mantenimiento simple, lotes y tareas repetibles | Worker de volumen |
-| MiMo V2.6 Flash y Pro; V2.5 | V2.6 Flash para tareas baratas y comprobables; Pro cuando hace falta más juicio; V2.5 como fallback | Worker económico |
+| MiMo V2.6 Flash y Pro; V2.5 y Pro | V2.6 Flash para tareas baratas y comprobables; Pro cuando hace falta más juicio; V2.5 como fallback | Worker económico |
 | MiniMax M3 y M2.7 | M3 como generalista; M2.7 como fallback evaluado | Worker general |
-| Muse Spark 1.3 y 1.2 Contributor | Implementación, tests y docs con alcance bien delimitado | Contributor acotado |
-| Qwen3.8 Max, 3.8 Flash, 3.7 Max, 3.7 Plus, 3.6 Plus | 3.8 Flash para volumen; 3.8 Max para planificación y revisión | Worker o reviewer según variante |
+| Muse Spark 1.3 y 1.2 Contributor (regiones limitadas) | Implementación, tests y docs con alcance bien delimitado | Contributor acotado |
+| Qwen3.8 Max, 3.8 Flash, 3.7 Plus | 3.8 Flash para volumen; 3.8 Max para planificación y revisión | Worker o reviewer según variante |
 | DeepSeek V4.1 Flash, V4 Pro, V4 Flash, V4 Flash Vision Exp | V4.1 Flash para trabajo corriente; Pro para debugging/revisión; Vision para insumos visuales | Worker especializado |
 | Hy4 preview y Hy3 | Hy4 sólo en sandbox de evaluación; Hy3 después de una prueba contra el repo | Experimental o worker evaluado |
-| Space Bunny Free y LongCat 2.5 Preview Free | Probar sólo con tareas reproducibles y sin depender de su disponibilidad futura | Experimentación temporal |
+| LongCat 2.5 Preview Free y Step 5 Preview Free | Probar sólo con tareas reproducibles y sin depender de su disponibilidad futura | Experimentación temporal |
+| Claude Haiku 5.5 | Extracción, clasificación y subagentes acotados | Worker de volumen |
+| Space Bunny | Evaluar cambios pequeños con tests | Worker experimental |
 
-La página de Go también distingue límites de uso por ventana de cinco horas, semana y mes para cada modelo; una opción aparentemente barata puede tener un cupo mensual menor. El catálogo incluye variantes gratuitas por tiempo limitado. Ni su permanencia ni su desempeño en un repositorio propio se deducen de aparecer en la lista.
+Los cupos de cinco horas, semana y mes se expresan en dólares de uso por modelo: los recuentos de solicitudes son estimaciones, no cantidades garantizadas. Una opción barata puede tener un cupo menor; las variantes gratuitas son temporales. [Catálogo y límites](https://opencode.ai/v2/docs/console/go).
 
 ### Cómo usar esta tabla sin enamorarse del ranking
 
@@ -173,5 +177,5 @@ El selector no es una jerarquía de empleados. Es una caja de cambios: el mejor 
 - [Anthropic: cómo elegir un modelo](https://platform.claude.com/docs/en/about-claude/models/choosing-a-model)
 - [Anthropic: optimizar costo e inteligencia](https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence)
 - [Anthropic: thinking, effort y costo](https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost)
-- [OpenCode Go: modelos, precios y límites vigentes](https://opencode.ai/docs/go/)
-- [OpenCode: interfaz TUI y variantes de razonamiento](https://opencode.ai/docs/tui/)
+- [OpenCode Go: modelos, precios y límites vigentes](https://opencode.ai/v2/docs/console/go)
+- [OpenCode V2: modelos y variantes de razonamiento](https://opencode.ai/v2/docs/models/)

@@ -13,11 +13,13 @@ hue: rgba(236,95,189,.24)
 
 # Hermes como agente operativo
 
+> Referencia de producto revisada el 12 de octubre de 2026: [Hermes Agent de Nous Research](https://hermes-agent.nousresearch.com/docs). Los circuitos y permisos de esta guía son decisiones de diseño, no garantías automáticas del producto.
+
 ## La idea central
 
 Hermes sirve cuando el valor del agente no está solamente en conversar con una persona técnica, sino en **estar disponible dentro de un circuito operativo**: recibir consultas desde un canal compartido, consultar sistemas conectados y emitir alertas antes de que alguien recuerde mirar un tablero.
 
-No reemplaza a Codex, Claude Code u OpenCode. Es otra clase de producto. Los CLIs de desarrollo viven cerca del repositorio; Hermes vive cerca del equipo y de sus canales.
+En este circuito complementa a Codex, Claude Code u OpenCode. Hermes también ofrece CLI y herramientas de desarrollo; acá interesa su gateway de mensajería, que acerca esas capacidades al equipo y a sus canales.
 
 ## Qué problema resuelve
 

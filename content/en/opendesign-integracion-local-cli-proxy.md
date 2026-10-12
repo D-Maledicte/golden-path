@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # OpenDesign across Windows, WSL, plans and proxies
 
-> Editorial validity: September 14, 2026. Authentication mechanisms, models and limits depend on each provider and can change.
+> Editorial validity: October 12, 2026. Authentication mechanisms, models and limits depend on each provider and can change.
 
 “Local-first” sounds like a single computer. On Windows with WSL, however, one computer contains two environments that share resources but not necessarily executables, credentials or sessions.
 
@@ -27,7 +27,7 @@ OpenDesign can reach a model through three conceptual routes:
 
 | Route | Authentication | Spend |
 |---|---|---|
-| Local CLI | The installed agent’s session | Quota of the plan tied to the CLI |
+| Local CLI | Installed agent’s authentication | Plan quota or API billing, depending on that authentication |
 | BYOK / custom provider | API key | The provider’s API account or balance |
 | OpenDesign Cloud | OpenDesign account | Credits included or purchased there |
 
@@ -57,7 +57,7 @@ Native Codex / Claude Code
 ChatGPT and Claude quotas
 ```
 
-The alternative is running the OpenDesign daemon inside WSL and opening its interface from the Windows browser. That way the daemon shares the filesystem, PATH and credentials with the existing agents.
+If the agents already live in WSL, the [official WSL2 guide](https://github.com/nexu-io/open-design/blob/main/docs/wsl-setup.md) recommends running OpenDesign in that same environment. CLI, daemon, modules and credentials then align. The interface can open in the Windows browser. Also check which executable `od` resolves to: Linux includes an unrelated system utility with that name.
 
 ```text
 Windows browser
@@ -79,9 +79,11 @@ Local proxy on 127.0.0.1
 External provider
 ```
 
+Windows–WSL connectivity and daemon SSRF defenses also matter: OpenDesign blocks private/internal endpoints by default. If that protection rejects the destination, review the documented exact-host allowlist rather than opening broad ranges. This deployment condition needs testing. [Proxy security](https://github.com/nexu-io/open-design#use-opendesign-from-your-coding-agent).
+
 This path does not automatically reuse the Codex or Claude quota. OpenDesign thinks it is talking to an API; the proxy decides which provider and credential to use behind it.
 
-The pattern is especially well suited to services that publish API endpoints and keys, such as OpenCode Go. It lets you adapt protocols, normalize models and add the stable session identifier Go asks for routing and prompt caching.
+The pattern can adapt protocols and sessions, but an API does not authorize every use. [OpenCode Go](https://opencode.ai/v2/docs/console/go) is intended for coding-agent traffic: it requires an identifiable client and stable session. A proxy does not make an arbitrary workload compatible; check the client and each model’s endpoint, which may use Responses, Chat Completions or Messages.
 
 A proxy is not necessarily a hack. It can become a control boundary:
 
@@ -193,4 +195,6 @@ No option always wins. The right decision comes from choosing what we want to pr
 - [OpenDesign](https://open-design.ai/)
 - [OpenDesign Quickstart](https://github.com/nexu-io/open-design/blob/main/QUICKSTART.md)
 - [Agent adapters](https://open-design.ai/agents/)
-- [OpenCode Go](https://opencode.ai/docs/go/)
+- [OpenCode Go](https://opencode.ai/v2/docs/console/go)
+- [WSL2 setup](https://github.com/nexu-io/open-design/blob/main/docs/wsl-setup.md)
+- [Windows troubleshooting](https://github.com/nexu-io/open-design/blob/main/docs/windows-troubleshooting.md)

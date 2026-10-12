@@ -13,9 +13,11 @@ hue: rgba(87,217,232,.22)
 
 # Read-only como decisión arquitectónica
 
+> Documentación externa revisada el 12 de octubre de 2026. Se conservan los casos históricos y las decisiones operativas del entorno.
+
 ## Por qué no alcanza con prometer que no vamos a escribir
 
-En Deluge no existe una etapa de draft equivalente a un entorno de revisión. Crear o actualizar una función publica el cambio de inmediato. Un `PUT` mal ejecutado es un deploy productivo sin red de contención.
+En las funciones Deluge de Zoho CRM, crear o actualizar mediante la API publica el cambio inmediatamente. La API V8 distingue este comportamiento de Java, Node.js y Python, que sí admiten borradores y publicación separada. Un `PUT` sobre Deluge en producción puede afectar código activo: no hay que generalizar la protección de borradores de otros runtimes. [Funciones en V8](https://www.zoho.com/crm/developer/docs/api/v8/whats-new.html).
 
 Por eso la lectura no se planteó como una convención del script, sino como una propiedad del sistema.
 

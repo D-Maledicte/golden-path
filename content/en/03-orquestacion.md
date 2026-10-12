@@ -13,6 +13,8 @@ hue: rgba(236,95,189,.24)
 
 # Orchestration in Orca
 
+> External product documentation reviewed on October 12, 2026. Historical cases and local operating choices are preserved.
+
 ## Parallelism is not orchestration
 
 Opening several agents at once increases capacity, but it does not define who decides, what depends on what, or when a task is really finished.
@@ -54,6 +56,8 @@ Orca includes a structured layer, currently experimental, based on:
 - **Decision gate:** a pending decision that blocks progress.
 
 This option is useful when it matters to follow a task graph, record ownership or require every worker to formally close its dispatch. For a one-off prompt watched by a person, a regular terminal is still enough.
+
+Current documentation requires enabling the experimental feature and uses `run-create`, tasks and `worker-start`. The old `orchestration run` and `run-stop` commands are retired. A Run preserves coordination context; it does not place or schedule workers by itself. Consult `orca skills get orchestration --full` in the installation you will use before copying commands from another version. [Official flow](https://www.onorca.dev/docs/cli/orchestration).
 
 ## The manager’s role
 

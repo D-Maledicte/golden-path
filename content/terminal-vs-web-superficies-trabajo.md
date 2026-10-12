@@ -13,15 +13,17 @@ hue: rgba(87,217,232,.22)
 
 # CLI vs. web — el agente dentro del proyecto
 
+> Documentación externa revisada el 12 de octubre de 2026. Se conservan los casos históricos y las decisiones operativas del entorno.
+
 ## No es una competencia de inteligencia
 
 Trabajar desde Codex, Claude Code u OpenCode en una terminal no vuelve más capaz al modelo que conversa en una web. Cambia su **posición respecto del trabajo**.
 
-En una conversación web, el modelo suele recibir una pregunta, archivos elegidos por la persona o una copia del contexto. En un CLI, el agente puede habitar el repositorio: leer su estado actual, inspeccionar el historial, modificar archivos, ejecutar comandos y observar el resultado.
+En un chat sin entorno de ejecución conectado, el modelo recibe una pregunta, archivos elegidos por la persona o una copia del contexto. En un CLI, el agente puede habitar el repositorio: leer su estado actual, inspeccionar el historial, modificar archivos, ejecutar comandos y observar el resultado.
 
-La diferencia útil no es *chat versus código*. Es **contexto entregado versus contexto verificable**, y **recomendación versus ciclo de ejecución**.
+La diferencia útil es **contexto entregado versus contexto verificable**, y **recomendación versus ciclo de ejecución**. Esa frontera no coincide necesariamente con navegador versus terminal: Claude Code también puede trabajar sobre repositorios desde la web. Elegí por acceso al entorno, herramientas y permisos, no sólo por la apariencia de la interfaz. [Superficies oficiales](https://code.claude.com/docs/en/overview).
 
-> La web es una gran mesa de trabajo. La terminal es el taller conectado a la máquina.
+> La diferencia decisiva es si el agente puede inspeccionar, actuar y verificar en el entorno real de ejecución.
 
 ## Qué habilita realmente la terminal
 

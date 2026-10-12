@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # OpenDesign entre Windows, WSL, planes y proxies
 
-> Vigencia editorial: 14 de septiembre de 2026. Los mecanismos de autenticación, modelos y límites dependen de cada proveedor y pueden cambiar.
+> Vigencia editorial: 12 de octubre de 2026. Los mecanismos de autenticación, modelos y límites dependen de cada proveedor y pueden cambiar.
 
 “Local-first” suena a una sola computadora. En Windows con WSL, sin embargo, una computadora contiene dos entornos que comparten recursos pero no necesariamente ejecutables, credenciales ni sesiones.
 
@@ -27,7 +27,7 @@ OpenDesign puede llegar a un modelo por tres rutas conceptuales:
 
 | Ruta | Autenticación | Consumo |
 |---|---|---|
-| Local CLI | Sesión del agente instalado | Cuota del plan asociado al CLI |
+| Local CLI | Autenticación del agente instalado | Plan o facturación API, según esa autenticación |
 | BYOK / proveedor custom | Clave API | Cuenta o saldo API del proveedor |
 | OpenDesign Cloud | Cuenta de OpenDesign | Créditos incluidos o comprados allí |
 
@@ -57,7 +57,7 @@ Codex / Claude Code nativos
 Cuotas de ChatGPT y Claude
 ```
 
-La alternativa es ejecutar el daemon de OpenDesign dentro de WSL y abrir su interfaz desde el navegador de Windows. De esa forma el daemon comparte filesystem, PATH y credenciales con los agentes existentes.
+Si los agentes ya viven en WSL, la [guía oficial de WSL2](https://github.com/nexu-io/open-design/blob/main/docs/wsl-setup.md) recomienda ejecutar OpenDesign en ese mismo entorno. Así CLI, daemon, módulos y credenciales coinciden. La interfaz puede abrirse desde el navegador de Windows. Revisá también qué ejecutable resuelve `od`: Linux incluye una utilidad del sistema con ese nombre, ajena a OpenDesign.
 
 ```text
 Navegador Windows
@@ -79,9 +79,11 @@ Proxy local en 127.0.0.1
 Proveedor externo
 ```
 
+La conectividad Windows–WSL y las defensas SSRF del daemon también importan: OpenDesign bloquea por defecto endpoints privados/internos; si esa protección rechaza el destino, revisá la allowlist exacta documentada, sin abrir rangos amplios. Es una condición de despliegue que hay que probar. [Seguridad del proxy](https://github.com/nexu-io/open-design#use-opendesign-from-your-coding-agent).
+
 Este camino no reutiliza automáticamente la cuota de Codex o Claude. OpenDesign cree que está hablando con una API; el proxy decide qué proveedor y credencial utiliza detrás.
 
-El patrón es especialmente adecuado para servicios que publican endpoints y claves de API, como OpenCode Go. Permite adaptar protocolos, normalizar modelos y agregar el identificador estable de sesión que Go solicita para routing y prompt caching.
+El patrón permite adaptar protocolos y sesiones, pero publicar una API no habilita cualquier uso. [OpenCode Go](https://opencode.ai/v2/docs/console/go) está pensado para tráfico de agentes de programación: exige un cliente identificable y una sesión estable. Un proxy no vuelve compatible un workload arbitrario; hay que verificar el cliente y el endpoint de cada modelo, que puede usar Responses, Chat Completions o Messages.
 
 Un proxy no es necesariamente un parche. Puede convertirse en una frontera de control:
 
@@ -193,4 +195,6 @@ Ninguna opción gana siempre. La decisión correcta surge de elegir qué queremo
 - [OpenDesign](https://open-design.ai/)
 - [Quickstart de OpenDesign](https://github.com/nexu-io/open-design/blob/main/QUICKSTART.md)
 - [Adaptadores de agentes](https://open-design.ai/agents/)
-- [OpenCode Go](https://opencode.ai/docs/go/)
+- [OpenCode Go](https://opencode.ai/v2/docs/console/go)
+- [WSL2 setup](https://github.com/nexu-io/open-design/blob/main/docs/wsl-setup.md)
+- [Windows troubleshooting](https://github.com/nexu-io/open-design/blob/main/docs/windows-troubleshooting.md)
