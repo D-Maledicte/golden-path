@@ -46,7 +46,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-09-23',
   devtools: { enabled: true },
 
-  modules: ['@nuxt/icon', '@vercel/analytics'],
+  modules: ['@nuxt/icon', '@vercel/analytics', '@vercel/speed-insights/nuxt'],
 
   css: ['~/assets/css/main.css'],
 
