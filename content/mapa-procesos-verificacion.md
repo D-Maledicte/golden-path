@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Del backup al mapa de procesos
 
-> Actualizado el 12 de octubre de 2026. Se preserva la prueba piloto de análisis y se distingue de la posterior etapa de despliegue multiusuario.
+> Registros operativos revisados el 17 de noviembre de 2026. El piloto original y una propuesta posterior ilustran momentos distintos de la verificación.
 
 ## El salto de la segunda etapa
 
@@ -76,7 +76,11 @@ Son verificaciones diferentes:
 
 Una corrección de idempotencia, por ejemplo, puede tener un chequeo estático que detecte la condición de protección y aun necesitar una prueba de ejecuciones repetidas para demostrar que no duplica efectos. La presencia de `validar.sh` mejora la revisión; no autoriza a confundir inspección de código con validación integral.
 
-La documentación de la etapa multiusuario registra controles probados con escritura deshabilitada y mantiene pendiente el primer despliegue real desde `cambios/`. El circuito completo es la dirección implementada por el proyecto, con esa validación operativa aún abierta. La prueba piloto que sigue demuestra el análisis y sus entregables, no un despliegue posterior.
+### Una lectura puede aislar la falla
+
+En un caso posterior, un tablero alimentado por el CRM omitía registros porque una función traía sólo la primera página. Una consulta de sólo lectura reprodujo el faltante y una segunda consulta recuperó los registros omitidos. El equipo también comprobó un caso por debajo del límite como control. Esa evidencia sostuvo la revisión del cambio de paginación y el PR se integró.
+
+Al momento de la revisión, todavía quedaba pendiente ejecutar la función Deluge modificada. Las consultas demostraron la causa y el conjunto de datos esperado. Para verificar el comportamiento de la función hacía falta observar el resultado después de publicarla.
 
 ## Prueba piloto
 

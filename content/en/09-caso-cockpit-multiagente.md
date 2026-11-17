@@ -65,22 +65,23 @@ The V4 documentation, reviewed on October 12, 2026, separates responsibilities p
 | --- | --- | --- |
 | General direction | Opus | Conversation with the human operator, priorities and cross-cutting decisions |
 | Integration | Sol at low effort | Reconstruct state, order dependencies and integrate package evidence |
-| Package coordination | Sol at medium effort | Lead a bounded capability through acceptance |
+| Package coordination | Sol at medium effort or Opus at low effort | Lead a bounded capability through acceptance |
 
-These are project assignments, not universal recommendations or model equivalences. LIVE implementation uses Luna at high effort or Sonnet; auditing switches to the opposite model family. Different families add review diversity, but do not guarantee error detection or replace tests.
+These are project assignments, not universal recommendations or model equivalences. LIVE implementation uses Luna at high effort or Sonnet; auditing switches to the opposite model family. The package can use an inverted assignment: Opus coordinates, Sonnet implements, and Sol audits. Review from a different family adds a second perspective alongside the tests.
 
-The unit remains one capability, one task, one branch and one worktree. **BUILD/LIVE and the three-part gate already existed in V3**: parity with CRM behavior, prepared recovery and auditing. V4 changes authority allocation and permits small LIVE operations within a previously authorized scope, with verification and bounded automatic rollback. Deletions and tombstones, the records marking deletion, require explicit human permission. A repository rule does not grant permissions in another session or tool.
+The current unit is **one capability, one Notion task, one branch, and one worktree**. Implementation, corrections, and audit share that branch and worktree. The reviewer works in read-only mode and records a separate verdict against the candidate. Parallelism happens across capabilities, and the package coordinator keeps ownership through handoff to integration.
+
+**BUILD/LIVE and the three-part gate already existed in V3.** V4 permits narrowly scoped LIVE changes when they cover one section, preserve its contract, involve no deletions, and have a one-step rollback. The gate requires parity with CRM, an executable rollback, and cross-family audit. The Catalyst deployment wrappers require a structured `gate.json` for this LIVE path and reject a pending or incomplete gate. Deletions and tombstones still require explicit human permission.
 
 General direction receives a decision queue grouped by urgency: incidents, unblocking decisions and non-urgent matters. The integrator gathers evidence; it does not interrupt the person for every update or treat a pending decision as implied permission.
 
 ### From merge to accepted outcome
 
-The current circuit distinguishes **locally ready, applied and accepted**. A merged PR proves integration; an immediate postflight proves only the behavior it actually measured. Natural acceptance requires observing the agreed real operating cycle. If work remains, the handoff retains the remainder, its owner and the missing evidence: handing a problem to another person does not resolve it.
+A local test, a merged PR, and a production check are evidence of different events. One staged rollout package passed local checks and cross-family audit and was merged with the operational gate and LIVE application still pending. Its handoff preserved the candidate, the checks performed, and the remaining decision for the integrator.
 
-Resumption also requires reconstructing actual PRs, branches, workers and deployments before opening new work. This prevents duplicating an implementation that kept advancing while the conversation was closed.
+The team tracks local readiness, integration, application, immediate postflight, and acceptance after the agreed operating cycle. The handoff records the latest milestone actually demonstrated, the remaining work, its owner, and the next piece of evidence.
 
-This update summarizes anonymized project documentation and records reviewed on October 12. It is not a fresh execution of those tests or universal validation of the controls. Role contracts must be checked against effective runtime permissions, as explained in [the environment is the policy](/en/entrada/modelos-guiados-el-entorno-es-la-politica).
-
+Before resuming, reconcile active workers and worktrees with Git, the task record, and the systems that show what is running. The [continuity guide](/en/entrada/continuidad-y-observabilidad) explains where each piece of evidence lives. These examples come from anonymized project records reviewed on November 17, 2026.
 
 ## What Orca contributed
 
@@ -94,7 +95,7 @@ Different CLIs coexisted on the same surface. The model could be chosen per task
 
 ### Real isolation
 
-Implementations did not compete for the same checkout. Each branch could be reviewed, compared or discarded without contaminating the main work.
+Each capability kept its own checkout. Within that checkout, one implementer and a read-only reviewer could work against the same candidate and its evidence.
 
 ### Continuity
 

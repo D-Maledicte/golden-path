@@ -51,11 +51,16 @@ La regla es sencilla: **primero identificar, después intervenir**.
 
 ## Retomar con el estado real: revisión V4
 
-La revisión del caso operativo del 12 de octubre de 2026 refuerza un paso anterior al relanzamiento: reconstruir PRs abiertos o integrados, ramas y worktrees, workers todavía activos y despliegues efectivos. El resumen de la última conversación sirve como pista; no reemplaza esa lectura. Si el trabajo ya existe o sigue ejecutándose, abrir otro worker puede duplicarlo o competir por el mismo recurso.
+Antes de relanzar trabajo, reconstruí PRs abiertos o integrados, ramas y worktrees, workers todavía activos y despliegues efectivos. Usá la última conversación para localizar evidencia. Después comprobá cada hecho donde se registra o se puede observar.
 
-El handoff también debe separar **listo local, aplicado y aceptado**. Un cambio integrado puede seguir esperando publicación; uno publicado puede necesitar el siguiente ciclo real para confirmar el objetivo. Cuando queda un remanente, registrá responsable, evidencia faltante y próximo paso. Un proceso finalizado o una entrega al operador no prueban que la necesidad original esté resuelta.
+| Fuente | Pregunta que responde |
+| --- | --- |
+| Tarea en Notion | ¿Qué tiene prioridad, quién responde por la capacidad y qué aceptación o decisión falta? |
+| Git y paquete de trabajo | ¿Qué commit se propuso o integró, qué pruebas corrieron y qué acreditó la auditoría? |
+| Sistemas en ejecución | ¿Qué se aplicó, qué observó el postflight y se verificó el resultado en el ciclo acordado? |
+| Cockpit | ¿Qué está avanzando, qué está bloqueado y qué requiere atención ahora? |
 
-Es una evolución del [caso multiagente](/entrada/caso-orca-cockpit-multiagente), no una garantía de recuperación de Orca: el estado operativo debe verificarse fuera de la interfaz.
+En el [caso multiagente](/entrada/caso-orca-cockpit-multiagente), la entrega distingue listo local, merge, aplicación, postflight y aceptación. El cockpit reúne esa lectura para que el operador se oriente. Si una fuente no se puede comprobar, marcá ese dato como desconocido y dejá anotada la verificación que falta. Así evitás que un resumen viejo o un PR en verde disparen trabajo duplicado o un cierre prematuro.
 
 ## Observabilidad por pane
 

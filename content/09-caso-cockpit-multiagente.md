@@ -65,22 +65,23 @@ La documentación V4, revisada el 12 de octubre de 2026, separa responsabilidade
 | --- | --- | --- |
 | Dirección general | Opus | Conversación con la persona, prioridades y decisiones transversales |
 | Integración | Sol con esfuerzo low | Reconstruir estado, ordenar dependencias e integrar evidencia de los paquetes |
-| Coordinación de paquete | Sol con esfuerzo medium | Conducir una capacidad acotada hasta su aceptación |
+| Coordinación de paquete | Sol con esfuerzo medium u Opus con esfuerzo low | Conducir una capacidad acotada hasta su aceptación |
 
-Son asignaciones de este proyecto, no una recomendación universal ni una equivalencia entre modelos. Para implementación LIVE se usa Luna con esfuerzo high o Sonnet; la auditoría cambia a la familia opuesta al implementador. Separar familias agrega diversidad de revisión, pero no garantiza detectar errores ni reemplaza las pruebas.
+Son asignaciones de este proyecto, no una recomendación universal ni una equivalencia entre modelos. Para implementación LIVE se usa Luna con esfuerzo high o Sonnet; la auditoría cambia a la familia opuesta al implementador. El paquete también puede seguir un esquema invertido: Opus coordina, Sonnet implementa y Sol audita. La revisión cruzada aporta una segunda perspectiva junto con las pruebas.
 
-La unidad sigue siendo una capacidad, una tarea, una rama y un worktree. **BUILD/LIVE y el gate de tres partes ya existían en V3**: paridad con el comportamiento del CRM, recuperación preparada y auditoría. V4 modifica el reparto de autoridad y permite operaciones LIVE pequeñas dentro de un alcance previamente autorizado, con verificación y reversión automática acotada. Borrados y tombstones, las marcas de eliminación, requieren permiso humano explícito. Tener una regla en el repositorio no concede permisos en otra sesión o herramienta.
+La unidad vigente es **una capacidad, una tarea de Notion, una rama y un worktree**. Implementación, correcciones y auditoría comparten esa rama y ese checkout. El auditor trabaja en modo lectura y registra un veredicto independiente sobre el candidato. El paralelismo ocurre entre capacidades y el coordinador de paquete conserva la responsabilidad hasta el handoff a integración.
+
+**BUILD/LIVE y el gate de tres partes ya existían en V3.** V4 admite cambios LIVE acotados a una sección, con el contrato intacto, sin borrados y con rollback de un paso. El gate exige paridad contra el CRM, rollback ejecutable y auditoría cruzada. Los wrappers de despliegue de Catalyst exigen un `gate.json` para este recorrido LIVE y rechazan un gate pendiente o incompleto. Los borrados y tombstones siguen requiriendo permiso humano explícito.
 
 La dirección general recibe una bandeja de decisiones agrupadas por urgencia: incidentes, destrabes y asuntos sin apuro. El integrador reúne evidencia; no interrumpe a la persona por cada avance ni convierte una decisión pendiente en permiso implícito.
 
 ### Del merge al resultado aceptado
 
-El circuito vigente distingue **listo local, aplicado y aceptado**. Un PR integrado demuestra integración; un postflight inmediato demuestra el comportamiento que efectivamente midió. La aceptación natural requiere observar el ciclo real acordado. Si queda trabajo, el handoff conserva el remanente, su responsable y la evidencia que falta: entregar el problema a otra persona no equivale a resolverlo.
+Una prueba local, un PR integrado y una comprobación en producción acreditan hechos distintos. Un paquete de activación por fases pasó las pruebas locales y la auditoría cruzada y se integró con el gate operativo y la aplicación LIVE todavía pendientes. El handoff dejó identificado el candidato, las verificaciones hechas y la decisión que quedaba para integración.
 
-Al retomar, primero se reconstruyen PRs, ramas, workers y despliegues reales. Sólo después se abre trabajo nuevo. Esa comprobación evita duplicar una implementación que siguió avanzando mientras la conversación estaba cerrada.
+El equipo registra cuándo el paquete quedó listo local, cuándo se integró y aplicó, qué se observó en la verificación inmediata tras el despliegue (postflight) y si hubo aceptación en el ciclo real acordado. El handoff deja el último hito demostrado, el remanente, el responsable y la próxima evidencia necesaria.
 
-Esta actualización resume documentación y registros del proyecto revisados el 12 de octubre, anonimizados. No constituye una nueva ejecución de sus pruebas ni una validación universal de sus controles. Los contratos de rol deben contrastarse con los permisos efectivos del runtime, como explica [el entorno es la política](/entrada/modelos-guiados-el-entorno-es-la-politica).
-
+Al retomar, cruzá workers y worktrees activos con Git, la tarea y los sistemas que muestran qué está corriendo. La [guía de continuidad](/entrada/continuidad-y-observabilidad) explica dónde buscar cada evidencia. Los ejemplos se basan en registros anonimizados del proyecto revisados el 17 de noviembre de 2026.
 
 ## Qué aportó Orca
 
@@ -94,7 +95,7 @@ Distintos CLIs convivieron en una misma superficie. El modelo pudo elegirse por 
 
 ### Aislamiento real
 
-Las implementaciones no compitieron por el mismo checkout. Cada rama podía revisarse, compararse o descartarse sin contaminar el trabajo principal.
+Cada capacidad conservó su propio checkout. Dentro de él, un implementador y un auditor en modo lectura podían trabajar sobre el mismo candidato y su evidencia.
 
 ### Continuidad
 

@@ -13,7 +13,7 @@ hue: rgba(237,195,94,.25)
 
 # From backup to a CRM function platform
 
-> Updated on October 12, 2026 with the internal evolution known as V2, documented in the project as the multiuser deployment stage. Implemented capabilities and pending tests are distinguished below.
+> Operational records reviewed on November 17, 2026. The multi-user deployment path has recorded production use.
 
 ## The problem
 
@@ -72,6 +72,7 @@ Production → change baseline → proposal in cambios/
   → pull request → owner review → merge
   → preflight checks → explicit deployment
   → download again and compare
+  → next snapshot reflects production → remove the proposal in a separate PR
 ```
 
 This separation avoids two different mistakes: editing a backup as though it were code ready to publish, and giving production permissions to everyone who needs to analyze it. A contributor can prepare a proposal with read access; publication belongs to another role.
@@ -80,9 +81,9 @@ The documented normal path requires checking function identity, file provenance 
 
 ## What is demonstrated and what remains open
 
-The internal documentation reviewed describes the implementation of this path and records tests of its controls with writes disabled. It also leaves the first real deployment from the changes directory and contributor onboarding pending. This is therefore an implemented capability with incomplete operational validation, rather than a production workflow already proven end to end.
+The records include production deployments where the new code was retrieved from CRM and verified. A later PR removed a batch of proposals after comparing them with the production snapshot. The team compared one formatting difference directly against CRM. Together, these records show how a proposal is retired once the generated tree reflects the published code.
 
-The write is not an atomic transaction with automatic rollback: if the subsequent comparison fails, the tool reports the problem and requires inspection. Reading back checks content; it does not by itself test business-flow behavior, associations or a function's external effects. Those outcomes need specific tests and observation after the change.
+Each checkpoint answers a different question. Git records what was approved. Readback checks what CRM stored, using the tool's comparison rules. The next snapshot makes the observed code available for future analysis. To verify how the function behaves or whether an automation actually calls it, the team still needs evidence from the relevant business flow.
 
 ## When this design makes sense
 
@@ -92,4 +93,4 @@ The prerequisite for going further is sustaining both halves: a reliable picture
 
 ## The benefit
 
-The backup had already made it possible to review changes, audit risks and analyze state without distributing production credentials. The next stage uses that foundation to organize the path from a finding to publication. The observed benefit of reading is preserved; closing the full deployment loop remains subject to the pending tests.
+The team can review and propose changes from a shared production snapshot while keeping write authority with the deployment owner. The observed publication and cleanup give future reviewers a way to trace the approved proposal back to the code the CRM returned.

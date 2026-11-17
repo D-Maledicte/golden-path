@@ -13,7 +13,7 @@ hue: rgba(237,195,94,.25)
 
 # Del backup a una plataforma de funciones CRM
 
-> Actualizado el 12 de octubre de 2026 con la evolución interna conocida como V2, documentada en el proyecto como etapa de despliegue multiusuario. Las capacidades implementadas y las pruebas pendientes se distinguen abajo.
+> Registros operativos revisados el 17 de noviembre de 2026. La vía de despliegue multiusuario ya tiene uso registrado en producción.
 
 ## El problema
 
@@ -72,6 +72,7 @@ Producción → base del cambio → propuesta en cambios/
   → pull request → revisión del responsable → merge
   → controles previos → despliegue explícito
   → nueva descarga y comparación
+  → el siguiente snapshot refleja producción → retiro de la propuesta en otro PR
 ```
 
 La separación evita dos errores distintos: editar un backup como si fuera código listo para publicar y entregar permisos productivos a toda persona que necesita analizarlo. Un colaborador puede preparar una propuesta con acceso de lectura; la publicación pertenece a otro rol.
@@ -80,9 +81,9 @@ El recorrido normal documentado exige comprobar la identidad de la función, la 
 
 ## Qué está demostrado y qué queda abierto
 
-La documentación interna revisada describe la implementación de esta vía y registra pruebas de sus controles con la escritura deshabilitada. También deja pendiente el primer despliegue real desde el directorio de cambios y la incorporación de colaboradores. Por eso corresponde hablar de una capacidad implementada con validación operativa todavía incompleta, no de un circuito productivo ya probado de punta a punta.
+Los registros incluyen despliegues en producción en los que se volvió a descargar el código del CRM y se verificó el resultado. Un PR posterior retiró una tanda de propuestas tras compararlas con el snapshot de producción. Para una diferencia de formato se hizo además una comparación directa contra el CRM. Es el cierre del ciclo de propuesta: el árbol generado refleja lo publicado y el archivo que esperaba deploy se puede retirar.
 
-La escritura no es una transacción atómica con rollback automático: si la comparación posterior falla, la herramienta informa el problema y exige inspección. La lectura posterior comprueba contenido; no prueba por sí sola el comportamiento del circuito de negocio, sus asociaciones ni los efectos externos de una función. Esos resultados requieren pruebas específicas y observación después del cambio.
+Cada comprobación responde una pregunta. Git registra qué se aprobó. La lectura posterior comprueba qué guardó el CRM bajo el criterio de comparación de la herramienta. El siguiente snapshot deja el código observado disponible para nuevos análisis. Para verificar cómo se comporta la función o si una automatización la invoca, hace falta evidencia del circuito de negocio correspondiente.
 
 ## Cuándo conviene este diseño
 
@@ -92,4 +93,4 @@ La condición para avanzar es poder sostener ambas mitades: una fotografía conf
 
 ## Beneficio obtenido
 
-El backup ya había permitido revisar cambios, auditar riesgos y analizar el estado sin repartir credenciales productivas. La nueva etapa usa esa base para ordenar el trayecto entre un hallazgo y su publicación. El beneficio observado de la lectura se conserva; el cierre completo del despliegue queda sujeto a las pruebas pendientes.
+El equipo puede revisar y proponer cambios sobre una fotografía compartida de producción, con la escritura a cargo del responsable del despliegue. Los registros de publicación y limpieza permiten rastrear la propuesta aprobada hasta el código que devolvió el CRM.

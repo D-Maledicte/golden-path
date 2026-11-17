@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # From backup to process map
 
-> Updated on October 12, 2026. The analysis pilot is preserved and distinguished from the subsequent multiuser deployment stage.
+> Operational records reviewed on November 17, 2026. The original analysis pilot and a later proposal illustrate different stages of verification.
 
 ## The second-stage leap
 
@@ -76,7 +76,11 @@ These are different checks:
 
 An idempotency fix, for example, can have a static check detecting its guard condition and still need a repeated-execution test to demonstrate that it does not duplicate effects. Having `validar.sh` improves review; it does not justify confusing code inspection with comprehensive validation.
 
-The multiuser-stage documentation records controls tested with writes disabled and keeps the first real deployment from `cambios/` pending. The full workflow is the direction implemented by the project, with that operational validation still open. The pilot below demonstrates analysis and its deliverables, not a subsequent deployment.
+### A read-only check can isolate the failure
+
+In a later case, a dashboard fed by CRM missed records because a function fetched only the first page. A read-only query reproduced the gap, and a second query retrieved the missing records. The team also checked a case below the limit to establish a baseline. That evidence supported the review of the pagination change and the PR was merged.
+
+At the time of review, execution of the modified Deluge function was still pending. The queries demonstrated the root cause and the expected data. Verifying the function's behavior required observing the result after publication.
 
 ## Pilot test
 

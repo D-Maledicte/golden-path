@@ -51,11 +51,16 @@ The rule is simple: **identify first, intervene second**.
 
 ## Resume from actual state: V4 review
 
-The October 12, 2026 operational case review reinforces a step before relaunching: reconstruct open or merged PRs, branches and worktrees, workers still running and actual deployments. The last conversation summary is a lead, not a substitute for that inspection. If work already exists or is still running, opening another worker can duplicate it or create competition for the same resource.
+Before relaunching work, reconstruct open or merged PRs, branches and worktrees, workers still active, and actual deployments. Use the last conversation to locate evidence. Then check each fact where it is recorded or where it can be observed.
 
-The handoff must also distinguish **locally ready, applied and accepted**. An integrated change may still await publication; a published change may need the next real cycle to confirm its objective. When work remains, record its owner, missing evidence and next step. A finished process or delivery to the operator does not prove the original need has been resolved.
+| Source | Question it answers |
+| --- | --- |
+| Notion task | What takes priority, who owns it, and what acceptance or decision remains? |
+| Git and the work package | Which commit was proposed or merged, which tests ran, and what did the audit establish? |
+| Running systems | What is deployed, what did the postflight observe, and did the agreed operating cycle verify the outcome? |
+| Cockpit | What is moving, what is blocked, and what requires attention now? |
 
-This evolves the [multi-agent case](/en/entrada/caso-orca-cockpit-multiagente); it is not an Orca recovery guarantee. Operational state must be verified outside the interface.
+In the [multi-agent case](/en/entrada/caso-orca-cockpit-multiagente), the delivery record distinguishes local readiness, merge, application, postflight, and acceptance. The cockpit helps the operator orient across all five. When a source cannot be checked, mark that part as unknown and record the check that would resolve it. This prevents a stale summary or a green PR from triggering duplicate work or premature closure.
 
 ## Per-pane observability
 

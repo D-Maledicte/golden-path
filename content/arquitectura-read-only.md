@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # Read-only como decisión arquitectónica
 
-> Actualizado el 12 de octubre de 2026. La etapa inicial era enteramente read-only; la evolución multiusuario conserva esa frontera para observación y agrega una vía de escritura controlada.
+> Registros operativos revisados el 17 de noviembre de 2026. El uso en producción muestra por qué observación y publicación tienen autoridades separadas.
 
 ## Por qué no alcanza con prometer que no vamos a escribir
 
@@ -54,7 +54,11 @@ Si producción cambió en el medio dentro del recorrido protegido, la propuesta 
 
 La comparación normalizada elimina espacios y paréntesis: puede considerar iguales textos distintos y no es una prueba semántica. Si la verificación posterior falla, se informa el error; no hay rollback automático. La operación puede haber publicado ya, y un fallo de notificación tampoco la deshace.
 
-Estos controles complementan la revisión humana. Tampoco convierten Deluge en un runtime con borradores: el riesgo de publicación inmediata sigue siendo relevante. La documentación registra pruebas sin escritura y deja pendiente el primer despliegue real de esta vía; no hay que presentar el guardrail probado como una prueba completa del despliegue.
+### Una tanda puede tener más de un resultado
+
+En una tanda registrada en producción, el equipo verificó dos publicaciones. El CRM rechazó una tercera función al compilar y esa función quedó sin publicar. Las tres propuestas formaban parte del mismo pase, con resultados distintos por función.
+
+Registrá el resultado por función y volvé a leer el código vigente antes de decidir qué reintentar. Si el rechazo ocurrió claramente antes de publicar, la corrección puede volver a revisión. Si el error llegó después de escribir o el resultado es incierto, compará primero la versión observada con la base y con el cambio esperado. Si la tanda tiene dependencias, revisalas contra el conjunto que efectivamente quedó activo.
 
 ## Decisiones que evitan backups falsos
 

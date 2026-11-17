@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # Read-only as an architectural decision
 
-> Updated on October 12, 2026. The initial stage was entirely read-only; the multiuser evolution preserves that boundary for observation and adds a controlled write path.
+> Operational records reviewed on November 17, 2026. Production use illustrates why observation and publication have separate authority.
 
 ## Why promising not to write is not enough
 
@@ -54,7 +54,11 @@ If production changed in the meantime within the protected path, the proposal mu
 
 The normalized comparison removes whitespace and parentheses: it can treat different texts as equal and is not a semantic test. If post-write verification fails, the error is reported; there is no automatic rollback. The operation may already have published, and a notification failure does not undo it either.
 
-These controls complement human review. They do not turn Deluge into a runtime with drafts: the risk of immediate publication remains relevant. The documentation records tests without writes and leaves the first real deployment through this path pending; a tested guardrail must not be presented as a complete deployment test.
+### A batch can have more than one outcome
+
+In one recorded production batch, the team verified two publications. CRM rejected a third function during compilation and left it unpublished. All three proposals were part of the same rollout, with different outcomes per function.
+
+Record the result per function and read back the current code before deciding what to retry. If a call fails clearly before publication, the correction can go through review again. If the error comes after the write or its outcome is uncertain, compare the observed version with the baseline and the intended change first. For a multi-function rollout, check dependent functions against the set that actually went live.
 
 ## Decisions that prevent fake backups
 
