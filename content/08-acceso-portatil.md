@@ -26,6 +26,12 @@ El dispositivo portátil no recrea el stack ni mantiene clones paralelos. Funcio
 - **Red privada:** conecta ambos dispositivos sin abrir SSH a Internet.
 - **Identidad:** cada cliente posee su propia clave revocable.
 
+## Notebook, móvil y servidor compartido
+
+- **Notebook por SSH.** Conserva el recorrido de esta guía y sirve para operar directamente sobre el host de desarrollo.
+- **Teléfono emparejado.** Orca Mobile, en beta, permite ver estados y responder desde iOS o Android. El runtime emparejado conserva las sesiones. [Mobile companion](https://orca.dev/docs/mobile)
+- **Servidor compartido.** Para que la continuidad dependa de un host siempre encendido, podés emparejar clientes a un Remote Orca Server con Orca Desktop o `orca serve`. [Remote Orca Servers](https://orca.dev/docs/remote-servers)
+
 ## Controles recomendados
 
 ### Destino estable

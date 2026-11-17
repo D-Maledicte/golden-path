@@ -249,6 +249,24 @@ OpenCode evaluates rules by match and the last matching rule wins, which is why 
 
 This example is an editorial baseline, not a universal configuration. Each project must declare its safe commands and forbidden operations. A pattern as broad as `*deploy*` can also block innocent commands containing that text; the real policy has to be tested with the CLI and version in use.
 
+### Discovery profile for OpenCode V2
+
+For a read-only worker in a disposable checkout, V2 lets you define an ordered list of actions. This example permits reads and two exact Git queries. Prepare an environment that contains only the files the worker may see and remove unnecessary credentials.
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permissions": [
+    { "action": "*", "resource": "*", "effect": "deny" },
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "shell", "resource": "git status --short", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --no-ext-diff --no-textconv", "effect": "allow" }
+  ]
+}
+```
+
+The last matching rule wins. In the actual session, verify that it can read the repository, that a write is rejected, and that a command outside the list is blocked. Read permission covers the files the tool can reach. Enforce filesystem, network, and credential boundaries outside the CLI. [V2 permissions](https://opencode.ai/v2/docs/permissions/)
+
 ## How to prepare an environment before launching the agent
 
 1. Create an exclusive branch and worktree.

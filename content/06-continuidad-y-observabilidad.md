@@ -37,6 +37,10 @@ Por eso hay tres niveles distintos:
 
 Sólo el tercero sobrevive de forma independiente a una caída total y permite reconstruir con confianza.
 
+### Hibernación de sesiones
+
+Orca documenta una hibernación experimental, desactivada por defecto. Si una terminal de agente elegible terminó su turno y lleva tiempo inactiva, Orca puede detener su proceso y reanudar la sesión al abrir el worktree. Un turno en espera de respuesta o una tarea de orquestación pendiente impiden esa hibernación. Al volver, distinguí entre conversación reanudada, proceso original vivo y cambios persistidos en disco. [Agent hibernation](https://orca.dev/docs/agents/hibernation)
+
 ## Lo que aprendimos recuperando sesiones
 
 En recuperaciones reales fue necesario distinguir entre una interfaz caída, un servicio de Orca detenido, un agente todavía vivo y un worktree sano aunque la conversación ya no pudiera retomarse.

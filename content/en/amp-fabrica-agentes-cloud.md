@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # Amp and the cloud agent factory
 
-> Editorial validity: October 12, 2026. Amp states a frontier philosophy with no commitment to backward compatibility; models, routing, pricing and features can change quickly.
+> Model selector reviewed on November 17, 2026. Amp states a frontier philosophy with no commitment to backward compatibility; models, routing, pricing and features can change quickly.
 
 Amp is not interesting because it invented yet another agent capable of editing files. That space is already crowded. What is appealing is that it tries to turn everything around the agent into a product: the machine where it works, the context it keeps, the repository it modifies, the tests it runs, the agents it coordinates and the continuity needed to finish even when the user’s computer is off.
 
@@ -31,24 +31,13 @@ The novelty is not in any single piece. It is in treating them as a single opera
 
 That combination lets you ask for something more demanding than “write this function”. You can ask it to implement the change, bring the system up, test it end to end and leave a branch or pull request with evidence attached.
 
-## The Dial: choose effort before brand
+## Model and effort selector
 
-Amp offers four built-in modes through The Dial: `low`, `medium`, `high` and `ultra`. The idea is to choose by difficulty and the cost of being wrong, not to fall in love with a model’s name.
+The [Amp selector](https://ampcode.com/docs/model-selector) lets you pick the model and effort for each thread. **Staff Pick** is a starting point maintained by Amp. When you pick a model, the selector shows its supported effort levels and recommends one. Amp pairs each model with instructions and tools from its harness.
 
-| Mode | Practical reading |
-|---|---|
-| `low` | Small changes, tests and refactors with an obvious outcome |
-| `medium` | Everyday development with some ambiguity or several steps |
-| `high` | Delicate work that should arrive close to a final review |
-| `ultra` | Architecture, migrations and open problems across several systems |
+In a model thread, you can change both settings and continue with the next message. The transcript records the switch. When you change models, the first response reads the thread without the old cache, which can make that turn more expensive. Threads started with Claude Code or a plugin agent keep that agent.
 
-Behind each position, Amp can combine a main model, reasoning level, tools, instructions, subagents and an **Oracle** that provides a second opinion. Automatic routing changes when better models appear, while the intent of the mode stays stable.
-
-The abstraction is healthy: an organization should not rewrite its policy every time the provider ranking changes. “Use high capability when a subtle omission would be expensive” ages better than “always use model X”.
-
-That said, Amp does not force you to hand over all control. You can pin models and effort separately for the main agent, the Oracle and the subagents, and define custom modes through plugins.
-
-The [Dial](https://ampcode.com/docs/the-dial) is customizable, but a Thread keeps the mode selected for its first message: switching requires a new thread. Choose the effort before starting.
+For a verifiable change, start at the lowest effort that can reliably pass the tests. If the work gets harder, you can raise effort in the same thread. If you change models, record the switch before comparing cost or quality across runs.
 
 ## Two ways to delegate
 
@@ -68,7 +57,7 @@ Amp and Orca overlap, but they are not exactly the same product.
 |---|---|---|
 | Unit of work | Session, terminal and worktree managed by the user | Thread with a working copy and an isolated Orb |
 | Infrastructure | Local machine, WSL, SSH and your own servers | Cloud Orbs, local execution or your own runners |
-| Model selection | Explicit and granular per tool | Routing by difficulty, with the option to pin it |
+| Model selection | Explicit and granular by tool | Per-thread model and effort, with Staff Pick as a starting option |
 | Coordination | Flexible, visible and hand-built | Built-in delegation between subagents and Threads |
 | Continuity | Depends on the processes and hosts you manage | The Orb keeps working and pauses automatically |
 | GitHub | Credentials and flow from the local environment | GitHub App, short-lived tokens, branches, PRs and CI built in |
@@ -104,7 +93,7 @@ Continuity does not replace governance. It makes it more important.
 
 The [current pricing](https://ampcode.com/docs/pricing) combines monthly tiers and pay-as-you-go, separating agent and tool usage from the Orb allowance. Orbs are metered by the minute, larger sizes use more allowance, and paused Orbs cost nothing.
 
-Compatible keys and subscriptions can be connected, but check the effective routing. A Claude subscription covers **Claude Code mode**, not Amp’s own modes. With ChatGPT, uncovered calls and tools still consume Amp credits; the subscription does not cover the Orb either. [Mode-specific details](https://ampcode.com/docs/the-dial).
+The selector shows what pays for each model: an eligible subscription, your own API key, or Amp credits. Check the active connection and machine charges separately. A ChatGPT subscription can cover use of OpenAI models, and a Claude subscription lets you start a thread with the Claude Code agent. [Billing in the model selector](https://ampcode.com/docs/model-selector#who-pays).
 
 To evaluate the product, comparing price per token is not enough. You have to measure:
 
@@ -142,7 +131,7 @@ For someone who already built a hand-made cockpit, Amp may feel less like a revo
 ## Official sources
 
 - [Introduction to Amp](https://ampcode.com/docs)
-- [The Dial](https://ampcode.com/docs/the-dial)
+- [Model Selector](https://ampcode.com/docs/model-selector)
 - [Modes & Models](https://ampcode.com/docs/models-and-subagents)
 - [Orbs](https://ampcode.com/docs/orbs)
 - [Agent to Agent](https://ampcode.com/docs/orbs/agent-to-agent)

@@ -17,7 +17,7 @@ hue: rgba(168,106,255,.24)
 
 Many steps in an AI application do not need another paragraph. They need to know **what to do next**: which team to send a request to, whether a claim is supported, which candidate to review first or whether it is worth calling a more expensive model.
 
-[Jev 1.13](https://openrouter.ai/typesafe/jev-1.13), by TypeSafe, is designed for that kind of decision. It takes text or structured state and returns typed answers, not free prose. The [System One documentation](https://docs.typesafe.ai/concepts/system-one) distinguishes three primitives:
+[Jev 1.14](https://openrouter.ai/typesafe/jev-1.14), by TypeSafe, is designed for that kind of decision. It takes text or structured state and returns typed answers, not free prose. The [System One documentation](https://docs.typesafe.ai/concepts/system-one) distinguishes three primitives:
 
 | Primitive | Question | Answer |
 | --- | --- | --- |
@@ -26,6 +26,10 @@ Many steps in an AI application do not need another paragraph. They need to know
 | **Noul** | Is this condition met? | A probability between 0 and 1 |
 
 The application defines the options and criteria. Jev judges a state within that frame; the code decides which action follows, with its own rules and permissions.
+
+### What changes in 1.14
+
+TypeSafe released Jev 1.14 on October 14, 2026. In its API, image inputs, bounding-box output (`box`), and context beyond the standard limit are opt-in experiments. For classification or routing, start with the text primitives and verify any experimental capability on your specific endpoint before relying on it. [TypeSafe announcement](https://typesafe.ai/blog/jev-1-14)
 
 ## Four places where it makes sense to try it
 

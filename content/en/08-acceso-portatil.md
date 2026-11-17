@@ -26,6 +26,12 @@ The portable device does not recreate the stack or keep parallel clones. It acts
 - **Private network:** connects both devices without opening SSH to the Internet.
 - **Identity:** each client has its own revocable key.
 
+## Laptop, phone, and shared server
+
+- **Laptop over SSH.** This is the setup described here and works for operating directly on the development host.
+- **Paired phone.** Orca Mobile is in beta and can show status and send replies from iOS or Android. The paired runtime owns the sessions. [Mobile companion](https://orca.dev/docs/mobile)
+- **Shared server.** If continuity should depend on an always-on host, you can pair clients with a Remote Orca Server running Orca Desktop or `orca serve`. [Remote Orca Servers](https://orca.dev/docs/remote-servers)
+
 ## Recommended controls
 
 ### A stable destination

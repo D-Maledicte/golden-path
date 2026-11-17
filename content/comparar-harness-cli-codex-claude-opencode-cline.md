@@ -87,6 +87,8 @@ La referencia actual de Cline marca `--auto-approve` con default `true` y no ofr
 
 Headless describe una forma de ejecutar sin interfaz interactiva; no acredita por sí solo aislamiento ni confiabilidad. Para automatizar, hace falta decidir qué cambios están autorizados y cómo se acepta la salida.
 
+Al llevar Cline a un script, verificá la invocación exacta. Un pipe, la redirección de stdout o `--json` pueden activar headless aunque el comando se parezca al interactivo. Probá con un checkout descartable y comprobá qué pasa cuando el agente intenta escribir y no hay una persona para aprobar. [Modo headless](https://docs.cline.bot/usage/cli-overview#headless-mode)
+
 **Dónde lo pondría:** como comodín para tareas acotadas y una segunda mirada sobre cambios preparados por otro agente. También puede asumir trabajo principal si encaja mejor con el proyecto; el rol de comodín es una elección operativa.
 
 ## Oh My Pi (OMP) y la instrumentación del harness

@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # OpenDesign entre Windows, WSL, planes y proxies
 
-> Vigencia editorial: 12 de octubre de 2026. Los mecanismos de autenticación, modelos y límites dependen de cada proveedor y pueden cambiar.
+> Plugin de Codex y clientes de OpenCode Go revisados el 17 de noviembre de 2026. Los mecanismos de autenticación, modelos y límites dependen de cada proveedor y pueden cambiar.
 
 “Local-first” suena a una sola computadora. En Windows con WSL, sin embargo, una computadora contiene dos entornos que comparten recursos pero no necesariamente ejecutables, credenciales ni sesiones.
 
@@ -67,9 +67,15 @@ OpenDesign daemon en WSL
 CLIs y repositorios de WSL
 ```
 
+## Dos rutas directas antes de sumar un proxy
+
+**Desde Codex hacia OpenDesign.** El plugin invoca el MCP local de OpenDesign desde Codex Desktop o CLI. Sirve cuando el trabajo visual forma parte de una tarea que ya vive en Codex. Después de instalarlo, abrí una tarea nueva para cargar las capacidades y verificá que el entorno donde corre Codex pueda alcanzar el MCP. Esta conexión organiza el trabajo visual. El proveedor elegido para ejecutarlo determina qué cuenta paga. [Plugin para Codex](https://open-design.ai/codex-plugin/)
+
+**Desde OpenDesign hacia Go.** Si OpenDesign puede lanzar un CLI local que ya tiene Go configurado, probá esa ruta. OpenCode Go documenta clientes compatibles, entre ellos Claude Code y Codex, y reconoce sus encabezados de sesión nativos en las configuraciones admitidas. Verificá el cliente, el modelo y la sesión en tu instalación antes de sumar un intermediario. [Clientes validados por Go](https://opencode.ai/docs/console/go/#validated-clients)
+
 ## El proxy como puente deliberado
 
-Existe una tercera opción: exponer en WSL un proxy compatible con OpenAI y configurarlo como proveedor custom.
+Si necesitás adaptar el protocolo o centralizar el control del tráfico, podés usar un proxy en WSL y configurarlo como proveedor personalizado.
 
 ```text
 OpenDesign en Windows
@@ -83,7 +89,7 @@ La conectividad Windows–WSL y las defensas SSRF del daemon también importan: 
 
 Este camino no reutiliza automáticamente la cuota de Codex o Claude. OpenDesign cree que está hablando con una API; el proxy decide qué proveedor y credencial utiliza detrás.
 
-El patrón permite adaptar protocolos y sesiones, pero publicar una API no habilita cualquier uso. [OpenCode Go](https://opencode.ai/v2/docs/console/go) está pensado para tráfico de agentes de programación: exige un cliente identificable y una sesión estable. Un proxy no vuelve compatible un workload arbitrario; hay que verificar el cliente y el endpoint de cada modelo, que puede usar Responses, Chat Completions o Messages.
+El patrón permite adaptar protocolos y sesiones, pero publicar una API no habilita cualquier uso. [OpenCode Go](https://opencode.ai/docs/console/go/) está pensado para tráfico de agentes de programación: exige un cliente identificable y una sesión estable. Un proxy no vuelve compatible un workload arbitrario; hay que verificar el cliente y el endpoint de cada modelo, que puede usar Responses, Chat Completions o Messages.
 
 Un proxy no es necesariamente un parche. Puede convertirse en una frontera de control:
 
@@ -195,6 +201,6 @@ Ninguna opción gana siempre. La decisión correcta surge de elegir qué queremo
 - [OpenDesign](https://open-design.ai/)
 - [Quickstart de OpenDesign](https://github.com/nexu-io/open-design/blob/main/QUICKSTART.md)
 - [Adaptadores de agentes](https://open-design.ai/agents/)
-- [OpenCode Go](https://opencode.ai/v2/docs/console/go)
+- [OpenCode Go](https://opencode.ai/docs/console/go/)
 - [WSL2 setup](https://github.com/nexu-io/open-design/blob/main/docs/wsl-setup.md)
 - [Windows troubleshooting](https://github.com/nexu-io/open-design/blob/main/docs/windows-troubleshooting.md)

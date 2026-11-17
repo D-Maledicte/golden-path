@@ -75,13 +75,15 @@ Las interfaces web como ChatGPT o Claude son una superficie especialmente cómod
 
 La frontera tampoco es absoluta. Las experiencias web modernas pueden conectar repositorios y ejecutar agentes remotos; los CLIs pueden conversar, investigar y producir documentación. La pregunta correcta es **dónde vive el contexto autoritativo y dónde conviene cerrar el loop**.
 
+Codex Cloud abre un workspace por tarea sobre un repositorio conectado. Desde la web se puede inspeccionar el diff, pedir cambios y abrir un PR. Sirve cuando los tests y las dependencias se pueden reproducir en ese entorno. Si el diagnóstico depende del estado actual de WSL o de un servicio accesible sólo desde tu máquina, usá el CLI en el entorno que tiene ese acceso. [Codex Cloud](https://learn.chatgpt.com/docs/cloud)
+
 ## Mapa rápido de elección
 
 | Trabajo | Superficie sugerida | Motivo |
 |---|---|---|
 | Explorar una idea o comparar enfoques | Web | Conversación amplia y mezcla de fuentes |
 | Entender el comportamiento exacto de un repo | CLI | Acceso al estado y herramientas reales |
-| Implementar un cambio multiarchivo | CLI en worktree | Edición, pruebas y diff trazable |
+| Implementar un cambio multiarchivo | CLI en worktree o Codex Cloud | Elegí según dónde puedas reproducir las pruebas y revisar el diff |
 | Producir un informe o guía portable | Web, con evidencia del CLI | Mejor síntesis sin perder verificación |
 | Prototipar una dirección visual | Web o canvas | Iteración visual más directa |
 | Integrar el prototipo al producto | CLI | Ajuste contra componentes, build y tests |
@@ -101,7 +103,7 @@ Por eso **CLI no significa seguro**. Significa cercano al sistema. Esa cercanía
 - revisión de diffs antes de integrar;
 - bloqueos externos para push, deploy y producción.
 
-La editorial sobre [modelos guiados](https://ia.dmaledicte.cloud/#modelos-guiados-el-entorno-es-la-politica) desarrolla esta idea: las instrucciones orientan, pero el entorno limita.
+La editorial sobre [modelos guiados](/entrada/modelos-guiados-el-entorno-es-la-politica) desarrolla esta idea: las instrucciones orientan, pero el entorno limita.
 
 ## El flujo híbrido que mejor aprovecha ambas
 

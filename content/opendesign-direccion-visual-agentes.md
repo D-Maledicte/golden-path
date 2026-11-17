@@ -13,7 +13,7 @@ hue: rgba(236,95,189,.24)
 
 # OpenDesign y la dirección visual de los agentes
 
-> Vigencia editorial: 12 de octubre de 2026. OpenDesign evoluciona rápido; verificar adaptadores, catálogo y requisitos en la documentación oficial antes de fijarlos como política.
+> Flujo con el plugin de Codex revisado el 17 de noviembre de 2026. OpenDesign evoluciona rápido; verificar adaptadores, catálogo y requisitos en la documentación oficial antes de fijarlos como política.
 
 Los agentes de código aprendieron a construir interfaces antes de aprender a sostener una identidad visual. Pueden transformar una consigna en HTML, CSS y componentes funcionales, pero todavía tienden a diseñar cada ejecución como si fuera la primera: inventan una paleta, cambian la escala tipográfica, alteran el espaciado y terminan regresando al mismo dashboard genérico con cards flotantes.
 
@@ -70,6 +70,8 @@ brief → template → dirección → DESIGN.md → artefacto → handoff → me
 El agente recibe el sistema visual y las instrucciones correspondientes. Con un CLI y herramientas de filesystem escribe los archivos del proyecto; una ejecución BYOK/API sin esas herramientas devuelve un bloque de artefacto para la preview. No son recorridos equivalentes de edición. [Contrato de ejecución](https://github.com/nexu-io/open-design#quick-start). El resultado puede continuar como código o exportarse, según el formato, a HTML, ZIP, PDF, PPTX o video.
 
 Esto cambia la unidad de valor. Ya no se trata sólo de generar una pantalla atractiva, sino de construir un proceso capaz de producir una familia coherente de artefactos.
+
+Si el brief ya vive en Codex, el plugin de OpenDesign conecta Codex Desktop o CLI al MCP local. Codex mantiene el contexto del encargo y OpenDesign produce el artefacto editable. Esa ruta sirve para iterar sobre el diseño en la misma tarea y pasar después el resultado al flujo de implementación. [Plugin para Codex](https://open-design.ai/codex-plugin/)
 
 ## Un director creativo, no un nuevo empleado
 

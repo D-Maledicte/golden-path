@@ -13,7 +13,7 @@ hue: rgba(236,95,189,.24)
 
 # Orquestación en Orca
 
-> Documentación externa revisada el 12 de octubre de 2026. Se conservan los casos históricos y las decisiones operativas del entorno.
+> Disponibilidad de la función experimental revisada el 17 de noviembre de 2026. Se conservan los casos históricos y las decisiones operativas del entorno.
 
 ## Paralelismo no es orquestación
 
@@ -59,7 +59,7 @@ Orca incorpora una capa estructurada, actualmente experimental, basada en:
 
 Esta opción sirve cuando importa seguir un grafo de tareas, registrar ownership o exigir que cada worker cierre formalmente su dispatch. Para un prompt puntual observado por una persona, una terminal común sigue siendo suficiente.
 
-La documentación vigente exige habilitar la función experimental y usa `run-create`, tareas y `worker-start`. Los antiguos `orchestration run` y `run-stop` están retirados. Un Run conserva contexto de coordinación; no coloca ni agenda workers por sí solo. Consultá `orca skills get orchestration --full` en la instalación que vas a usar antes de copiar comandos de otra versión. [Flujo oficial](https://www.onorca.dev/docs/cli/orchestration).
+**Disponibilidad.** Orca avisa que el panel experimental y su interruptor están temporalmente indisponibles. La disponibilidad del flujo nativo depende de la versión y del runtime. En la instalación que vas a usar, verificá la conexión con `orca status --json` y consultá `orca skills get orchestration --full` antes de planificar una corrida. El flujo documentado usa `run-create`, tareas y `worker-start`. Los antiguos `orchestration run` y `run-stop` están retirados. Un Run conserva contexto. El coordinador sigue siendo responsable de iniciar los workers. Si el runtime no ofrece ese flujo, usá worktrees y terminales con el mismo contrato de handoff. [Flujo oficial](https://orca.dev/docs/cli/orchestration).
 
 ## El rol del gerente
 

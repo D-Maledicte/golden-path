@@ -37,6 +37,10 @@ That is why there are three different levels:
 
 Only the third one survives a total outage independently and lets you rebuild with confidence.
 
+### Session hibernation
+
+Orca documents experimental hibernation, off by default. Once an eligible agent terminal has finished its turn and been idle long enough, Orca can stop its process and resume the session when you reopen the worktree. A turn waiting for input or an unsettled orchestration dispatch prevents hibernation. On return, distinguish a resumed conversation, an original process that is still alive, and work persisted to disk. [Agent hibernation](https://orca.dev/docs/agents/hibernation)
+
 ## What we learned recovering sessions
 
 In real recoveries we had to tell apart a crashed interface, a stopped Orca service, an agent that was still alive and a healthy worktree whose conversation could no longer be resumed.

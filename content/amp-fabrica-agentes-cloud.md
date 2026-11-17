@@ -13,7 +13,7 @@ hue: rgba(87,217,232,.22)
 
 # Amp y la fábrica de agentes en la nube
 
-> Vigencia editorial: 12 de octubre de 2026. Amp declara una filosofía de frontera y sin compromiso de compatibilidad hacia atrás; modelos, routing, precios y funciones pueden cambiar con rapidez.
+> Selector de modelos revisado el 17 de noviembre de 2026. Amp declara una filosofía de frontera y sin compromiso de compatibilidad hacia atrás; modelos, routing, precios y funciones pueden cambiar con rapidez.
 
 Amp no resulta interesante porque haya inventado otro agente capaz de editar archivos. Ese espacio ya está lleno. Lo atractivo es que intenta convertir en producto todo lo que rodea al agente: la máquina donde trabaja, el contexto que conserva, el repositorio que modifica, las pruebas que ejecuta, los agentes que coordina y la continuidad necesaria para terminar aunque la computadora del usuario esté apagada.
 
@@ -31,24 +31,13 @@ La novedad no está en ninguna pieza aislada. Está en tratarlas como una sola u
 
 Esa combinación permite pedir algo más exigente que “escribí esta función”. Se le puede pedir que implemente el cambio, levante el sistema, lo pruebe de punta a punta y deje una rama o un pull request acompañado por evidencia.
 
-## The Dial: elegir esfuerzo antes que marca
+## Selector de modelos y esfuerzo
 
-Amp ofrece cuatro modos de base en The Dial: `low`, `medium`, `high` y `ultra`. La idea es elegir según la dificultad y el costo de equivocarse, no enamorarse del nombre de un modelo.
+El [selector de Amp](https://ampcode.com/docs/model-selector) permite elegir modelo y esfuerzo por hilo. **Staff Pick** ofrece un punto de partida mantenido por Amp. Si elegís un modelo, el selector muestra los niveles que admite y recomienda uno. Amp combina cada modelo con instrucciones y herramientas propias del harness.
 
-| Modo | Lectura práctica |
-|---|---|
-| `low` | Cambios chicos, tests y refactors con resultado evidente |
-| `medium` | Desarrollo cotidiano con algo de ambigüedad o varios pasos |
-| `high` | Trabajo delicado que debería llegar cerca de una revisión final |
-| `ultra` | Arquitectura, migraciones y problemas abiertos entre varios sistemas |
+En un hilo de modelo, podés cambiar ambos valores y seguir desde el próximo mensaje. El cambio queda en la conversación. Al cambiar de modelo, la primera respuesta vuelve a leer el hilo sin la caché anterior, lo que puede subir el costo de ese turno. Los hilos iniciados con Claude Code o con un agente de un plugin conservan ese agente.
 
-Detrás de cada posición, Amp puede combinar modelo principal, nivel de razonamiento, herramientas, instrucciones, subagentes y un **Oracle** que aporta una segunda opinión. El routing automático cambia cuando aparecen mejores modelos, mientras que la intención del modo permanece estable.
-
-La abstracción es sana: una organización no debería reescribir su política cada vez que cambia el ranking de proveedores. “Usar capacidad alta cuando una omisión sutil sería cara” envejece mejor que “usar siempre el modelo X”.
-
-Sin embargo, Amp no obliga a entregar todo el control. Es posible fijar modelos y esfuerzo por separado para el agente principal, el Oracle y los subagentes, además de definir modos personalizados mediante plugins.
-
-El [Dial](https://ampcode.com/docs/the-dial) se puede personalizar, pero el modo de un Thread queda fijado al enviar su primer mensaje: cambiarlo exige abrir otro hilo. Conviene elegir el esfuerzo antes de empezar.
+Para un cambio verificable, empezá con el menor esfuerzo que sostenga las pruebas. Si la tarea se complica, podés subir el esfuerzo dentro del mismo hilo. Si cambiás de modelo, registrá ese cambio antes de comparar costo o calidad entre ejecuciones.
 
 ## Dos formas de delegar
 
@@ -68,7 +57,7 @@ Amp y Orca se pisan, pero no son exactamente el mismo producto.
 |---|---|---|
 | Unidad de trabajo | Sesión, terminal y worktree administrados por el usuario | Thread con working copy y Orb aislado |
 | Infraestructura | Máquina local, WSL, SSH y servidores propios | Orbs cloud, ejecución local o runners propios |
-| Selección de modelos | Explícita y granular por herramienta | Routing por dificultad, con posibilidad de fijarlo |
+| Selección de modelos | Explícita y granular por herramienta | Modelo y esfuerzo por hilo, con Staff Pick como opción inicial |
 | Coordinación | Flexible, visible y artesanal | Delegación integrada entre subagentes y Threads |
 | Continuidad | Depende de procesos y hosts administrados | El Orb sigue trabajando y se pausa automáticamente |
 | GitHub | Credenciales y flujo del entorno local | GitHub App, tokens breves, branches, PR y CI integrados |
@@ -104,7 +93,7 @@ La continuidad no reemplaza al gobierno. Lo vuelve más importante.
 
 La [tarifa actual](https://ampcode.com/docs/pricing) combina planes mensuales y pago por uso; distingue consumo de agentes y herramientas de la asignación de Orbs. Los Orbs se miden por minuto, los tamaños mayores consumen más asignación y la pausa no genera costo.
 
-Se pueden conectar claves o suscripciones compatibles, pero hay que revisar el routing efectivo. La suscripción de Claude cubre el modo **Claude Code**, no los modos propios de Amp. Con ChatGPT, las llamadas y herramientas no cubiertas siguen consumiendo créditos de Amp; la suscripción tampoco cubre el Orb. [Detalle por modo](https://ampcode.com/docs/the-dial).
+El selector muestra quién factura cada modelo: una suscripción compatible, una clave API propia o créditos de Amp. Revisá la conexión efectiva y el cargo de la máquina por separado. Una suscripción de ChatGPT puede cubrir el uso de modelos de OpenAI y la suscripción de Claude permite iniciar un hilo con el agente Claude Code. [Facturación según el selector](https://ampcode.com/docs/model-selector#who-pays).
 
 Para evaluar el producto no alcanza con comparar precio por token. Hay que medir:
 
@@ -142,7 +131,7 @@ Para quien ya construyó un cockpit artesanal, Amp puede sentirse menos como una
 ## Fuentes oficiales
 
 - [Introducción a Amp](https://ampcode.com/docs)
-- [The Dial](https://ampcode.com/docs/the-dial)
+- [Model Selector](https://ampcode.com/docs/model-selector)
 - [Modes & Models](https://ampcode.com/docs/models-and-subagents)
 - [Orbs](https://ampcode.com/docs/orbs)
 - [Agent to Agent](https://ampcode.com/docs/orbs/agent-to-agent)

@@ -75,13 +75,15 @@ Web interfaces like ChatGPT or Claude are an especially comfortable surface for:
 
 The line is not absolute either. Modern web experiences can connect repositories and run remote agents; CLIs can converse, research and produce documentation. The right question is **where the authoritative context lives and where it makes sense to close the loop**.
 
+Codex Cloud opens a workspace per task on a connected repository. From the web, you can inspect the diff, request changes, and open a PR. It fits when tests and dependencies can be reproduced in that environment. If diagnosis depends on live WSL state or a service only your machine can reach, run the CLI in the environment that has that access. [Codex Cloud](https://learn.chatgpt.com/docs/cloud)
+
 ## Quick decision map
 
 | Work | Suggested surface | Why |
 |---|---|---|
 | Explore an idea or compare approaches | Web | Broad conversation and a mix of sources |
 | Understand a repo’s exact behavior | CLI | Access to real state and tools |
-| Implement a multi-file change | CLI in a worktree | Editing, tests and a traceable diff |
+| Implement a multi-file change | CLI in a worktree or Codex Cloud | Choose where you can reproduce the tests and review the diff |
 | Produce a portable report or guide | Web, with evidence from the CLI | Better synthesis without losing verification |
 | Prototype a visual direction | Web or canvas | More direct visual iteration |
 | Integrate the prototype into the product | CLI | Fitting it against components, build and tests |

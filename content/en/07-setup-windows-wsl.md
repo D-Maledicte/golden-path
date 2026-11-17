@@ -21,7 +21,11 @@ Orca Desktop can live on Windows while the real work runs inside WSL. The separa
 | --- | --- |
 | Windows | Orca interface and host selection |
 | WSL/Linux | Git, repositories, runtimes and CLI agents |
-| Local SSH | Controlled bridge between the interface and the environment |
+| Connection to the environment | Open the WSL folder directly or connect over local SSH |
+
+**Direct access.** Orca can open a repository on the WSL filesystem and launch its terminal through `wsl.exe -d <distro>`. Start there on a Windows workstation that only needs its own distribution. [Orca terminal](https://orca.dev/docs/terminal)
+
+**SSH.** The original setup uses local SSH with a dedicated key. That route remains useful when you want to reuse an SSH target and keep an access path from other machines. [SSH hosts and topology](/en/entrada/hosts-ssh)
 
 ## Important decisions
 
@@ -29,7 +33,7 @@ Orca Desktop can live on Windows while the real work runs inside WSL. The separa
 
 Projects stay inside the WSL filesystem. This reduces friction with permissions, watchers, performance and tools designed for Linux.
 
-### A dedicated SSH identity
+### Dedicated identity when using SSH
 
 Orca uses a dedicated key. There is no need to reuse a personal identity with broader reach: a specific credential simplifies revocation and auditing.
 
@@ -51,9 +55,8 @@ Before enabling edits, ask the agent to identify the framework and cite the file
 
 ## Portable checklist
 
-- [ ] The Linux environment’s SSH service is running.
-- [ ] Orca uses a dedicated key.
-- [ ] The local host connects without depending on an open terminal.
+- [ ] Orca opens the repository and its terminal points to the intended distribution.
+- [ ] If using SSH, the service starts and Orca connects with its dedicated key without relying on an open terminal.
 - [ ] Repositories are opened from the Linux filesystem.
 - [ ] Agents are available and authenticated on that host.
 - [ ] The read-only test finished with a clean Git state.

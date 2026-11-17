@@ -42,9 +42,9 @@ This separation avoids duplicating environments and cuts down on “works on my 
 
 An **SSH host** lets Orca open and manage workspaces directly on another machine over SSH.
 
-A **Remote Orca Server** is another Orca runtime instance prepared for paired clients and more federated scenarios. To use local WSL from Orca Desktop, the simple pattern is an SSH connection over the loopback interface.
+A **Remote Orca Server** hosts the full runtime on another machine. The server keeps workspaces, sessions, and state for paired clients. It can run in Orca Desktop or headless as an `orca serve` service. With an **SSH host**, the Orca client owns the runtime and delegates execution of selected worktrees to the host. Orca can install a managed component on the SSH target. [Remote Orca Servers](https://orca.dev/docs/remote-servers) · [SSH worktrees](https://orca.dev/docs/ssh)
 
-The current documentation, checked on October 12, 2026, also describes an **Orca-managed server inside the SSH host**, installed on first connection when the host supports it, with compatibility and migration paths for existing sessions. The distinction above is between connection modes, not between having a server and having none. This describes the current product; it does not establish that an existing installation has already migrated. [SSH worktrees](https://www.onorca.dev/docs/ssh)
+For a WSL distribution on the workstation itself, you can also open its repository directly from Orca on Windows. Loopback SSH is the reference setup in this case study. The docs also describe ephemeral per-workspace VMs on your own provider. [Orca terminal](https://orca.dev/docs/terminal) · [Ways to run Orca](https://orca.dev/docs/ways-to-run)
 
 ## Our pattern
 

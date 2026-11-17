@@ -13,7 +13,7 @@ hue: rgba(236,95,189,.24)
 
 # Orchestration in Orca
 
-> External product documentation reviewed on October 12, 2026. Historical cases and local operating choices are preserved.
+> Experimental feature availability reviewed on November 17, 2026. Historical cases and local operating choices are preserved.
 
 ## Parallelism is not orchestration
 
@@ -59,7 +59,7 @@ Orca includes a structured layer, currently experimental, based on:
 
 This option is useful when it matters to follow a task graph, record ownership or require every worker to formally close its dispatch. For a one-off prompt watched by a person, a regular terminal is still enough.
 
-Current documentation requires enabling the experimental feature and uses `run-create`, tasks and `worker-start`. The old `orchestration run` and `run-stop` commands are retired. A Run preserves coordination context; it does not place or schedule workers by itself. Consult `orca skills get orchestration --full` in the installation you will use before copying commands from another version. [Official flow](https://www.onorca.dev/docs/cli/orchestration).
+**Availability.** Orca says the experimental panel and its toggle are temporarily unavailable. The native workflow depends on the version and runtime. On the installation you intend to use, check the connection with `orca status --json` and consult `orca skills get orchestration --full` before planning a run. The documented flow uses `run-create`, tasks and `worker-start`. The old `orchestration run` and `run-stop` commands are retired. A Run preserves context. The coordinator still starts the workers. If the runtime does not offer that flow, use worktrees and terminals with the same handoff contract. [Official workflow](https://orca.dev/docs/cli/orchestration).
 
 ## The manager’s role
 

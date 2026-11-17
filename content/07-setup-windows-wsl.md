@@ -21,7 +21,11 @@ Orca Desktop puede vivir en Windows mientras el trabajo real se ejecuta dentro d
 | --- | --- |
 | Windows | Interfaz de Orca y selección del host |
 | WSL/Linux | Git, repositorios, runtimes y agentes CLI |
-| SSH local | Puente controlado entre la interfaz y el entorno |
+| Conexión al entorno | Apertura directa de la carpeta WSL o SSH local, según el flujo |
+
+**Apertura directa.** Orca puede abrir un repositorio en el filesystem de WSL y lanzar la terminal con `wsl.exe -d <distro>`. Es el punto de partida para una estación Windows que sólo necesita acceder a su propia distribución. [Terminal en Orca](https://orca.dev/docs/terminal)
+
+**SSH.** El entorno original usa SSH local con una clave dedicada. Ese camino sigue siendo útil si querés reutilizar un destino SSH y conservar una ruta de acceso desde otros equipos. [Hosts SSH y topología](/entrada/hosts-ssh)
 
 ## Decisiones importantes
 
@@ -29,7 +33,7 @@ Orca Desktop puede vivir en Windows mientras el trabajo real se ejecuta dentro d
 
 Los proyectos se mantienen dentro del filesystem de WSL. Esto reduce fricción con permisos, watchers, rendimiento y herramientas diseñadas para Linux.
 
-### Identidad SSH exclusiva
+### Identidad exclusiva si usás SSH
 
 Orca usa una clave dedicada. No hace falta reutilizar una identidad personal con mayor alcance: una credencial específica simplifica revocación y auditoría.
 
@@ -39,7 +43,7 @@ Cada CLI debe estar instalado y autenticado dentro de WSL. Que una herramienta f
 
 ### Primera prueba en modo lectura
 
-Antes de habilitar edición, se pide al agente que identifique el framework y cite el archivo donde lo verificó. La prueba prueba simultáneamente conexión, ruta, CLI y acceso al repositorio sin modificar nada.
+Antes de habilitar edición, se pide al agente que identifique el framework y cite el archivo donde lo verificó. La prueba comprueba conexión, ruta, CLI y acceso al repositorio sin modificar nada.
 
 ## Preparar trabajo paralelo
 
@@ -51,9 +55,8 @@ Antes de habilitar edición, se pide al agente que identifique el framework y ci
 
 ## Checklist portable
 
-- [ ] El servicio SSH del entorno Linux está activo.
-- [ ] Orca usa una clave exclusiva.
-- [ ] El host local conecta sin depender de una terminal abierta.
+- [ ] Orca abre el repo y la terminal apunta a la distribución esperada.
+- [ ] Si elegiste SSH, el servicio arranca y Orca conecta con su clave exclusiva sin depender de una terminal abierta.
 - [ ] Los repositorios se abren desde el filesystem Linux.
 - [ ] Los agentes están disponibles y autenticados en ese host.
 - [ ] La prueba de solo lectura terminó con Git limpio.

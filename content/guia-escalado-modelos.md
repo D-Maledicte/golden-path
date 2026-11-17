@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Elegir modelo y nivel de razonamiento
 
-> Revisada el 12 de noviembre de 2026. Los nombres, límites y catálogos cambian; verificar las fichas oficiales antes de convertir esta guía en política. Las recomendaciones son criterios editoriales, no benchmarks propios.
+> Catálogos revisados el 12 de noviembre de 2026. Privacidad y novedades de OpenCode Go verificadas el 17 de noviembre. Los nombres, límites y catálogos cambian; verificar las fichas oficiales antes de convertir esta guía en política. Las recomendaciones son criterios editoriales, no benchmarks propios.
 
 ## La decisión no empieza por la marca
 
@@ -122,7 +122,7 @@ Dos advertencias:
 
 ## OpenCode Go: mapa práctico del catálogo
 
-OpenCode Go reúne modelos de varios proveedores. Al 12 de noviembre ofrece Go (USD 10/mes), Go Plus (USD 40/mes) y Go Teams (USD 20 por miembro/mes). Go y Plus corresponden a workspaces de un miembro; Teams cubre workspaces con varias personas, con límites individuales, pero no service accounts. La tabla siguiente es una **heurística editorial de arranque**, no un benchmark oficial. La presencia en el catálogo no demuestra aptitud para una tarea: los modelos nuevos quedan en evaluación hasta pasar pruebas del repositorio. [Planes y catálogo](https://dev.opencode.ai/docs/console/go/).
+OpenCode Go reúne modelos de varios proveedores. Al 12 de noviembre ofrece Go (USD 10/mes), Go Plus (USD 40/mes) y Go Teams (USD 20 por miembro/mes, mínimo dos miembros). Go y Plus corresponden a workspaces de un miembro; Teams cubre workspaces con varias personas, con límites individuales, pero no service accounts. La tabla siguiente es una **heurística editorial de arranque**, no un benchmark oficial. La presencia en el catálogo no demuestra aptitud para una tarea: los modelos nuevos quedan en evaluación hasta pasar pruebas del repositorio. [Planes y catálogo](https://opencode.ai/docs/console/go/).
 
 | Opciones del catálogo de Go | Punto de partida sugerido | Papel inicial |
 |---|---|---|
@@ -132,17 +132,18 @@ OpenCode Go reúne modelos de varios proveedores. Al 12 de noviembre ofrece Go (
 | Gemini 4 Argon | Comparar contra tareas reales antes de asignarle un rol estable | En evaluación |
 | Kimi K3.1 Pro, K3, K2.7 Code | K2.7 Code para código; evaluar K3.1 Pro frente a K3 en tareas exigentes | Worker de código; Pro en evaluación |
 | LongCat 2.0 | Mantenimiento simple, lotes y tareas repetibles | Worker de volumen |
-| MiMo V2.6 Flash y Pro; V2.5 y Pro | V2.6 Flash para tareas baratas y comprobables; Pro cuando hace falta más juicio; V2.5 como fallback | Worker económico |
+| MiMo V2.6 Flash y Pro | Flash para tareas baratas y comprobables; Pro cuando hace falta más juicio | Worker económico |
 | MiniMax M3.1 Flash y M3 | Evaluar Flash en tareas acotadas; comparar M3 en cambios con más contexto | Worker general evaluado |
 | Muse Spark 1.3 y 1.2 Contributor (regiones limitadas) | Implementación, tests y docs con alcance bien delimitado | Contributor acotado |
+| Qwen4 Max | Evaluar en cambios multiarchivo frente a Qwen3.8 Max con las mismas pruebas | En evaluación |
 | Qwen3.8 Max, 3.8 Flash, 3.7 Plus | 3.8 Flash para volumen; 3.8 Max para planificación y revisión | Worker o reviewer según variante |
 | DeepSeek V4.1 Flash y V4 Pro | Flash para trabajo corriente; Pro para debugging y revisión, después de evaluar | Worker especializado |
 | Hy4, Hy4 preview y Hy3 | Evaluar Hy4 estable por separado; mantener preview fuera del camino crítico | Worker evaluado o experimental |
 | Step 5 Preview | No asumir gratuidad por conservar el nombre preview | Evaluación aislada |
-| Beam Free, Iceman Contributor Free y LongCat 2.5 Free | Disponibilidad temporal; revisar regiones y entrenamiento antes de enviar datos | Experimentación temporal |
+| Beam Free, Iceman Contributor Free, LongCat 2.5 Free y Hy4 Flash Free | Disponibilidad temporal; revisar regiones y entrenamiento antes de enviar datos | Experimentación temporal |
 | Claude Haiku 5.5 | Extracción, clasificación y subagentes acotados | Worker de volumen |
 
-Los cupos se expresan en dólares de uso por modelo y plan: las ventanas de cinco horas, semana y mes representan el 20%, 50% y 100% del límite mensual. Los recuentos de solicitudes son estimaciones, no garantías. Cada respuesta informa `opencode.allowance`. Una opción barata puede tener un cupo menor; las variantes gratuitas y descuentos son temporales. No fijar una política sobre una promoción. [Catálogo y límites](https://dev.opencode.ai/docs/console/go/).
+Los modelos pagos comparten un cupo. Los montos en dólares por modelo y plan indican cuánto uso cubriría el cupo si usaras sólo ese modelo. Cambiar de modelo sigue descontando del mismo cupo. Las ventanas de cinco horas, semana y mes representan el 20%, 50% y 100% del límite mensual. Los recuentos de solicitudes son estimaciones, no garantías. Cada respuesta informa `opencode.allowance`. Una opción barata puede tener un cupo menor; las variantes gratuitas y descuentos son temporales. No fijar una política sobre una promoción. [Catálogo y límites](https://opencode.ai/docs/console/go/).
 
 ### Privacidad antes que capacidad
 
@@ -151,12 +152,13 @@ La política de privacidad del workspace también aplica a Go. Por defecto bloqu
 | Modelos o familia, vía Go | Entrenamiento declarado | Retención declarada |
 |---|---|---|
 | Grok 4.7, GPT-6/5.6 Luna, Claude Haiku 5.5 | No | 30 días |
-| Gemini 4 Argon, GLM, Kimi, MiMo, Qwen, MiniMax, Hy y LongCat | No | 0 días según la tabla vigente |
+| Gemini 4 Argon | No | Hasta 55 días para monitoreo de abuso |
+| GLM, Kimi, MiMo, Qwen, MiniMax, Hy y LongCat | No | 0 días para los endpoints indicados en la tabla oficial |
 | Muse Spark Contributor e Iceman Contributor Free | Sí | No ZDR |
 | Beam Free | No | 30 días |
 | DeepSeek V4.1 Flash y V4 Pro | No | 0 días bajo acuerdo renovable mensualmente |
 
-DeepSeek y LongCat 2.5 Free requieren región Global; este último está alojado en China. Muse Contributor requiere habilitar endpoints pagos que entrenan con las solicitudes. El acuerdo ZDR de DeepSeek está vigente hasta el **30 de noviembre de 2026**: revisarlo antes de reutilizar esta condición en una política. Estas condiciones son del servicio Go y del endpoint, no propiedades universales del modelo. [Privacidad y restricciones](https://dev.opencode.ai/docs/console/go/#privacy).
+DeepSeek y LongCat 2.5 Free requieren región Global; este último está alojado en China. Muse Contributor requiere habilitar endpoints pagos que entrenan con las solicitudes. El acuerdo ZDR de DeepSeek está vigente hasta el **30 de noviembre de 2026**: revisarlo antes de reutilizar esta condición en una política. Estas condiciones son del servicio Go y del endpoint, no propiedades universales del modelo. [Privacidad y restricciones](https://opencode.ai/docs/console/go/#privacy).
 
 ### Cómo usar esta tabla sin enamorarse del ranking
 
@@ -205,5 +207,5 @@ El selector no es una jerarquía de empleados. Es una caja de cambios: el mejor 
 - [Anthropic: thinking, effort y costo](https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost)
 - [Anthropic: Fable 5.2, límites y retención](https://platform.claude.com/docs/en/models/fable-5-2/overview)
 - [Anthropic: niveles de effort por modelo](https://platform.claude.com/docs/en/build-with-claude/effort)
-- [OpenCode Go: modelos, precios, privacidad y límites vigentes](https://dev.opencode.ai/docs/console/go/)
+- [OpenCode Go: modelos, precios, privacidad y límites vigentes](https://opencode.ai/docs/console/go/)
 - [OpenCode V2: modelos y variantes de razonamiento](https://opencode.ai/v2/docs/models/)

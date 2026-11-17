@@ -249,6 +249,24 @@ OpenCode evalúa reglas por coincidencia y prevalece la última que coincide, po
 
 Este ejemplo es una base editorial, no una configuración universal. Cada proyecto debe declarar sus comandos seguros y sus operaciones prohibidas. Un patrón demasiado amplio como `*deploy*` también puede bloquear comandos inocentes con ese texto; la política real debe probarse con el CLI y versión utilizados.
 
+### Perfil de descubrimiento para OpenCode V2
+
+Para un worker de lectura en un checkout descartable, V2 permite definir una lista ordenada de acciones. Este ejemplo autoriza lectura y dos consultas exactas de Git. Prepará el entorno con sólo los archivos que el worker puede ver y sin credenciales innecesarias.
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permissions": [
+    { "action": "*", "resource": "*", "effect": "deny" },
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "shell", "resource": "git status --short", "effect": "allow" },
+    { "action": "shell", "resource": "git diff --no-ext-diff --no-textconv", "effect": "allow" }
+  ]
+}
+```
+
+La última regla coincidente prevalece. Comprobá en la sesión efectiva que puede leer el repositorio, que una escritura se rechaza y que un comando fuera de la lista queda bloqueado. El permiso de lectura abarca los archivos que pueda alcanzar la herramienta. Aplicá fuera del CLI los límites de filesystem, red y credenciales. [Permisos V2](https://opencode.ai/v2/docs/permissions/)
+
 ## Cómo preparar un entorno antes de lanzar el agente
 
 1. Crear una rama y worktree exclusivos.

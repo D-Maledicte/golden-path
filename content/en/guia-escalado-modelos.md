@@ -13,7 +13,7 @@ hue: rgba(168,106,255,.24)
 
 # Choosing a model and reasoning level
 
-> Reviewed on November 12, 2026. Names, limits and catalogs change; check the official model pages before turning this guide into policy. Recommendations are editorial heuristics, not our own benchmarks.
+> Catalogs reviewed on November 12, 2026. OpenCode Go privacy terms and catalog changes checked on November 17. Names, limits and catalogs change; check the official model pages before turning this guide into policy. Recommendations are editorial heuristics, not our own benchmarks.
 
 ## The decision does not start with the brand
 
@@ -122,7 +122,7 @@ Two warnings:
 
 ## OpenCode Go: a practical map of the catalog
 
-As of November 12, OpenCode offers Go (USD 10/month), Go Plus (USD 40/month) and Go Teams (USD 20/member/month). Go and Plus serve single-member workspaces; Teams covers multi-member workspaces with individual allowances, excluding service accounts. The following table is an **editorial starting heuristic**, not a benchmark. Catalog presence does not prove task suitability: evaluate new models against your repository before assigning stable roles. [Plans and catalog](https://dev.opencode.ai/docs/console/go/).
+As of November 12, OpenCode offers Go (USD 10/month), Go Plus (USD 40/month) and Go Teams (USD 20/member/month, two-member minimum). Go and Plus serve single-member workspaces; Teams covers multi-member workspaces with individual allowances, excluding service accounts. The following table is an **editorial starting heuristic**, not a benchmark. Catalog presence does not prove task suitability: evaluate new models against your repository before assigning stable roles. [Plans and catalog](https://opencode.ai/docs/console/go/).
 
 | Go catalog options | Suggested starting point | Initial role |
 |---|---|---|
@@ -132,17 +132,18 @@ As of November 12, OpenCode offers Go (USD 10/month), Go Plus (USD 40/month) and
 | Gemini 4 Argon | Compare on real tasks before assigning a stable role | Under evaluation |
 | Kimi K3.1 Pro, K3, K2.7 Code | K2.7 Code for code; evaluate K3.1 Pro against K3 on demanding tasks | Code worker; Pro under evaluation |
 | LongCat 2.0 | Simple maintenance, batches and repeatable tasks | Volume worker |
-| MiMo V2.6 Flash and Pro; V2.5 and Pro | V2.6 Flash for cheap, checkable tasks; Pro when more judgment is needed; V2.5 as fallback | Cheap worker |
+| MiMo V2.6 Flash and Pro | Flash for inexpensive, verifiable tasks; Pro when more judgment is needed | Low-cost worker |
 | MiniMax M3.1 Flash and M3 | Evaluate Flash on bounded tasks and M3 on broader context | Evaluated general worker |
 | Muse Spark 1.3 and 1.2 Contributor (limited regions) | Implementation, tests and docs with a well-defined scope | Bounded contributor |
+| Qwen4 Max | Evaluate multi-file changes against Qwen3.8 Max using the same tests | Under evaluation |
 | Qwen3.8 Max, 3.8 Flash, 3.7 Plus | 3.8 Flash for volume; 3.8 Max for planning and review | Worker or reviewer depending on the variant |
 | DeepSeek V4.1 Flash and V4 Pro | Flash for routine work; Pro for debugging and review after evaluation | Specialized worker |
 | Hy4, Hy4 preview and Hy3 | Evaluate stable Hy4 separately; keep preview off the critical path | Evaluated or experimental worker |
 | Step 5 Preview | Do not assume a preview model is free | Isolated evaluation |
-| Beam Free, Iceman Contributor Free and LongCat 2.5 Free | Temporary availability; check regions and training terms before sending data | Temporary experimentation |
+| Beam Free, Iceman Contributor Free, LongCat 2.5 Free and Hy4 Flash Free | Temporary availability; check regions and training terms before sending data | Temporary experimentation |
 | Claude Haiku 5.5 | Extraction, classification and bounded subagents | Volume worker |
 
-Allowances are dollar amounts per model and plan. Five-hour, weekly and monthly windows represent 20%, 50% and 100% of the monthly limit. Request counts are estimates, not guarantees. Responses report `opencode.allowance`. Cheap models can have smaller allowances; free variants and discounts are temporary. Do not base policy on a promotion. [Catalog and limits](https://dev.opencode.ai/docs/console/go/).
+Paid models share an allowance. The dollar amounts for each model and plan show how much usage the allowance would cover if you used that model alone. Switching models draws from the same allowance. The five-hour, weekly and monthly windows correspond to 20%, 50% and 100% of the monthly limit. Request counts are estimates, not guarantees. Responses report `opencode.allowance`. Cheap models can have smaller allowances; free variants and discounts are temporary. Do not base policy on a promotion. [Catalog and limits](https://opencode.ai/docs/console/go/).
 
 ### Privacy before capability
 
@@ -151,12 +152,13 @@ Workspace privacy settings apply to Go. By default, paid endpoints that train on
 | Models or family through Go | Declared training use | Declared retention |
 |---|---|---|
 | Grok 4.7, GPT-6/5.6 Luna, Claude Haiku 5.5 | No | 30 days |
-| Gemini 4 Argon, GLM, Kimi, MiMo, Qwen, MiniMax, Hy and LongCat | No | 0 days in the current table |
+| Gemini 4 Argon | No | Up to 55 days for abuse monitoring |
+| GLM, Kimi, MiMo, Qwen, MiniMax, Hy and LongCat | No | 0 days for the endpoints listed in the official table |
 | Muse Spark Contributor and Iceman Contributor Free | Yes | Not ZDR |
 | Beam Free | No | 30 days |
 | DeepSeek V4.1 Flash and V4 Pro | No | 0 days under a monthly renewable agreement |
 
-DeepSeek and LongCat 2.5 Free require Global regions; the latter is hosted in China. Muse Contributor requires enabling paid endpoints that train on requests. DeepSeek's ZDR agreement is valid through **November 30, 2026**: recheck before relying on it in policy. These are Go service and endpoint conditions, not universal model properties. [Privacy and restrictions](https://dev.opencode.ai/docs/console/go/#privacy).
+DeepSeek and LongCat 2.5 Free require Global regions; the latter is hosted in China. Muse Contributor requires enabling paid endpoints that train on requests. DeepSeek's ZDR agreement is valid through **November 30, 2026**: recheck before relying on it in policy. These are Go service and endpoint conditions, not universal model properties. [Privacy and restrictions](https://opencode.ai/docs/console/go/#privacy).
 
 ### How to use this table without falling in love with the ranking
 
@@ -205,5 +207,5 @@ The selector is not a hierarchy of employees. It is a gearbox: the best gear is 
 - [Anthropic: thinking, effort and cost](https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost)
 - [Anthropic: Fable 5.2 limits and retention](https://platform.claude.com/docs/en/models/fable-5-2/overview)
 - [Anthropic: effort levels by model](https://platform.claude.com/docs/en/build-with-claude/effort)
-- [OpenCode Go: current models, pricing, privacy and limits](https://dev.opencode.ai/docs/console/go/)
+- [OpenCode Go: current models, pricing, privacy and limits](https://opencode.ai/docs/console/go/)
 - [OpenCode V2: models and reasoning variants](https://opencode.ai/v2/docs/models/)
